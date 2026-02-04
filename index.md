@@ -5,7 +5,7 @@ subtitle: Machine Learning Engineer
 cover-img: /assets/img/main1.jpeg
 ---
 
-<div class="lang-en">
+<div class="lang-en" markdown="1">
 ## About me
 
 I am an AI Researcher at [GNEWSOFT](https://www.gnewsoft.com/) and a Research Assistant at the Medical Imaging Lab, Seoul National University, under the supervision of Prof. Nam-Joon Kim. I am also working closely with radiologists from Samsung Medical Center and NVIDIA researchers on cutting-edge medical AI projects.
@@ -23,7 +23,7 @@ I am passionate about developing AI solutions that can make a real impact in med
 Feel free to reach out if you're interested in medical AI, generative models, or collaborative research opportunities!
 </div>
 
-<div class="lang-kr" style="display: none;">
+<div class="lang-kr" style="display: none;" markdown="1">
 ## 소개
 
 저는 [GNEWSOFT](https://www.gnewsoft.com/)의 AI 연구원이며, 서울대학교 의료영상연구실에서 김남준 교수님 지도 하에 연구조교로 활동하고 있습니다. 또한 삼성의료원 방사선과 의료진 및 NVIDIA 연구진들과 최첨단 의료 AI 프로젝트를 진행하고 있습니다.
@@ -52,7 +52,7 @@ Collaborating with **Ka-Chun (Charles) Cheung, Ph.D.** and **Ginny Wong, Ph.D.**
 ### Samsung Medical Center Partnership
 Working directly with radiologists to evaluate synthetic MRI realism and integrate generative models into clinical analysis workflows.
 
-<div class="lang-en">
+<div class="lang-en" markdown="1">
 ## Education
 
 **Master of Science in Artificial Intelligence** (GPA: 4.03/4.5)
@@ -65,7 +65,7 @@ Working directly with radiologists to evaluate synthetic MRI realism and integra
 - Completed 158 credits (graduation requirement: 130)
 </div>
 
-<div class="lang-kr" style="display: none;">
+<div class="lang-kr" style="display: none;" markdown="1">
 ## 학력
 
 **인공지능학과 석사** (학점: 4.03/4.5)
@@ -100,7 +100,7 @@ Working directly with radiologists to evaluate synthetic MRI realism and integra
 
 [**See all publications →**](/publication)
 
-<div class="lang-en">
+<div class="lang-en" markdown="1">
 ## Professional Experience
 
 * **AI Researcher** at [GNEWSOFT](https://www.gnewsoft.com/) (Oct. 2024 – Present)
@@ -114,7 +114,7 @@ Working directly with radiologists to evaluate synthetic MRI realism and integra
 * **Junior Developer** at [AST Global](https://www.astglobal.co.kr/) (Oct. 2020– Apr. 2021)
 </div>
 
-<div class="lang-kr" style="display: none;">
+<div class="lang-kr" style="display: none;" markdown="1">
 ## 경력사항
 
 * **AI 연구원** at [GNEWSOFT](https://www.gnewsoft.com/) (2024년 10월 – 현재)
@@ -134,7 +134,7 @@ Working directly with radiologists to evaluate synthetic MRI realism and integra
 - Lead weekly journal clubs on medical imaging at IMSI Lab
 - Mentor junior researchers across multimodal medical AI projects
 
-<div class="lang-en">
+<div class="lang-en" markdown="1">
 ## Contact
 
 ```
@@ -142,7 +142,7 @@ Email: khkim1729[at]gmail.com
 ```
 </div>
 
-<div class="lang-kr" style="display: none;">
+<div class="lang-kr" style="display: none;" markdown="1">
 ## 연락처
 
 ```
