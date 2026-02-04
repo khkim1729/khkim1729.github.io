@@ -1,0 +1,39 @@
+<div id="language-switcher" style="position: fixed; top: 20px; right: 20px; z-index: 1000; background: rgba(255,255,255,0.9); padding: 10px; border-radius: 5px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+  <button onclick="toggleLanguage()" id="lang-toggle" style="border: none; background: #007bff; color: white; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold;">
+    🇰🇷 한국어
+  </button>
+</div>
+
+<script>
+let currentLang = 'en';
+
+function toggleLanguage() {
+  const button = document.getElementById('lang-toggle');
+  const isKorean = currentLang === 'kr';
+
+  if (isKorean) {
+    currentLang = 'en';
+    button.innerHTML = '🇰🇷 한국어';
+    showEnglish();
+  } else {
+    currentLang = 'kr';
+    button.innerHTML = '🇺🇸 English';
+    showKorean();
+  }
+}
+
+function showEnglish() {
+  document.querySelectorAll('.lang-kr').forEach(el => el.style.display = 'none');
+  document.querySelectorAll('.lang-en').forEach(el => el.style.display = 'block');
+}
+
+function showKorean() {
+  document.querySelectorAll('.lang-en').forEach(el => el.style.display = 'none');
+  document.querySelectorAll('.lang-kr').forEach(el => el.style.display = 'block');
+}
+
+// 초기화 - 영어가 기본값
+document.addEventListener('DOMContentLoaded', function() {
+  showEnglish();
+});
+</script>
