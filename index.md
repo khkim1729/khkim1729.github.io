@@ -105,13 +105,13 @@ Working directly with radiologists to evaluate synthetic MRI realism and integra
 
 * **AI Researcher** at [GNEWSOFT](https://www.gnewsoft.com/) (Oct. 2024 – Present)
 * **Medical Imaging Team Lead** at [OUTTA](https://outta.ai/) (Jul. 2023 – Present)
-* **AI Researcher** at [Weatherpia](https://www.weatherpia.net/) (Mar. 2024 – Aug. 2024)
-* **Data Scientist** at [LG Uplus](https://www.lguplus.com/) (Jan. 2024 – Mar. 2024)
-* **AI Instructor** at [SK Telecom](https://www.sktelecom.com/) (Dec. 2023)
-* **AI Software Engineer** at [AI O2O Inc.](https://www.aio2o.com/) (Aug. 2023– Dec. 2023)
-* **Data Analyst** at [OESON](https://www.oeson.co.kr/) (Jan. 2023– Mar. 2023)
-* **Software Engineer** at [NuriFlex Holdings Inc.](https://www.nuriflex.co.kr/) (Nov. 2021– Dec. 2022)
-* **Junior Developer** at [AST Global](https://www.astglobal.co.kr/) (Oct. 2020– Apr. 2021)
+* **AI Researcher** at [Weatherpia](http://www.weatherpia.com/) (Mar. 2024 – Aug. 2024)
+* **Data Scientist** at [LG Uplus](https://www.lguplus.com/about/en) (Jan. 2024 – Mar. 2024)
+* **AI Instructor** at [SK Telecom](https://www.sktelecom.com/index_en.html) (Dec. 2023)
+* **AI Software Engineer** at [AI O2O Inc.](https://www.o2osolution.ai/) (Aug. 2023– Dec. 2023)
+* **Data Analyst** at [OESON](https://in.linkedin.com/company/oeson) (Jan. 2023– Mar. 2023)
+* **Software Engineer** at [NuriFlex Holdings Inc.](http://nuriflex.co.kr/) (Nov. 2021– Dec. 2022)
+* **Junior Developer** at [AST Global](https://www.astkorea.net/en) (Oct. 2020– Apr. 2021)
 </div>
 
 <div class="lang-kr" style="display: none;" markdown="1">
@@ -119,13 +119,13 @@ Working directly with radiologists to evaluate synthetic MRI realism and integra
 
 * **AI 연구원** at [GNEWSOFT](https://www.gnewsoft.com/) (2024년 10월 – 현재)
 * **의료영상팀 리더** at [OUTTA](https://outta.ai/) (2023년 7월 – 현재)
-* **AI 연구원** at [Weatherpia](https://www.weatherpia.net/) (2024년 3월 – 2024년 8월)
-* **데이터 사이언티스트** at [LG Uplus](https://www.lguplus.com/) (2024년 1월 – 2024년 3월)
-* **AI 강사** at [SK Telecom](https://www.sktelecom.com/) (2023년 12월)
-* **AI 소프트웨어 엔지니어** at [AI O2O Inc.](https://www.aio2o.com/) (2023년 8월 – 2023년 12월)
-* **데이터 분석가** at [OESON](https://www.oeson.co.kr/) (2023년 1월 – 2023년 3월)
-* **소프트웨어 엔지니어** at [NuriFlex Holdings Inc.](https://www.nuriflex.co.kr/) (2021년 11월 – 2022년 12월)
-* **주니어 개발자** at [AST Global](https://www.astglobal.co.kr/) (2020년 10월 – 2021년 4월)
+* **AI 연구원** at [Weatherpia](http://www.weatherpia.com/) (2024년 3월 – 2024년 8월)
+* **데이터 사이언티스트** at [LG Uplus](https://www.lguplus.com/about/en) (2024년 1월 – 2024년 3월)
+* **AI 강사** at [SK Telecom](https://www.sktelecom.com/index_en.html) (2023년 12월)
+* **AI 소프트웨어 엔지니어** at [AI O2O Inc.](https://www.o2osolution.ai/) (2023년 8월 – 2023년 12월)
+* **데이터 분석가** at [OESON](https://in.linkedin.com/company/oeson) (2023년 1월 – 2023년 3월)
+* **소프트웨어 엔지니어** at [NuriFlex Holdings Inc.](http://nuriflex.co.kr/) (2021년 11월 – 2022년 12월)
+* **주니어 개발자** at [AST Global](https://www.astkorea.net/en) (2020년 10월 – 2021년 4월)
 </div>
 
 ## Teaching & Mentoring
