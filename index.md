@@ -5,19 +5,9 @@ subtitle: Machine Learning Engineer
 cover-img: /assets/img/main1.jpeg
 ---
 
-{% include language-switcher.html %}
-
-<br/>
-
 <div class="lang-en">
 ## About me
-</div>
 
-<div class="lang-kr" style="display: none;">
-## 소개
-</div>
-
-<div class="lang-en">
 I am an AI Researcher at [GNEWSOFT](https://www.gnewsoft.com/) and a Research Assistant at the Medical Imaging Lab, Seoul National University, under the supervision of Prof. Nam-Joon Kim. I am also working closely with radiologists from Samsung Medical Center and NVIDIA researchers on cutting-edge medical AI projects.
 
 My current research focuses on:
@@ -34,6 +24,8 @@ Feel free to reach out if you're interested in medical AI, generative models, or
 </div>
 
 <div class="lang-kr" style="display: none;">
+## 소개
+
 저는 [GNEWSOFT](https://www.gnewsoft.com/)의 AI 연구원이며, 서울대학교 의료영상연구실에서 김남준 교수님 지도 하에 연구조교로 활동하고 있습니다. 또한 삼성의료원 방사선과 의료진 및 NVIDIA 연구진들과 최첨단 의료 AI 프로젝트를 진행하고 있습니다.
 
 현재 제 연구 분야는 다음과 같습니다:

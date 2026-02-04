@@ -3,10 +3,6 @@ layout: page
 title: CV
 ---
 
-{% include language-switcher.html %}
-
-<br/>
-
 # Education
 
 ### Kookmin University, Sep 2022 - Feb 2024

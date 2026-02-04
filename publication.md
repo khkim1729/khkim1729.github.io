@@ -3,8 +3,6 @@ layout: page
 title: Publication
 ---
 
-{% include language-switcher.html %}
-
 \* indicates alphabetical order or equal contribution.
 
 I can also be found on [Google Scholar](https://scholar.google.com/citations?user=N3LVcyEAAAAJ&hl=ko).
