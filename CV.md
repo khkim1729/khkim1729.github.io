@@ -30,48 +30,48 @@ title: CV
 
 # Professional Experience
 
-### GNEWSOFT, Oct. 2024 – Present
+### [GNEWSOFT](https://www.gnewsoft.com/), Oct. 2024 – Present
 #### AI Researcher
 - Designed and led development of HyperspectralMAE, achieving state-of-the-art performance in classification tasks
 - Extended foundation model to downstream tasks including unmixing, denoising, and pixel-wise classification
 - Fine-tuned LLaMA 3.1 8B and multimodal medical vision-language models based on Gemma architecture
 
-### OUTTA, Jul. 2023 – Present
+### [OUTTA](https://outta.ai/), Jul. 2023 – Present
 #### Medical Imaging Team Lead
 - Active contributor in AI organization at Seoul National University
 - Led facial image generation and detection projects using DDPM and ProGAN
 - Taught deep learning and Python bootcamps for 450+ participants (2023) and 650+ participants (2024)
 
-### Weatherpia, Mar. 2024 – Aug. 2024
+### [Weatherpia](http://www.weatherpia.com/), Mar. 2024 – Aug. 2024
 #### AI Researcher
 - Built weather integration platform providing KMA-based datasets via MariaDB and APIs
 - Delivered accurate weather data to clients including Korean Broadcasting System (KBS)
 
-### LG Uplus, Jan. 2024 – Mar. 2024
+### [LG Uplus](https://www.lguplus.com/about/en), Jan. 2024 – Mar. 2024
 #### Data Scientist
 - Built Python-based parser for credit card application data extraction
 - Automated transformation and database insertion processes
 
-### SK Telecom, Dec. 2023
+### [SK Telecom](https://www.sktelecom.com/index_en.html), Dec. 2023
 #### AI Instructor (Contract)
 - Delivered 3-day Stable Diffusion training for 30+ engineers from multiple tech teams
 - Led practical sessions on Text-to-Image and Image-to-Image generation
 
-### AI O2O Inc., Aug. 2023– Dec. 2023
+### [AI O2O Inc.](https://www.o2osolution.ai/), Aug. 2023– Dec. 2023
 #### AI Software Engineer
 - Developed Django-based recommendation systems for travel routes and food preferences
 - Implemented RAG-based chatbot for enhanced personalized interaction
 
-### OESON, Jan. 2023– Mar. 2023
+### [OESON](https://in.linkedin.com/company/oeson), Jan. 2023– Mar. 2023
 #### Data Analyst
 - Performed sentiment analysis and statistical modeling on complex datasets in Sydney, Australia
 
-### NuriFlex Holdings Inc., Nov. 2021– Dec. 2022
+### [NuriFlex Holdings Inc.](http://nuriflex.co.kr/), Nov. 2021– Dec. 2022
 #### Software Engineer
 - Developed REST APIs and batch programs using Java and Spring Boot
 - Maintained CI/CD pipelines in Kubernetes environment
 
-### AST Global, Oct. 2020– Apr. 2021
+### [AST Global](https://www.astkorea.net/en), Oct. 2020– Apr. 2021
 #### Junior Developer
 - Created AR/VR content using Unity and C# for immersive applications
 

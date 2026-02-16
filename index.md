@@ -16,7 +16,7 @@ My current research focuses on:
 * **Foundation Models**: HyperspectralMAE, LLaMA fine-tuning, and vision-language models
 * **Hyperspectral Imaging**: Spectral analysis, anomaly detection, and pixel-wise classification
 
-I am passionate about developing AI solutions that can make a real impact in medical diagnostics and patient care. I lead the SUDAL Medical Imaging Team and have built the official [IMSI Lab website](https://imsilab.github.io) from the ground up.
+I am passionate about developing AI solutions that can make a real impact in medical diagnostics and patient care. I lead the SUDAL Medical Imaging Team and have built the official [IMSI Lab website](https://imsi.capp.snu.ac.kr) from the ground up.
 
 **I believe AI should serve humanity, especially in healthcare where it can save lives! 🏥🤖**
 
