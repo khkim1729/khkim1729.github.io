@@ -8,7 +8,7 @@ cover-img: /assets/img/main1.jpeg
 <div class="lang-en" markdown="1">
 ## About me
 
-I am an AI Researcher at [GNEWSOFT](https://www.gnewsoft.com/) and a Research Assistant at the Medical Imaging Lab, Seoul National University, under the supervision of Prof. Nam-Joon Kim. I am also working closely with radiologists from Samsung Medical Center and NVIDIA researchers on cutting-edge medical AI projects.
+I am an AI Researcher at [GNEWSOFT](https://www.gnewsoft.com/) and a Research Assistant at the [Medical Imaging Lab (IMSI)](http://capp.snu.ac.kr/imsi/), [CAPP Lab](http://capp.snu.ac.kr/), Seoul National University. My research is supervised by [Prof. Nam-Joon Kim](http://capp.snu.ac.kr/imsi/), [Prof. Hyuk-Jae Lee](http://capp.snu.ac.kr/?p=people), and [Dr. Woo Kyoung Jeong](http://www.samsunghospital.com/home/reservation/common/doctorProfile.do?DR_NO=1360) (Radiologist, Samsung Medical Center). I collaborate closely with NVIDIA researchers on cutting-edge medical AI projects.
 
 My current research focuses on:
 * **Medical Image Analysis**: 3D MRI synthesis, segmentation-guided ControlNet pipelines, and clinical AI applications
@@ -16,7 +16,7 @@ My current research focuses on:
 * **Foundation Models**: HyperspectralMAE, LLaMA fine-tuning, and vision-language models
 * **Hyperspectral Imaging**: Spectral analysis, anomaly detection, and pixel-wise classification
 
-I am passionate about developing AI solutions that can make a real impact in medical diagnostics and patient care. I lead the SUDAL Medical Imaging Team and have built the official [IMSI Lab website](https://imsi.capp.snu.ac.kr) from the ground up.
+I am passionate about developing AI solutions that can make a real impact in medical diagnostics and patient care. I lead the [SUDAL Medical Imaging Team](https://team-sudal.tistory.com/) and have built the official [IMSI Lab website](http://capp.snu.ac.kr/imsi/) from the ground up. The IMSI Lab is a specialized medical imaging laboratory under Seoul National University's [CAPP Lab](http://capp.snu.ac.kr/).
 
 **I believe AI should serve humanity, especially in healthcare where it can save lives! 🏥🤖**
 
@@ -26,31 +26,47 @@ Feel free to reach out if you're interested in medical AI, generative models, or
 <div class="lang-kr" style="display: none;" markdown="1">
 ## 소개
 
-저는 [GNEWSOFT](https://www.gnewsoft.com/)의 AI 연구원이며, 서울대학교 의료영상연구실에서 김남준 교수님 지도 하에 연구조교로 활동하고 있습니다. 또한 삼성의료원 방사선과 의료진 및 NVIDIA 연구진들과 최첨단 의료 AI 프로젝트를 진행하고 있습니다.
+저는 [GNEWSOFT](https://www.gnewsoft.com/)의 AI 연구원이며, 서울대학교 [CAPP Lab](http://capp.snu.ac.kr/) 산하 [의료영상연구실(IMSI)](http://capp.snu.ac.kr/imsi/)에서 연구조교로 활동하고 있습니다. [김남준 교수님](http://capp.snu.ac.kr/imsi/), [이혁재 교수님](http://capp.snu.ac.kr/?p=people), [정우경 의료진](http://www.samsunghospital.com/home/reservation/common/doctorProfile.do?DR_NO=1360)(삼성의료원 영상의학과)의 지도를 받고 있으며, NVIDIA 연구진들과 최첨단 의료 AI 프로젝트를 진행하고 있습니다.
 
-현재 제 연구 분야는 다음과 같습니다:
-* **의료영상분석**: 3D MRI 합성, 분할 가이드 ControlNet 파이프라인, 임상 AI 응용
-* **생성형 AI**: 확산 모델, 파운데이션 모델, 멀티모달 딥러닝
-* **파운데이션 모델**: HyperspectralMAE, LLaMA 파인튜닝, 비전-언어 모델
-* **초분광 이미징**: 스펙트럼 분석, 이상탐지, 픽셀 단위 분류
+## 현재 연구 및 리더십
 
-의료 진단 및 환자 치료에 실질적인 도움이 되는 AI 솔루션 개발에 열정을 가지고 있습니다. SUDAL 의료영상팀을 리드하고 있으며, [IMSI Lab 공식 웹사이트](https://imsilab.github.io)를 처음부터 직접 구축했습니다.
+### 연구 분야
+종양 인식 간 MRI 합성, 간 종양 분류, 뇌 MRI 바이오마커 예측(IDH 돌연변이, 1p/19q 공동 결실, WHO 등급), 치아 감지 및 치아 우식 분할, 전립선암 분류, 간 종양의 TNM 병기 등 다양한 임상 영상 도메인에서 멀티모달 의료 AI 연구를 수행하고 있습니다.
+
+### [Lambda Course](https://lambdacourse.tistory.com/)
+매주 토요일(12:00-14:00)에 개최되는 주간 연구 세미나를 조직하고 리드하며, 세션당 약 6편의 최첨단 AI 및 의료영상 논문에 대한 구조화된 토론과 리뷰를 진행합니다.
+
+### 플랫폼 개발
+연구 하이라이트, 출판물, 구성원 프로필, 프로젝트 문서화를 위한 중앙집중식 플랫폼을 제공하는 [IMSI Lab 공식 웹사이트](http://capp.snu.ac.kr/imsi/)를 처음부터 직접 구축하고 유지보수하고 있으며, 연구실 가시성과 내부 커뮤니케이션을 크게 향상시켰습니다.
+
+의료 진단 및 환자 치료에 실질적인 도움이 되는 AI 솔루션 개발에 열정을 가지고 있습니다. [SUDAL 의료영상팀](https://team-sudal.tistory.com/)을 리드하고 있으며, IMSI Lab은 서울대학교 [CAPP Lab](http://capp.snu.ac.kr/) 산하 전문 의료영상 연구실입니다.
 
 **AI는 인류를 위해 봉사해야 하며, 특히 생명을 구할 수 있는 의료 분야에서 더욱 그렇다고 믿습니다! 🏥🤖**
 
 의료 AI, 생성 모델, 또는 공동 연구 기회에 관심이 있으시면 언제든 연락주세요!
 </div>
 
-## Current Research Collaborations
+## Current Research & Leadership
+
+### Research Focus
+I conduct research on multimodal medical AI across diverse clinical imaging domains, including tumor-aware liver MRI synthesis, liver tumor classification, brain MRI biomarker prediction (IDH mutation, 1p/19q codeletion, WHO grade), tooth detection and dental caries segmentation, prostate cancer classification, and TNM staging of liver tumors.
+
+### [Lambda Course](https://lambdacourse.tistory.com/)
+I organize and lead a weekly research seminar held every Saturday (12:00–14:00), conducting structured discussions and reviews of approximately six state-of-the-art AI and medical imaging papers per session.
+
+### Platform Development
+I solely built and maintain the official [IMSI Lab website](http://capp.snu.ac.kr/imsi/), providing a centralized platform for research highlights, publications, member profiles, and project documentation, significantly improving lab visibility and internal communication.
+
+## International Collaborations
 
 ### TEAM CEUS (NVIDIA Collaboration)
-Working with NVIDIA researchers including **Ping Shu Ho (Cliff)** and **Ivan Au-Yeung** on diffusion-based contrast-enhanced ultrasound (CEUS) reconstruction and noise reduction models optimized for NVIDIA GPU pipelines.
+Work in direct technical collaboration with NVIDIA researchers, including [**Ping Shu Ho (Cliff)**](https://www.linkedin.com/in/ping-shu-ho/) and [**Ivan Au-Yeung**](https://www.linkedin.com/in/ivan-au-yeung-1359901ba/?originalSubdomain=hk), on diffusion-based contrast-enhanced ultrasound (CEUS) reconstruction, noise reduction, and real-time enhancement models optimized for NVIDIA GPU computing pipelines.
 
 ### TEAM PNI (NVIDIA Collaboration)
-Collaborating with **Ka-Chun (Charles) Cheung, Ph.D.** and **Ginny Wong, Ph.D.** on physiology-informed MRI generation and neural parameterization aligned with NVIDIA's biomedical simulation research.
+Conduct joint model development with [**Ka-Chun (Charles) Cheung, Ph.D.**](https://www.linkedin.com/in/ka-chun-cheung-ph-d-40b12446) and [**Ginny Wong, Ph.D.**](https://www.linkedin.com/in/ginny-wong-phd-3985bab5/), focusing on physiology-informed MRI generation, neural parameterization, and multimodal generative imaging aligned with NVIDIA's biomedical simulation research.
 
-### Samsung Medical Center Partnership
-Working directly with radiologists to evaluate synthetic MRI realism and integrate generative models into clinical analysis workflows.
+### Multi-institutional Partnerships
+Conduct collaborative research with multiple clinical and industrial partners including **Samsung Medical Center (SMC)**, **Severance Hospital**, **NVIDIA Hong Kong**, and **NVIDIA Taiwan**, focusing on generative medical imaging, multimodal clinical AI, and large-scale synthetic medical data generation.
 
 <div class="lang-en" markdown="1">
 ## Education
@@ -91,12 +107,24 @@ Working directly with radiologists to evaluate synthetic MRI realism and integra
 ## Recent Publications
 
 ### 2026
-- **Kyeonghun Kim**, Jaehyeok Bae, Youngung Han, et al., _"3D-LLDM: Label-Guided 3D Latent Diffusion Model"_, **IEEE ISBI 2026**
-- **Kyeonghun Kim**, Hyeonseok Jung, Youngung Han, et al., _"MAESIL: Masked Autoencoder for Enhanced Self-supervised Medical Image Learning"_, **IEEE ICEIC 2026**
+
+- **[3D-LLDM: Label-Guided 3D Latent Diffusion Model](https://drive.google.com/file/d/1vAzN0kGJcB5YubmK4JvNFUgaqlec4kzZ/view?usp=sharing)**
+  **Kyeonghun Kim**, Jaehyeok Bae, Youngung Han, Joo Young Bae, Seoyoung Ju, Junsu Lim, Gyeongmin Kim, Nam-Joon Kim<sup>†</sup>, Woo Kyoung Jeong, Ken Ying-Kai Liao, Won Jae Lee, Pa Hong, Hyuk-Jae Lee
+  [**IEEE Int. Symp. Biomedical Imaging (ISBI) 2026**](https://biomedicalimaging.org/2026/) ***Oral Presentation***
+
+- **[MAESIL: Masked Autoencoder for Enhanced Self-supervised Medical Image Learning](https://drive.google.com/file/d/1saWbcEu17BOUgGZUKTnXILk4p4EZ3P7G/view)**
+  **Kyeonghun Kim**, Hyeonseok Jung, Youngung Han, Junsu Lim, YeonJu Jean, Seongbin Park, Eunseob Choi, Hyunsu Go, SeoYoung Ju, Seohyoung Park, Gyeongmin Kim, MinJu Kwon, KyungSeok Yuh, Soo Yong Kim, Ken Ying-Kai Liao, Nam-Joon Kim<sup>†</sup>, Hyuk-Jae Lee
+  [**IEEE Int. Conf. Electronics, Information, and Communication (ICEIC) 2026**](https://iceic.org/2026/)
 
 ### 2025
-- **Kyeonghun Kim**, Youngung Han, SeoYoung Ju, et al., _"CIPHER: Counterfeit Image Pattern High-level Examination via Representation"_, **IEEE ICCE-Asia 2025**
-- Youngung Han, **Kyeonghun Kim**, Seoyoung Ju, et al., _"FOSCU: Feasibility of Synthetic MRI Generation via Duo-Diffusion Models"_, **IEEE APCCAS 2025**
+
+- **[CIPHER: Counterfeit Image Pattern High-level Examination via Representation](https://drive.google.com/file/d/124Vg2U4MSRy7rE5PKpa56FxUznbmTaJM/view)**
+  **Kyeonghun Kim**, Youngung Han, SeoYoung Ju, Yeonju Jean, YooHyun Kim, Minseo Choi, SuYeon Lim, Kyungtae Park, Seungwoo Baek, Sieun Hyeon, Nam-Joon Kim<sup>†</sup>, Hyuk-Jae Lee
+  [**IEEE Int. Conf. Consumer Electronics - Asia (ICCE-Asia) 2025**](https://icce-asia2025.org/2025/)
+
+- **[FOSCU: Feasibility of Synthetic MRI Generation via Duo-Diffusion Models](https://drive.google.com/file/d/1H_ZA14jrUSSB8iZbK_7qLR87pa5pYR03/view?usp=drive_link)**
+  Youngung Han, **Kyeonghun Kim**, Seoyoung Ju, Yeonju Jean, Minkyung Cha, Seohyoung Park, Hyeonseok Jung, Nam-Joon Kim<sup>†</sup>, Woo Kyoung Jeong, Ken Ying-Kai Liao, Hyuk-Jae Lee
+  [**IEEE Asia Pacific Conf. Circuits and Systems (APCCAS) 2025**](https://apccas2025.org/)
 
 [**See all publications →**](/publication)
 
@@ -140,6 +168,16 @@ Working directly with radiologists to evaluate synthetic MRI realism and integra
 ```
 Email: khkim1729[at]gmail.com
 ```
+
+### Links
+<div style="text-align: center; margin: 20px 0;">
+  <a href="https://docs.google.com/presentation/d/1Ns0ebR9yU-mzKa_Ua9e0_YRzSjMfQzVUia90qfQuW5E/edit?usp=sharing" target="_blank" style="display: inline-block; margin: 10px; text-decoration: none;">
+    <div style="background-color: #f8f9fa; border: 2px solid #dee2e6; border-radius: 10px; padding: 15px; width: 120px; text-align: center; transition: all 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+      <div style="font-size: 2em; margin-bottom: 5px;">📊</div>
+      <div style="font-weight: bold; color: #495057;">Portfolio (KR)</div>
+    </div>
+  </a>
+</div>
 </div>
 
 <div class="lang-kr" style="display: none;" markdown="1">
@@ -148,4 +186,14 @@ Email: khkim1729[at]gmail.com
 ```
 이메일: khkim1729[at]gmail.com
 ```
+
+### 링크
+<div style="text-align: center; margin: 20px 0;">
+  <a href="https://docs.google.com/presentation/d/1Ns0ebR9yU-mzKa_Ua9e0_YRzSjMfQzVUia90qfQuW5E/edit?usp=sharing" target="_blank" style="display: inline-block; margin: 10px; text-decoration: none;">
+    <div style="background-color: #f8f9fa; border: 2px solid #dee2e6; border-radius: 10px; padding: 15px; width: 120px; text-align: center; transition: all 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+      <div style="font-size: 2em; margin-bottom: 5px;">📊</div>
+      <div style="font-weight: bold; color: #495057;">포트폴리오</div>
+    </div>
+  </a>
+</div>
 </div>

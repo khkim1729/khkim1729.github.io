@@ -3,6 +3,16 @@ layout: page
 title: CV
 ---
 
+<div style="text-align: center; margin: 20px 0;">
+  <a href="https://drive.google.com/file/d/1rAHBDnjFKuMpUSmotlibU4ES0BHUIDOM/view?usp=sharing"
+     target="_blank"
+     style="display: inline-block; background-color: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: background-color 0.3s;">
+    📄 Download CV (PDF)
+  </a>
+</div>
+
+---
+
 # Education
 
 ### Kookmin University, Sep 2022 - Feb 2024
