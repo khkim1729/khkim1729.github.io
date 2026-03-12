@@ -128,27 +128,33 @@ Conduct collaborative research with multiple clinical and industrial partners in
 
 ## Recent Publications
 
+<style>
+.paper-title { font-size: 1.1em; font-weight: bold; }
+.paper-authors { font-size: 0.9em; }
+.paper-venue { font-size: 0.9em; }
+</style>
+
 <!-- Note: Update this section with latest 4 publications from /publication page -->
 
 ### Under Review (2026)
 
-- **[TIME: 2.5D IDH-predictive Multimodal Ensemble for Glioma Subtyping](https://github.com/khkim1729/TIME)** [[Code]](https://github.com/khkim1729/TIME)<br/>
-  **Kyeonghun Kim**, Jieon Kim, Seongheon Choi, Donghyeon Seo, Minchan Kim, Insung Hwang, Suemin Yang, Taeyun Kim, Seoyoon Koo, Wonhyuk Kim, Yoonseon Jung, Nam-Joon Kim<sup>†</sup>, Woo Kyoung Jeong, Won Jae Lee, Pa Hong, Ken Ying-Kai Liao, Hyuk-Jae Lee<br/>
-  [**Int. Conf. Medical Image Computing and Computer-Assisted Intervention (MICCAI) 2026**](https://conferences.miccai.org/2026/en/) *(Under Review)*
+- <span class="paper-title">**[TIME: 2.5D IDH-predictive Multimodal Ensemble for Glioma Subtyping](https://github.com/khkim1729/TIME)** [[Code]](https://github.com/khkim1729/TIME)</span><br/>
+  <span class="paper-authors">**Kyeonghun Kim**, Jieon Kim, Seongheon Choi, Donghyeon Seo, Minchan Kim, Insung Hwang, Suemin Yang, Taeyun Kim, Seoyoon Koo, Wonhyuk Kim, Yoonseon Jung, Nam-Joon Kim<sup>†</sup>, Woo Kyoung Jeong, Won Jae Lee, Pa Hong, Ken Ying-Kai Liao, Hyuk-Jae Lee</span><br/>
+  <span class="paper-venue">[**Int. Conf. Medical Image Computing and Computer-Assisted Intervention (MICCAI) 2026**](https://conferences.miccai.org/2026/en/) *(Under Review)*</span>
 
-- **[MATHENA: Mamba-based Tooth Hierarchical Estimator and Evaluation Network](https://github.com/khkim1729/mathena)** [[Code]](https://github.com/khkim1729/mathena)<br/>
-  **Kyeonghun Kim**, Jaehyung Park, Youngung Han, Anna Jung, Seongbin Park, Sumin Lee, Jiwon Yang, Jiyoon Han, Subeen Lee, Junsu Lim, Hyunsu Go, Eunseob Choi, Hyeonseok Jung, Soo Yong Kim, Nam-Joon Kim<sup>†</sup>, Woo Kyoung Jeong, Won Jae Lee, Pa Hong, Ken Ying-Kai Liao, Hyuk-Jae Lee<br/>
-  [**Int. Conf. Medical Image Computing and Computer-Assisted Intervention (MICCAI) 2026**](https://conferences.miccai.org/2026/en/) *(Under Review)*
+- <span class="paper-title">**[MATHENA: Mamba-based Tooth Hierarchical Estimator and Evaluation Network](https://github.com/khkim1729/mathena)** [[Code]](https://github.com/khkim1729/mathena)</span><br/>
+  <span class="paper-authors">**Kyeonghun Kim**, Jaehyung Park, Youngung Han, Anna Jung, Seongbin Park, Sumin Lee, Jiwon Yang, Jiyoon Han, Subeen Lee, Junsu Lim, Hyunsu Go, Eunseob Choi, Hyeonseok Jung, Soo Yong Kim, Nam-Joon Kim<sup>†</sup>, Woo Kyoung Jeong, Won Jae Lee, Pa Hong, Ken Ying-Kai Liao, Hyuk-Jae Lee</span><br/>
+  <span class="paper-venue">[**Int. Conf. Medical Image Computing and Computer-Assisted Intervention (MICCAI) 2026**](https://conferences.miccai.org/2026/en/) *(Under Review)*</span>
 
 ### Published (2026)
 
-- **[3D-LLDM: Label-Guided 3D Latent Diffusion Model](https://drive.google.com/file/d/1vAzN0kGJcB5YubmK4JvNFUgaqlec4kzZ/view?usp=sharing)** [[Poster]](https://drive.google.com/file/d/1mftbV7-XWdl3k3FDau8Vv8MZddhJ8oGK/view?usp=sharing) [[Slides]](https://drive.google.com/file/d/1haddFfwmRb3lFlNVbTGn8_GuqbhntSNP/view?usp=drive_link)<br/>
-  **Kyeonghun Kim**, Jaehyeok Bae, Youngung Han, Joo Young Bae, Seoyoung Ju, Junsu Lim, Gyeongmin Kim, Nam-Joon Kim<sup>†</sup>, Woo Kyoung Jeong, Ken Ying-Kai Liao, Won Jae Lee, Pa Hong, Hyuk-Jae Lee<br/>
-  [**IEEE Int. Symp. Biomedical Imaging (ISBI) 2026**](https://biomedicalimaging.org/2026/) ***Oral Presentation***
+- <span class="paper-title">**[3D-LLDM: Label-Guided 3D Latent Diffusion Model](https://drive.google.com/file/d/1vAzN0kGJcB5YubmK4JvNFUgaqlec4kzZ/view?usp=sharing)** [[Poster]](https://drive.google.com/file/d/1mftbV7-XWdl3k3FDau8Vv8MZddhJ8oGK/view?usp=sharing) [[Slides]](https://drive.google.com/file/d/1haddFfwmRb3lFlNVbTGn8_GuqbhntSNP/view?usp=drive_link)</span><br/>
+  <span class="paper-authors">**Kyeonghun Kim**, Jaehyeok Bae, Youngung Han, Joo Young Bae, Seoyoung Ju, Junsu Lim, Gyeongmin Kim, Nam-Joon Kim<sup>†</sup>, Woo Kyoung Jeong, Ken Ying-Kai Liao, Won Jae Lee, Pa Hong, Hyuk-Jae Lee</span><br/>
+  <span class="paper-venue">[**IEEE Int. Symp. Biomedical Imaging (ISBI) 2026**](https://biomedicalimaging.org/2026/) ***Oral Presentation***</span>
 
-- **[MAESIL: Masked Autoencoder for Enhanced Self-supervised Medical Image Learning](https://drive.google.com/file/d/1saWbcEu17BOUgGZUKTnXILk4p4EZ3P7G/view)** [[Code]](https://github.com/khkim1729/MAEgic) [[Poster]](https://drive.google.com/file/d/12Hc7rvhjkuc640BqzIbnKFGVCoInGj44/view?usp=sharing)<br/>
-  **Kyeonghun Kim**, Hyeonseok Jung, Youngung Han, Junsu Lim, YeonJu Jean, Seongbin Park, Eunseob Choi, Hyunsu Go, SeoYoung Ju, Seohyoung Park, Gyeongmin Kim, MinJu Kwon, KyungSeok Yuh, Soo Yong Kim, Ken Ying-Kai Liao, Nam-Joon Kim<sup>†</sup>, Hyuk-Jae Lee<br/>
-  [**IEEE Int. Conf. Electronics, Information, and Communication (ICEIC) 2026**](https://iceic.org/2026/)
+- <span class="paper-title">**[MAESIL: Masked Autoencoder for Enhanced Self-supervised Medical Image Learning](https://drive.google.com/file/d/1saWbcEu17BOUgGZUKTnXILk4p4EZ3P7G/view)** [[Code]](https://github.com/khkim1729/MAEgic) [[Poster]](https://drive.google.com/file/d/12Hc7rvhjkuc640BqzIbnKFGVCoInGj44/view?usp=sharing)</span><br/>
+  <span class="paper-authors">**Kyeonghun Kim**, Hyeonseok Jung, Youngung Han, Junsu Lim, YeonJu Jean, Seongbin Park, Eunseob Choi, Hyunsu Go, SeoYoung Ju, Seohyoung Park, Gyeongmin Kim, MinJu Kwon, KyungSeok Yuh, Soo Yong Kim, Ken Ying-Kai Liao, Nam-Joon Kim<sup>†</sup>, Hyuk-Jae Lee</span><br/>
+  <span class="paper-venue">[**IEEE Int. Conf. Electronics, Information, and Communication (ICEIC) 2026**](https://iceic.org/2026/)</span>
 
 [**See all publications →**](/publication)
 
