@@ -13,8 +13,8 @@ author: Kyeonghun Kim
 # 예를 들어 ETRI 라는 항목을 네비게이션 바에 추가하고 싶은 경우, etri.md 파일 생성 후 ETRI: "etri" 라고 지정.
 navbar-links:
   CV: "CV"
-  Publication: "publication"
-  Project: "project"
+  Publications: "publication"
+  Projects: "project"
   GitHub: "https://github.com/khkim1729"
   Google Scholar: "https://scholar.google.com/citations?user=N3LVcyEAAAAJ&hl=ko"
   BLOG(KOREAN): "https://blog.naver.com/kgh9080"
@@ -38,8 +38,9 @@ round-avatar: true
 social-network-links:
   email: "khkim1729@gmail.com"
   github: khkim1729
-  linkedin: khkim1729
+  linkedin: kyeonghun-kim-50705525b
   twitter: khkim1729
+  portfolio: "https://docs.google.com/presentation/d/1Ns0ebR9yU-mzKa_Ua9e0_YRzSjMfQzVUia90qfQuW5E/edit?usp=sharing"
 #  rss: true
 #  reddit: yourname
 #  xing: yourname

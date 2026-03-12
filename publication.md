@@ -11,28 +11,28 @@ I can also be found on [Google Scholar](https://scholar.google.com/citations?use
 
 ### 2026 Under Review
 
-- **FiLMamba: FiLM-Conditioned State Space Models for 3D Multi-Coil MRI Reconstruction**
-  Eunseob Choi, Hyeonseok Jung, **Kyeonghun Kim**, Nam-Joon Kim<sup>†</sup>, Pa Hong, Hyuk-Jae Lee
+- **FiLMamba: FiLM-Conditioned State Space Models for 3D Multi-Coil MRI Reconstruction**<br/>
+  Eunseob Choi, Hyeonseok Jung, **Kyeonghun Kim**, Nam-Joon Kim<sup>†</sup>, Pa Hong, Hyuk-Jae Lee<br/>
   [**Int. Conf. Medical Image Computing and Computer-Assisted Intervention (MICCAI) 2026**](https://conferences.miccai.org/2026/en/) *(Under Review)*
 
-- **[TIME: 2.5D IDH-predictive Multimodal Ensemble for Glioma Subtyping](https://github.com/khkim1729/TIME)**
-  **Kyeonghun Kim**, Jieon Kim, Seongheon Choi, Donghyeon Seo, Minchan Kim, Insung Hwang, Suemin Yang, Taeyun Kim, Seoyoon Koo, Wonhyuk Kim, Yoonseon Jung, Nam-Joon Kim<sup>†</sup>, Woo Kyoung Jeong, Won Jae Lee, Pa Hong, Ken Ying-Kai Liao, Hyuk-Jae Lee [[Code]](https://github.com/khkim1729/TIME)
+- **[TIME: 2.5D IDH-predictive Multimodal Ensemble for Glioma Subtyping](https://github.com/khkim1729/TIME)** [[Code]](https://github.com/khkim1729/TIME)<br/>
+  **Kyeonghun Kim**, Jieon Kim, Seongheon Choi, Donghyeon Seo, Minchan Kim, Insung Hwang, Suemin Yang, Taeyun Kim, Seoyoon Koo, Wonhyuk Kim, Yoonseon Jung, Nam-Joon Kim<sup>†</sup>, Woo Kyoung Jeong, Won Jae Lee, Pa Hong, Ken Ying-Kai Liao, Hyuk-Jae Lee<br/>
   [**Int. Conf. Medical Image Computing and Computer-Assisted Intervention (MICCAI) 2026**](https://conferences.miccai.org/2026/en/) *(Under Review)*
 
-- **MAESTRO: Adaptive Experts with Spiking Temporal-spatial Routing for PNI Prediction**
-  Youngung Han, Induk Um, **Kyeonghun Kim**, Hyunsu Go, Junga Kim, Dohyun Kweon, Jaewon Jung, Jina Jeong, Yuluei Jeong, Minjae Park, Nam-Joon Kim<sup>†</sup>, Woo Kyoung Jeong, Won Jae Lee, Pa Hong, Ping Shu Ho, Tak Shing Au Yeung, Ka Chun Cheung, Ken Ying-Kai Liao, Hyuk-Jae Lee
+- **MAESTRO: Adaptive Experts with Spiking Temporal-spatial Routing for PNI Prediction**<br/>
+  Youngung Han, Induk Um, **Kyeonghun Kim**, Hyunsu Go, Junga Kim, Dohyun Kweon, Jaewon Jung, Jina Jeong, Yuluei Jeong, Minjae Park, Nam-Joon Kim<sup>†</sup>, Woo Kyoung Jeong, Won Jae Lee, Pa Hong, Ping Shu Ho, Tak Shing Au Yeung, Ka Chun Cheung, Ken Ying-Kai Liao, Hyuk-Jae Lee<br/>
   [**Int. Conf. Medical Image Computing and Computer-Assisted Intervention (MICCAI) 2026**](https://conferences.miccai.org/2026/en/) *(Under Review)*
 
-- **State-Space Modeling of Spatial Structure and Phase Dynamics for PNI Prediction**
-  Youngung Han, Hyunsu Go, **Kyeonghun Kim**, Induk Um, Junga Kim, Dohyun Kweon, Jaewon Jung, Jina Jeong, Sungha Park, Minjae Park, Nam-Joon Kim<sup>†</sup>, Woo Kyoung Jeong, Won Jae Lee, Pa Hong, Ping Shu Ho, Tak Shing Au Yeung, Ka Chun Cheung, Ken Ying-Kai Liao, Hyuk-Jae Lee
+- **State-Space Modeling of Spatial Structure and Phase Dynamics for PNI Prediction**<br/>
+  Youngung Han, Hyunsu Go, **Kyeonghun Kim**, Induk Um, Junga Kim, Dohyun Kweon, Jaewon Jung, Jina Jeong, Sungha Park, Minjae Park, Nam-Joon Kim<sup>†</sup>, Woo Kyoung Jeong, Won Jae Lee, Pa Hong, Ping Shu Ho, Tak Shing Au Yeung, Ka Chun Cheung, Ken Ying-Kai Liao, Hyuk-Jae Lee<br/>
   [**Int. Conf. Medical Image Computing and Computer-Assisted Intervention (MICCAI) 2026**](https://conferences.miccai.org/2026/en/) *(Under Review)*
 
 - **PANDA: Phase-Aware Diffusion Refinement and Expert Aggregation for PNI Detection**
   Youngung Han, Dohyun Kweon, **Kyeonghun Kim**, Hyunsu Go, Junga Kim, Induk Um, Jaewon Jung, Jina Jeong, Anna Jung, Minjae Park, Nam-Joon Kim<sup>†</sup>, Woo Kyoung Jeong, Won Jae Lee, Pa Hong, Ping Shu Ho, Tak Shing Au Yeung, Ka Chun Cheung, Ken Ying-Kai Liao, Hyuk-Jae Lee
   [**Int. Conf. Medical Image Computing and Computer-Assisted Intervention (MICCAI) 2026**](https://conferences.miccai.org/2026/en/) *(Under Review)*
 
-- **[MATHENA: Mamba-based Tooth Hierarchical Estimator and Evaluation Network](https://github.com/khkim1729/mathena)**
-  **Kyeonghun Kim**, Jaehyung Park, Youngung Han, Anna Jung, Seongbin Park, Sumin Lee, Jiwon Yang, Jiyoon Han, Subeen Lee, Junsu Lim, Hyunsu Go, Eunseob Choi, Hyeonseok Jung, Soo Yong Kim, Nam-Joon Kim<sup>†</sup>, Woo Kyoung Jeong, Won Jae Lee, Pa Hong, Ken Ying-Kai Liao, Hyuk-Jae Lee [[Code]](https://github.com/khkim1729/mathena)
+- **[MATHENA: Mamba-based Tooth Hierarchical Estimator and Evaluation Network](https://github.com/khkim1729/mathena)** [[Code]](https://github.com/khkim1729/mathena)<br/>
+  **Kyeonghun Kim**, Jaehyung Park, Youngung Han, Anna Jung, Seongbin Park, Sumin Lee, Jiwon Yang, Jiyoon Han, Subeen Lee, Junsu Lim, Hyunsu Go, Eunseob Choi, Hyeonseok Jung, Soo Yong Kim, Nam-Joon Kim<sup>†</sup>, Woo Kyoung Jeong, Won Jae Lee, Pa Hong, Ken Ying-Kai Liao, Hyuk-Jae Lee<br/>
   [**Int. Conf. Medical Image Computing and Computer-Assisted Intervention (MICCAI) 2026**](https://conferences.miccai.org/2026/en/) *(Under Review)*
 
 - **FBI: A Framework for Benchmark Integrity to Verify Malicious Contamination in LLMs**
@@ -41,8 +41,8 @@ I can also be found on [Google Scholar](https://scholar.google.com/citations?use
 
 ### 2026 Publications
 
-- **[3D-LLDM: Label-Guided 3D Latent Diffusion Model](https://drive.google.com/file/d/1vAzN0kGJcB5YubmK4JvNFUgaqlec4kzZ/view?usp=sharing)**
-  **Kyeonghun Kim**, Jaehyeok Bae, Youngung Han, Joo Young Bae, Seoyoung Ju, Junsu Lim, Gyeongmin Kim, Nam-Joon Kim<sup>†</sup>, Woo Kyoung Jeong, Ken Ying-Kai Liao, Won Jae Lee, Pa Hong, Hyuk-Jae Lee [[Poster]](https://drive.google.com/file/d/1mftbV7-XWdl3k3FDau8Vv8MZddhJ8oGK/view?usp=sharing) [[Slides]](https://drive.google.com/file/d/1haddFfwmRb3lFlNVbTGn8_GuqbhntSNP/view?usp=drive_link)
+- **[3D-LLDM: Label-Guided 3D Latent Diffusion Model](https://drive.google.com/file/d/1vAzN0kGJcB5YubmK4JvNFUgaqlec4kzZ/view?usp=sharing)** [[Poster]](https://drive.google.com/file/d/1mftbV7-XWdl3k3FDau8Vv8MZddhJ8oGK/view?usp=sharing) [[Slides]](https://drive.google.com/file/d/1haddFfwmRb3lFlNVbTGn8_GuqbhntSNP/view?usp=drive_link)<br/>
+  **Kyeonghun Kim**, Jaehyeok Bae, Youngung Han, Joo Young Bae, Seoyoung Ju, Junsu Lim, Gyeongmin Kim, Nam-Joon Kim<sup>†</sup>, Woo Kyoung Jeong, Ken Ying-Kai Liao, Won Jae Lee, Pa Hong, Hyuk-Jae Lee<br/>
   [**IEEE Int. Symp. Biomedical Imaging (ISBI) 2026**](https://biomedicalimaging.org/2026/) ***Oral Presentation***
 
 - **[LOSA-NET: Localized and Scale-Adaptive Network](https://drive.google.com/file/d/13yCLS1jSmsWlOd7VjjoABJ5YA25Txp6d/view?usp=drive_link)**

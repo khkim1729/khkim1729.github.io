@@ -175,12 +175,28 @@ title: CV
 
 # Contact Information
 
-**Email**: khkim1729@gmail.com
-**Phone**: +82-10-2947-0453
-**GitHub**: [github.com/khkim1729](https://github.com/khkim1729)
-**LinkedIn**: [linkedin.com/in/khkim1729](https://linkedin.com/in/khkim1729)
-**Google Scholar**: [Google Scholar Profile](https://scholar.google.com/citations?user=N3LVcyEAAAAJ&hl=ko)
-**Blog**: [velog.io/@khkim1729](https://velog.io/@khkim1729)
+<div style="display: flex; flex-wrap: wrap; gap: 20px; margin: 20px 0;">
+  <div style="display: flex; align-items: center; gap: 8px;">
+    <span style="font-size: 1.2em;">📧</span>
+    <a href="mailto:khkim1729@gmail.com" style="text-decoration: none; color: #007bff;">Email</a>
+  </div>
+  <div style="display: flex; align-items: center; gap: 8px;">
+    <span style="font-size: 1.2em;">💻</span>
+    <a href="https://github.com/khkim1729" target="_blank" style="text-decoration: none; color: #007bff;">GitHub</a>
+  </div>
+  <div style="display: flex; align-items: center; gap: 8px;">
+    <span style="font-size: 1.2em;">🔗</span>
+    <a href="https://www.linkedin.com/in/kyeonghun-kim-50705525b/" target="_blank" style="text-decoration: none; color: #007bff;">LinkedIn</a>
+  </div>
+  <div style="display: flex; align-items: center; gap: 8px;">
+    <span style="font-size: 1.2em;">🎓</span>
+    <a href="https://scholar.google.com/citations?user=N3LVcyEAAAAJ&hl=ko" target="_blank" style="text-decoration: none; color: #007bff;">Google Scholar</a>
+  </div>
+  <div style="display: flex; align-items: center; gap: 8px;">
+    <span style="font-size: 1.2em;">📝</span>
+    <a href="https://blog.naver.com/kgh9080" target="_blank" style="text-decoration: none; color: #007bff;">Blog</a>
+  </div>
+</div>
 
 <br/>
 
