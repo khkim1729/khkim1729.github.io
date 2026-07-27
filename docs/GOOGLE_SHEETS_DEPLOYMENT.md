@@ -7,8 +7,8 @@ Additional portfolio-only fields begin at column O.
 ## Upload and deploy
 
 1. Upload `Portfolio_Website_Content_Model.xlsx` to Google Drive.
-2. Open it with Google Sheets and confirm that `WEB_Publications` is populated
-   from `DB_Publications`.
+2. Open it with Google Sheets and confirm that `DB_Publications` and the
+   value-only `WEB_Publications` compatibility tab are populated.
 3. Open **Extensions → Apps Script**.
 4. Replace the editor contents with [google-sheets-code.gs](google-sheets-code.gs).
 5. Select **Deploy → New deployment → Web app**.
@@ -28,15 +28,20 @@ Cell edits are served immediately. A new deployment is only needed when
 .../exec?sheet=08_Projects&lang=en
 .../exec?sheet=08_Projects&lang=en&slug=3d-lldm
 .../exec?sheet=09_Project_Content&lang=ko&project_id=PROJ_3DLLDM
+.../exec?sheet=10_Credentials&lang=all
+.../exec?sheet=Site_Config&lang=all
 ```
 
-The API removes any column containing `private`; credential numbers therefore
-remain in the maintenance workbook and are not published.
+The API publishes `khkim1729@gmail.com` from `Site_Config` and publishes
+`credential_number`/`verification_id` for the credentials table. Do not add a
+phone-number column or any other private contact data to a public sheet.
 
 ## Editing rules
 
 - Publications: edit `DB_Publications`; keep `Pub_ID` unique.
-- IMSI import: paste `WEB_Publications!A:N` into `DB_Publications!A:N`.
+- IMSI import: paste the IMSI roster's `WEB_Publications!A:N` into
+  `DB_Publications!A:N`. The API reads `DB_Publications` directly, avoiding
+  upload-time formula compatibility problems.
 - Korean text: optional. Empty Korean values fall back to English.
 - Projects: use public HTTPS URLs in `cover_image_url`.
 - Project details: add ordered blocks in `Project_Content`.

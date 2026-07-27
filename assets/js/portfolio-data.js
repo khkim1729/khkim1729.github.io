@@ -58,7 +58,11 @@
       return rows.length >= 10 && rows.some(row => String(row.Authors || '').includes('Kyeonghun Kim'));
     }
     if (name === 'Projects') return rows.length >= 4;
-    if (name === 'Professional_Credentials') return rows.length >= 10;
+    if (name === 'Professional_Credentials') {
+      return rows.length >= 10 && rows.some(row =>
+        String(row.credential_number || row.verification_id || '').trim()
+      );
+    }
     return rows.length > 0;
   }
 
@@ -181,11 +185,20 @@
     const rows = (await getSheet('Professional_Credentials'))
       .filter(row => row.is_visible === undefined || truthy(row.is_visible))
       .sort((a, b) => Number(a.display_order || 0) - Number(b.display_order || 0));
-    root.innerHTML = `<div class="credential-grid">${rows.map(row => `<article class="credential-item">
+    root.innerHTML = `<div class="credential-grid">${rows.map(row => {
+      const number = String(row.credential_number || '').trim();
+      const verificationId = String(row.verification_id || '').trim();
+      const identifiers = [number, verificationId].filter((value, index, values) =>
+        value && values.indexOf(value) === index
+      );
+      const idLabel = lang === 'ko' ? '자격증 번호' : 'Credential No.';
+      return `<article class="credential-item">
       <strong>${escapeHtml(localized(row, 'name', lang))}</strong>
       <span>${escapeHtml(localized(row, 'level', lang))}</span>
       <small>${escapeHtml(localized(row, 'issuer', lang))} · ${escapeHtml(localized(row, 'date', lang))}</small>
-    </article>`).join('')}</div>`;
+      ${identifiers.length ? `<small><strong>${idLabel}</strong> ${identifiers.map(escapeHtml).join(' · ')}</small>` : ''}
+    </article>`;
+    }).join('')}</div>`;
   }
 
   async function openGlobalSearch() {

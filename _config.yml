@@ -10,7 +10,7 @@ description: Academic Website of Kyeonghun Kim - AI Researcher specializing in M
 author: Kyeonghun Kim
 
 # Google Apps Script web app. The bundled JSON snapshot is used as a fallback.
-portfolio_api_url: "https://script.google.com/macros/s/AKfycbyVN9ak8DGJQCeIEc1q-78enTXng03HlYqNUfhOQJC-_heUa6Jx8qtoP0hqSKLH5zZonQ/exec"
+portfolio_api_url: "https://script.google.com/macros/s/AKfycbwF_IabUr_NYJehsE2Bz729_t9tg1uiIi2xz9HCf2KDxyt-FE58M6dyDiI_iUq9_QlbzQ/exec"
 
 # [조건부수정] 네비게이션 바에 포함되는 항목 (명칭 수정, 추가, 삭제 가능)
 # 예를 들어 ETRI 라는 항목을 네비게이션 바에 추가하고 싶은 경우, etri.md 파일 생성 후 ETRI: "etri" 라고 지정.

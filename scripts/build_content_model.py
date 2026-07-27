@@ -169,7 +169,7 @@ def build(args):
         ["Languages", "한국어 열이 비어 있으면 Apps Script와 웹사이트가 영어 값을 fallback으로 사용합니다."],
         ["Projects/images", "Projects의 cover_image_url과 Project_Content의 media_url에 공개 HTTPS 이미지 URL을 입력합니다."],
         ["Deploy", "docs/GOOGLE_SHEETS_DEPLOYMENT.md와 docs/google-sheets-code.gs를 사용해 웹 앱으로 배포합니다."],
-        ["Safety", "API에는 개인 전화번호, 비공개 이메일, 자격증 번호를 공개하지 마세요."],
+        ["Public contact", "API에는 khkim1729@gmail.com과 자격증 번호를 공개합니다. 개인 전화번호는 입력하지 않습니다."],
     ])
     add_sheet(wb, "Site_Config", ["config_key", "value_en", "value_ko", "data_type", "notes"], [
         ["site_title", "Kyeonghun Kim | AI Researcher", "김경훈 | AI 연구자", "text", "SEO/title"],
@@ -178,6 +178,7 @@ def build(args):
         ["github_url", "https://github.com/khkim1729", "https://github.com/khkim1729", "url", ""],
         ["google_scholar_url", "https://scholar.google.com/citations?user=N3LVcyEAAAAJ&hl=en", "https://scholar.google.com/citations?user=N3LVcyEAAAAJ&hl=ko", "url", ""],
         ["portfolio_url", "https://docs.google.com/presentation/d/1Ns0ebR9yU-mzKa_Ua9e0_YRzSjMfQzVUia90qfQuW5E/edit?usp=sharing", "https://docs.google.com/presentation/d/1Ns0ebR9yU-mzKa_Ua9e0_YRzSjMfQzVUia90qfQuW5E/edit?usp=sharing", "url", ""],
+        ["public_email", "khkim1729@gmail.com", "khkim1729@gmail.com", "email", "Public contact email; do not add a phone number."],
     ])
     add_sheet(wb, "Home_Sections", ["section_id", "title_en", "title_ko", "body_en", "body_ko", "display_order", "is_visible"], [
         ["ABOUT", "About Me", "소개", "AI researcher working across medical imaging, generative AI, multimodal learning, and hyperspectral imaging. Research Assistant at IMSI Lab and AI Researcher at GNEWSOFT.", "의료영상, 생성형 AI, 멀티모달 학습, 초분광 영상을 연구하는 AI 연구자입니다. IMSI Lab 연구조교이자 GNEWSOFT AI 연구원으로 활동하고 있습니다.", 10, True],
@@ -202,8 +203,9 @@ def build(args):
             name = re.sub(r"[\*†‡]+$", "", marked)
             author_rows.append([pub[0], order, person_ids.get(name, ""), name, "*" in marked, "†" in marked])
     add_sheet(wb, "DB_PublicationAuthor", ["Pub_ID", "Author_Order", "Person_ID", "Author_Name_Display", "Is_CoFirst_Author", "Is_Corresponding"], author_rows)
-    web = add_sheet(wb, "WEB_Publications", PUBLICATION_HEADERS, [])
-    web["A2"] = '=ARRAYFORMULA(IF(DB_Publications!A2:A="","",DB_Publications!A2:X))'
+    # Keep a value-only compatibility view. ARRAYFORMULA is not evaluated by
+    # Excel/openpyxl and can become #NAME? when the XLSX is first uploaded.
+    add_sheet(wb, "WEB_Publications", PUBLICATION_HEADERS, publications, {"Title": 55, "Venue_Name": 42, "Authors": 70})
     add_sheet(wb, "WEB_People", ["Person_ID", "Name_KO", "Name_EN", "Primary_URL"], [[p[0], p[1], p[2], p[6]] for p in people])
     add_sheet(wb, "Projects", ["project_id", "slug", "title_en", "title_ko", "summary_en", "summary_ko", "tags", "cover_image_url", "github_link", "paper_or_demo_link", "featured_on_home", "display_order", "is_visible"], [
         [*p, i < 4, i * 10, True] for i, p in enumerate(PROJECTS, 1)
@@ -211,7 +213,7 @@ def build(args):
     add_sheet(wb, "Project_Content", ["content_id", "project_id", "block_type", "title_en", "title_ko", "content_en", "content_ko", "media_url", "caption_en", "caption_ko", "display_order", "is_visible"], [
         [f"PC_{i:03d}", p[0], "paragraph", "Overview", "개요", p[4], p[5], p[7], p[2], p[3], 10, True] for i, p in enumerate(PROJECTS, 1)
     ])
-    add_sheet(wb, "Professional_Credentials", ["credential_id", "name_ko", "name_en", "level_ko", "level_en", "date_ko", "date_en", "issuer_ko", "issuer_en", "credential_number_private", "credential_id_private", "display_order", "is_visible"], credentials)
+    add_sheet(wb, "Professional_Credentials", ["credential_id", "name_ko", "name_en", "level_ko", "level_en", "date_ko", "date_en", "issuer_ko", "issuer_en", "credential_number", "verification_id", "display_order", "is_visible"], credentials)
     add_sheet(wb, "News", ["news_id", "date", "title_en", "title_ko", "description_en", "description_ko", "link_url", "featured_on_home", "display_order", "is_visible"], [
         ["NEWS_001", "2026-07-27", "Portfolio content moved to Google Sheets", "포트폴리오 콘텐츠를 Google Sheets로 이전", "Publications, projects, and credentials can now be maintained without code changes.", "논문·프로젝트·자격 정보를 코드 수정 없이 관리할 수 있습니다.", "", True, 10, True],
     ])
@@ -221,7 +223,7 @@ def build(args):
         ["SK_003", "Domains", "전문 분야", "Medical Imaging / Hyperspectral Imaging", 30, True],
     ])
     add_sheet(wb, "Developer_Notes", ["Topic", "Recommendation"], [
-        ["Public API", "Apps Script allowlist에 포함된 공개 열만 반환합니다. *_private 열은 절대 반환하지 않습니다."],
+        ["Public API", "공개 이메일과 credential_number/verification_id를 반환합니다. 개인 전화번호 열은 만들거나 입력하지 않습니다."],
         ["Fallback", "GitHub Pages는 assets/data/portfolio-data.json을 오프라인 fallback으로 사용합니다."],
         ["lang=all", "모든 언어 열을 반환합니다. lang=en/ko는 *_en, *_ko 열을 공통 키로 정규화합니다."],
     ])

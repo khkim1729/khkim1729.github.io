@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-27T16:59:51.344987",
+  "generated_at": "2026-07-27T19:08:01.182595",
   "sheets": {
     "Site_Config": [
       {
@@ -43,6 +43,13 @@
         "value_ko": "https://docs.google.com/presentation/d/1Ns0ebR9yU-mzKa_Ua9e0_YRzSjMfQzVUia90qfQuW5E/edit?usp=sharing",
         "data_type": "url",
         "notes": ""
+      },
+      {
+        "config_key": "public_email",
+        "value_en": "khkim1729@gmail.com",
+        "value_ko": "khkim1729@gmail.com",
+        "data_type": "email",
+        "notes": "Public contact email; do not add a phone number."
       }
     ],
     "Home_Sections": [
@@ -2514,8 +2521,8 @@
         "date_en": "2025.06.24",
         "issuer_ko": "THE TEPS COUNCIL",
         "issuer_en": "Seoul National University",
-        "credential_number_private": "111844",
-        "credential_id_private": "111844",
+        "credential_number": "111844",
+        "verification_id": "111844",
         "display_order": 10,
         "is_visible": true
       },
@@ -2529,8 +2536,8 @@
         "date_en": "2024.05.06",
         "issuer_ko": "Google",
         "issuer_en": "Google",
-        "credential_number_private": "A11100010",
-        "credential_id_private": "A11100010",
+        "credential_number": "A11100010",
+        "verification_id": "A11100010",
         "display_order": 20,
         "is_visible": true
       },
@@ -2544,8 +2551,8 @@
         "date_en": "2023.07.14",
         "issuer_ko": "한국산업인력공단",
         "issuer_en": "HRD Korea",
-        "credential_number_private": "BAE-006002366",
-        "credential_id_private": "BAE-006002366",
+        "credential_number": "BAE-006002366",
+        "verification_id": "BAE-006002366",
         "display_order": 30,
         "is_visible": true
       },
@@ -2559,8 +2566,8 @@
         "date_en": "2023.02.26",
         "issuer_ko": "한국 TOEIC 위원회",
         "issuer_en": "ETS",
-        "credential_number_private": "000114-0416008301",
-        "credential_id_private": "000114-0416008301",
+        "credential_number": "000114-0416008301",
+        "verification_id": "000114-0416008301",
         "display_order": 40,
         "is_visible": true
       },
@@ -2574,8 +2581,8 @@
         "date_en": "2021.06.02",
         "issuer_ko": "한국산업인력공단",
         "issuer_en": "HRD Korea",
-        "credential_number_private": "21201101308E",
-        "credential_id_private": "21201101308E",
+        "credential_number": "21201101308E",
+        "verification_id": "21201101308E",
         "display_order": 50,
         "is_visible": true
       },
@@ -2589,8 +2596,8 @@
         "date_en": "2020.12.10",
         "issuer_ko": "청주시장",
         "issuer_en": "Korea Transportation Safety Authority",
-        "credential_number_private": "11013312",
-        "credential_id_private": "11013312",
+        "credential_number": "11013312",
+        "verification_id": "11013312",
         "display_order": 60,
         "is_visible": true
       },
@@ -2604,8 +2611,8 @@
         "date_en": "2020.08.30",
         "issuer_ko": "ETS",
         "issuer_en": "ETS",
-        "credential_number_private": "035142-0416001401",
-        "credential_id_private": "035142-0416001401",
+        "credential_number": "035142-0416001401",
+        "verification_id": "035142-0416001401",
         "display_order": 70,
         "is_visible": true
       },
@@ -2619,8 +2626,8 @@
         "date_en": "2020.08.21",
         "issuer_ko": "한국사편찬위원회",
         "issuer_en": "National Institute of Korean History",
-        "credential_number_private": "48-115359",
-        "credential_id_private": "48-115359",
+        "credential_number": "48-115359",
+        "verification_id": "48-115359",
         "display_order": 80,
         "is_visible": true
       },
@@ -2634,8 +2641,8 @@
         "date_en": "2020.02.15",
         "issuer_ko": "ETS",
         "issuer_en": "ETS",
-        "credential_number_private": "2522502201696230",
-        "credential_id_private": "2522502201696230",
+        "credential_number": "2522502201696230",
+        "verification_id": "2522502201696230",
         "display_order": 90,
         "is_visible": true
       },
@@ -2649,8 +2656,8 @@
         "date_en": "2019.05.09",
         "issuer_ko": "대한수중·핀수영협회",
         "issuer_en": "Korea Underwater Association",
-        "credential_number_private": "RD KOR F00 19-0108",
-        "credential_id_private": "RD KOR F00 19-0108",
+        "credential_number": "RD KOR F00 19-0108",
+        "verification_id": "RD KOR F00 19-0108",
         "display_order": 100,
         "is_visible": true
       },
@@ -2664,8 +2671,8 @@
         "date_en": "2019.05.09",
         "issuer_ko": "세계수중연맹",
         "issuer_en": "CMAS",
-        "credential_number_private": "KOR/F00/P2/19/000257",
-        "credential_id_private": "KOR/F00/P2/19/000257",
+        "credential_number": "KOR/F00/P2/19/000257",
+        "verification_id": "KOR/F00/P2/19/000257",
         "display_order": 110,
         "is_visible": true
       },
@@ -2679,8 +2686,8 @@
         "date_en": "2019.04.26",
         "issuer_ko": "한국산업인력공단",
         "issuer_en": "HRD Korea",
-        "credential_number_private": "19401240950S",
-        "credential_id_private": "19401240950S",
+        "credential_number": "19401240950S",
+        "verification_id": "19401240950S",
         "display_order": 120,
         "is_visible": true
       },
@@ -2694,8 +2701,8 @@
         "date_en": "2019.04.26",
         "issuer_ko": "한국산업인력공단",
         "issuer_en": "HRD Korea",
-        "credential_number_private": "19401081317L",
-        "credential_id_private": "19401081317L",
+        "credential_number": "19401081317L",
+        "verification_id": "19401081317L",
         "display_order": 130,
         "is_visible": true
       },
@@ -2709,8 +2716,8 @@
         "date_en": "2019.01.28",
         "issuer_ko": "충남지방경찰청장",
         "issuer_en": "Korea Transportation Safety Authority",
-        "credential_number_private": "15-17-016762-11",
-        "credential_id_private": "15-17-016762-11",
+        "credential_number": "15-17-016762-11",
+        "verification_id": "15-17-016762-11",
         "display_order": 140,
         "is_visible": true
       },
@@ -2724,8 +2731,8 @@
         "date_en": "2018.11.23",
         "issuer_ko": "한국교통안전공단",
         "issuer_en": "Korea Transportation Safety Authority",
-        "credential_number_private": "91-018032",
-        "credential_id_private": "91-018032",
+        "credential_number": "91-018032",
+        "verification_id": "91-018032",
         "display_order": 150,
         "is_visible": true
       },
@@ -2739,8 +2746,8 @@
         "date_en": "2018.11.21",
         "issuer_ko": "CMAS",
         "issuer_en": "CMAS",
-        "credential_number_private": "KOR/F00/P1/18/003207",
-        "credential_id_private": "KOR/F00/P1/18/003207",
+        "credential_number": "KOR/F00/P1/18/003207",
+        "verification_id": "KOR/F00/P1/18/003207",
         "display_order": 160,
         "is_visible": true
       },
@@ -2754,8 +2761,8 @@
         "date_en": "2018.10.22",
         "issuer_ko": "대한윈드서핑카이트보딩연맹",
         "issuer_en": "Korean Windsurfing and Kiteboarding Federation",
-        "credential_number_private": "2028-847",
-        "credential_id_private": "2028-847",
+        "credential_number": "2028-847",
+        "verification_id": "2028-847",
         "display_order": 170,
         "is_visible": true
       },
@@ -2769,8 +2776,8 @@
         "date_en": "2018.03.05",
         "issuer_ko": "한국생산성본부",
         "issuer_en": "KPC",
-        "credential_number_private": "20180001728",
-        "credential_id_private": "20180001728",
+        "credential_number": "20180001728",
+        "verification_id": "20180001728",
         "display_order": 180,
         "is_visible": true
       },
@@ -2784,8 +2791,8 @@
         "date_en": "2017.03.24",
         "issuer_ko": "한국어문회",
         "issuer_en": "Korean Language Institute",
-        "credential_number_private": "76-453-0016",
-        "credential_id_private": "76-453-0016",
+        "credential_number": "76-453-0016",
+        "verification_id": "76-453-0016",
         "display_order": 190,
         "is_visible": true
       },
@@ -2799,8 +2806,8 @@
         "date_en": "2016.10.30",
         "issuer_ko": "충청북도교육감",
         "issuer_en": "Chungcheongbuk-do Office of Education",
-        "credential_number_private": "2016-3915",
-        "credential_id_private": "2016-3915",
+        "credential_number": "2016-3915",
+        "verification_id": "2016-3915",
         "display_order": 200,
         "is_visible": true
       },
@@ -2814,8 +2821,8 @@
         "date_en": "2015.04.20",
         "issuer_ko": "대한기도회",
         "issuer_en": "Korean Aikido Association",
-        "credential_number_private": "202358",
-        "credential_id_private": "202358",
+        "credential_number": "202358",
+        "verification_id": "202358",
         "display_order": 210,
         "is_visible": true
       }

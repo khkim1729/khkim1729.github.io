@@ -2,13 +2,13 @@
  * Kyeonghun Kim portfolio read-only JSON API.
  *
  * Deploy as: Web app / Execute as me / Who has access: Anyone.
- * The response never exposes columns whose names contain "private".
+ * Do not place phone numbers or other private data in the public sheets.
  */
 const SHEETS = {
   "01_Site_Config": "Site_Config",
   "02_Home_Sections": "Home_Sections",
   "05_People": "WEB_People",
-  "07_Publications": "WEB_Publications",
+  "07_Publications": "DB_Publications",
   "08_Projects": "Projects",
   "09_Project_Content": "Project_Content",
   "10_Credentials": "Professional_Credentials",
@@ -17,8 +17,9 @@ const SHEETS = {
   "Site_Config": "Site_Config",
   "Home_Sections": "Home_Sections",
   "WEB_People": "WEB_People",
-  "WEB_Publications": "WEB_Publications",
-  "Publications": "WEB_Publications",
+  "WEB_Publications": "DB_Publications",
+  "DB_Publications": "DB_Publications",
+  "Publications": "DB_Publications",
   "Projects": "Projects",
   "Project_Content": "Project_Content",
   "Professional_Credentials": "Professional_Credentials",
