@@ -31,6 +31,11 @@
         {%- endif -%}
       {%- endfor -%}
       {% include language-switcher.html %}
+      <li class="nav-item">
+        <button class="nav-link portfolio-search-button" type="button" data-open-portfolio-search aria-label="Search">
+          🔎 <span class="d-md-none">Search</span>
+        </button>
+      </li>
     </ul>
   </div>
 
@@ -53,3 +58,13 @@
   {% endif %}
 
 </nav>
+
+<div id="portfolio-search-overlay" hidden>
+  <div class="portfolio-search-dialog" role="dialog" aria-modal="true" aria-label="Site search">
+    <header>
+      <input type="search" placeholder="Search publications, projects, authors…" aria-label="Search">
+      <button type="button" data-close-portfolio-search aria-label="Close">&times;</button>
+    </header>
+    <div data-global-search-results></div>
+  </div>
+</div>

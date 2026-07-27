@@ -41,17 +41,6 @@ Feel free to reach out if you're interested in medical AI, generative models, or
 
 의료 진단 및 환자 치료에 실질적인 도움이 되는 AI 솔루션 개발에 열정을 가지고 있습니다. [SUDAL 의료영상팀](https://team-sudal.tistory.com/)을 리드하고 있으며, IMSI Lab은 서울대학교 [CAPP Lab](http://capp.snu.ac.kr/) 산하 전문 의료영상 연구실입니다.
 
-## 현재 연구 및 리더십
-
-### 연구 분야
-종양 인식 간 MRI 합성, 간 종양 분류, 뇌 MRI 바이오마커 예측(IDH 돌연변이, 1p/19q 공동 결실, WHO 등급), 치아 감지 및 치아 우식 분할, 전립선암 분류, 간 종양의 TNM 병기 등 다양한 임상 영상 도메인에서 멀티모달 의료 AI 연구를 수행하고 있습니다.
-
-### [Lambda Course](https://lambdacourse.tistory.com/)
-매주 토요일(12:00-14:00)에 개최되는 주간 연구 세미나를 조직하고 리드하며, 세션당 약 6편의 최첨단 AI 및 의료영상 논문에 대한 구조화된 토론과 리뷰를 진행합니다.
-
-### 플랫폼 개발
-연구 하이라이트, 출판물, 구성원 프로필, 프로젝트 문서화를 위한 중앙집중식 플랫폼을 제공하는 [IMSI Lab 공식 웹사이트](http://capp.snu.ac.kr/imsi/)를 처음부터 직접 구축하고 유지보수하고 있으며, 연구실 가시성과 내부 커뮤니케이션을 크게 향상시켰습니다.
-
 ## 국제 협력
 
 ### TEAM CEUS (NVIDIA 협력)
@@ -68,6 +57,7 @@ Feel free to reach out if you're interested in medical AI, generative models, or
 의료 AI, 생성 모델, 또는 공동 연구 기회에 관심이 있으시면 언제든 연락주세요!
 </div>
 
+<div class="lang-en" markdown="1">
 ## Current Research & Leadership
 
 ### Research Focus
@@ -89,6 +79,7 @@ Conduct joint model development with [**Ka-Chun (Charles) Cheung, Ph.D.**](https
 
 ### Multi-institutional Partnerships
 Conduct collaborative research with multiple clinical and industrial partners including **Samsung Medical Center (SMC)**, **Severance Hospital**, **NVIDIA Hong Kong**, and **NVIDIA Taiwan**, focusing on generative medical imaging, multimodal clinical AI, and large-scale synthetic medical data generation.
+</div>
 
 <div class="lang-en" markdown="1">
 ## Education
@@ -116,47 +107,39 @@ Conduct collaborative research with multiple clinical and industrial partners in
 - 158학점 이수 (졸업요건: 130학점)
 </div>
 
+<div class="lang-en" markdown="1">
 ## Recent News
 
-* **February 2026**: Selected for presentation at IEEE ICEIC 2026 with MAESIL paper
-* **January 2026**: MAESIL paper on enhanced self-supervised medical image learning accepted
-* **December 2025**: Started collaboration with Samsung Medical Center on AI-driven radiology solutions
-* **November 2025**: 3D-LLDM paper accepted at IEEE ISBI 2025
-* **October 2024**: Joined GNEWSOFT as AI Researcher, developed HyperspectralMAE achieving SOTA performance
-* **September 2025**: FOSCU paper accepted at IEEE APCCAS 2025 - presented in Busan
-* **September 2024**: Started research at Medical Imaging Lab, Seoul National University
+* **July 2026**: 3D-LLDM, LoSA-Net, and MMA-Former presented as oral papers at IEEE ISBI 2026
+* **July 2026**: New arXiv preprints released across medical imaging, PNI prediction, and multimodal learning
+* **March 2026**: RAPIDS and GRAVEX presented at NVIDIA GTC 2026
+* **February 2026**: MAESIL presented at IEEE ICEIC 2026
+* **September 2025**: FOSCU presented at IEEE APCCAS 2025 in Busan
+</div>
 
+<div class="lang-kr" style="display:none" markdown="1">
+## 최근 소식
+
+* **2026년 7월**: 3D-LLDM, LoSA-Net, MMA-Former를 IEEE ISBI 2026 구두 논문으로 발표
+* **2026년 7월**: 의료영상, PNI 예측, 멀티모달 학습 분야 arXiv 프리프린트 공개
+* **2026년 3월**: RAPIDS와 GRAVEX를 NVIDIA GTC 2026에서 발표
+* **2026년 2월**: MAESIL을 IEEE ICEIC 2026에서 발표
+* **2025년 9월**: 부산 IEEE APCCAS 2025에서 FOSCU 발표
+</div>
+
+<div class="lang-en" markdown="1">
 ## Recent Publications
+</div>
+<div class="lang-kr" style="display:none" markdown="1">
+## 최근 논문
+</div>
 
-<style>
-.paper-title { font-size: 1.1em; font-weight: bold; }
-.paper-authors { font-size: 0.9em; }
-.paper-venue { font-size: 0.9em; }
-</style>
+<section data-portfolio-publications data-limit="5">
+  <div data-publication-list><p>Loading recent publications…</p></div>
+</section>
 
-<!-- Note: Update this section with latest 4 publications from /publication page -->
-
-### Under Review (2026)
-
-- <span class="paper-title">**[TIME: 2.5D IDH-predictive Multimodal Ensemble for Glioma Subtyping](https://github.com/khkim1729/TIME)** [[Code]](https://github.com/khkim1729/TIME)</span><br/>
-  <span class="paper-authors">**Kyeonghun Kim**, Jieon Kim, Seongheon Choi, Donghyeon Seo, Minchan Kim, Insung Hwang, Suemin Yang, Taeyun Kim, Seoyoon Koo, Wonhyuk Kim, Yoonseon Jung, Nam-Joon Kim<sup>†</sup>, Woo Kyoung Jeong, Won Jae Lee, Pa Hong, Ken Ying-Kai Liao, Hyuk-Jae Lee</span><br/>
-  <span class="paper-venue">[**Int. Conf. Medical Image Computing and Computer-Assisted Intervention (MICCAI) 2026**](https://conferences.miccai.org/2026/en/) *(Under Review)*</span>
-
-- <span class="paper-title">**[MATHENA: Mamba-based Tooth Hierarchical Estimator and Evaluation Network](https://github.com/khkim1729/mathena)** [[Code]](https://github.com/khkim1729/mathena)</span><br/>
-  <span class="paper-authors">**Kyeonghun Kim**, Jaehyung Park, Youngung Han, Anna Jung, Seongbin Park, Sumin Lee, Jiwon Yang, Jiyoon Han, Subeen Lee, Junsu Lim, Hyunsu Go, Eunseob Choi, Hyeonseok Jung, Soo Yong Kim, Nam-Joon Kim<sup>†</sup>, Woo Kyoung Jeong, Won Jae Lee, Pa Hong, Ken Ying-Kai Liao, Hyuk-Jae Lee</span><br/>
-  <span class="paper-venue">[**Int. Conf. Medical Image Computing and Computer-Assisted Intervention (MICCAI) 2026**](https://conferences.miccai.org/2026/en/) *(Under Review)*</span>
-
-### Published (2026)
-
-- <span class="paper-title">**[3D-LLDM: Label-Guided 3D Latent Diffusion Model](https://drive.google.com/file/d/1vAzN0kGJcB5YubmK4JvNFUgaqlec4kzZ/view?usp=sharing)** [[Poster]](https://drive.google.com/file/d/1mftbV7-XWdl3k3FDau8Vv8MZddhJ8oGK/view?usp=sharing) [[Slides]](https://drive.google.com/file/d/1haddFfwmRb3lFlNVbTGn8_GuqbhntSNP/view?usp=drive_link)</span><br/>
-  <span class="paper-authors">**Kyeonghun Kim**, Jaehyeok Bae, Youngung Han, Joo Young Bae, Seoyoung Ju, Junsu Lim, Gyeongmin Kim, Nam-Joon Kim<sup>†</sup>, Woo Kyoung Jeong, Ken Ying-Kai Liao, Won Jae Lee, Pa Hong, Hyuk-Jae Lee</span><br/>
-  <span class="paper-venue">[**IEEE Int. Symp. Biomedical Imaging (ISBI) 2026**](https://biomedicalimaging.org/2026/) ***Oral Presentation***</span>
-
-- <span class="paper-title">**[MAESIL: Masked Autoencoder for Enhanced Self-supervised Medical Image Learning](https://drive.google.com/file/d/1saWbcEu17BOUgGZUKTnXILk4p4EZ3P7G/view)** [[Code]](https://github.com/khkim1729/MAEgic) [[Poster]](https://drive.google.com/file/d/12Hc7rvhjkuc640BqzIbnKFGVCoInGj44/view?usp=sharing)</span><br/>
-  <span class="paper-authors">**Kyeonghun Kim**, Hyeonseok Jung, Youngung Han, Junsu Lim, YeonJu Jean, Seongbin Park, Eunseob Choi, Hyunsu Go, SeoYoung Ju, Seohyoung Park, Gyeongmin Kim, MinJu Kwon, KyungSeok Yuh, Soo Yong Kim, Ken Ying-Kai Liao, Nam-Joon Kim<sup>†</sup>, Hyuk-Jae Lee</span><br/>
-  <span class="paper-venue">[**IEEE Int. Conf. Electronics, Information, and Communication (ICEIC) 2026**](https://iceic.org/2026/)</span>
-
-[**See all publications →**](/publication)
+<span class="lang-en"><a href="/publication"><strong>See all publications →</strong></a></span>
+<span class="lang-kr" style="display:none"><a href="/publication"><strong>전체 논문 보기 →</strong></a></span>
 
 <div class="lang-en" markdown="1">
 ## Professional Experience

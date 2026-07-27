@@ -126,34 +126,9 @@ title: CV
 
 <br/>
 
-# Certifications & Licenses
+# Certifications & Licenses {#credentials}
 
-### Professional Certifications
-- **TEPS 328** - Seoul National University (2025.06.24)
-- **Google Analytics Beginners** - Google (2024.05.06)
-- **Engineer Big Data Analysis** - HRD Korea (2023.07.14)
-- **TOEIC 835** - ETS (2023.02.26)
-- **Engineer Information Processing** - HRD Korea (2021.06.02)
-- **TOEIC 920** - ETS (2020.08.30)
-- **Korean History Proficiency Test Level 1** - National Institute of Korean History (2020.08.21)
-- **TOEFL 76** - ETS (2020.02.15)
-
-### Technical Certifications
-- **Craftsman Computer Graphics Operation** - HRD Korea (2019.04.26)
-- **Craftsman Computer Aided Mechanical Drawing** - HRD Korea (2019.04.26)
-- **ITQ OA MASTER** (Word/Excel/PowerPoint) - Korea Productivity Center (2018.03.05)
-
-### Specialized Licenses
-- **Construction Machinery Pilot Certificate** - Korea Transportation Safety Authority (2020.12.10)
-- **Pilot of an Ultralight Vehicle** - Korea Transportation Safety Authority (2018.11.23)
-- **Bus Driver License** - Korea Transportation Safety Authority (2019.01.28)
-
-### Recreation & Sports
-- **RESCUE DIVER** - Korea Underwater Association (2019.05.09)
-- **ADVANCED SCUBA DIVER** - CMAS - World Underwater Federation (2019.05.09)
-- **OPENWATER SCUBA DIVER** - CMAS - World Underwater Federation (2018.11.21)
-- **Windsurfing Instructor Certification Level 3** - Korean Windsurfing and Kiteboarding Federation (2018.10.22)
-- **Black Belt Certification (Aikido 1st Dan)** - Korean Aikido Association (2015.04.20)
+<div data-portfolio-credentials><p>Loading credentials…</p></div>
 
 <br/>
 

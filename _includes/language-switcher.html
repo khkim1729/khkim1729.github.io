@@ -105,6 +105,7 @@ function toggleLanguage() {
 
   // 선택 상태 저장
   localStorage.setItem('language', currentLang);
+  document.dispatchEvent(new CustomEvent('portfolio:languagechange', { detail: { language: currentLang } }));
 }
 
 function showEnglish() {

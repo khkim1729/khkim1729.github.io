@@ -30,3 +30,8 @@
     <script src="{{ js | relative_url }}"></script>
   {% endfor %}
 {% endif %}
+
+<script>
+  window.PORTFOLIO_API_URL = {{ site.portfolio_api_url | jsonify }};
+</script>
+<script src="{{ '/assets/js/portfolio-data.js' | relative_url }}"></script>
