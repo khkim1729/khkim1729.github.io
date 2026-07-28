@@ -4,6 +4,7 @@
   const API_URL = window.PORTFOLIO_API_URL || '';
   const FALLBACK_URL = '/assets/data/portfolio-data.json';
   const cache = new Map();
+  const remoteLoads = new Map();
   let fallbackPromise;
 
   const aliases = {
@@ -11,6 +12,14 @@
     Projects: '08_Projects',
     Project_Content: '09_Project_Content',
     Professional_Credentials: '10_Credentials'
+  };
+
+  const expectedApiSheets = {
+    Publications: 'DB_Publications',
+    DB_People: 'WEB_People',
+    Projects: 'Projects',
+    Project_Content: 'Project_Content',
+    Professional_Credentials: 'Professional_Credentials'
   };
 
   function currentLanguage() {
@@ -53,19 +62,6 @@
     return normalized;
   }
 
-  function apiLooksCurrent(name, rows) {
-    if (name === 'Publications') {
-      return rows.length >= 10 && rows.some(row => String(row.Authors || '').includes('Kyeonghun Kim'));
-    }
-    if (name === 'Projects') return rows.length >= 4;
-    if (name === 'Professional_Credentials') {
-      return rows.length >= 10 && rows.some(row =>
-        String(row.credential_number || row.verification_id || '').trim()
-      );
-    }
-    return rows.length > 0;
-  }
-
   async function fetchWithTimeout(url, timeoutMs) {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), timeoutMs);
@@ -79,30 +75,61 @@
   }
 
   async function fallback() {
-    if (!fallbackPromise) fallbackPromise = fetch(FALLBACK_URL).then(r => r.json());
+    if (!fallbackPromise) {
+      fallbackPromise = fetch(FALLBACK_URL, {cache: 'force-cache'}).then(response => {
+        if (!response.ok) throw new Error(`Fallback HTTP ${response.status}`);
+        return response.json();
+      });
+    }
     return fallbackPromise;
+  }
+
+  function loadRemote(name) {
+    if (!API_URL) return;
+    if (remoteLoads.has(name)) return remoteLoads.get(name);
+
+    const promise = (async () => {
+      try {
+        const queryName = aliases[name] || name;
+        const separator = API_URL.includes('?') ? '&' : '?';
+        const url = `${API_URL}${separator}sheet=${encodeURIComponent(queryName)}&lang=all&_=${Date.now()}`;
+        const payload = await fetchWithTimeout(url, 5000);
+        if (!payload || payload.ok === false) {
+          throw new Error(payload && payload.error ? payload.error : 'Invalid API response');
+        }
+        const expectedSheet = expectedApiSheets[name];
+        if (expectedSheet && payload.sheet && payload.sheet !== expectedSheet) {
+          throw new Error(
+            `Outdated Apps Script deployment: expected ${expectedSheet}, received ${payload.sheet}`
+          );
+        }
+        const source = Array.isArray(payload) ? payload : payload.data;
+        if (!Array.isArray(source)) throw new Error('API data is not an array');
+        const rows = source.map(row => normalizeRow(name, row));
+        cache.set(name, rows);
+        document.dispatchEvent(new CustomEvent('portfolio:dataupdated', {
+          detail: {sheet: name}
+        }));
+        return rows;
+      } catch (error) {
+        console.warn(`Portfolio live update unavailable for ${name}:`, error.message);
+        return null;
+      }
+    })();
+    remoteLoads.set(name, promise);
+    return promise;
   }
 
   async function getSheet(name) {
     if (cache.has(name)) return cache.get(name);
-    const promise = (async () => {
-      if (API_URL) {
-        try {
-          const queryName = aliases[name] || name;
-          const url = `${API_URL}?sheet=${encodeURIComponent(queryName)}&lang=all`;
-          const payload = await fetchWithTimeout(url, 4500);
-          const rows = (Array.isArray(payload) ? payload : payload.data || [])
-            .map(row => normalizeRow(name, row));
-          if (apiLooksCurrent(name, rows)) return rows;
-        } catch (error) {
-          console.warn(`Portfolio API fallback for ${name}:`, error.message);
-        }
-      }
+    const localPromise = (async () => {
       const payload = await fallback();
-      return (payload.sheets[name] || []).map(row => normalizeRow(name, row));
+      const rows = (payload.sheets[name] || []).map(row => normalizeRow(name, row));
+      if (!cache.has(name)) cache.set(name, rows);
+      return cache.get(name);
     })();
-    cache.set(name, promise);
-    return promise;
+    loadRemote(name);
+    return localPromise;
   }
 
   function buildAuthorLinks(authors, people) {
@@ -159,8 +186,8 @@
         <div class="portfolio-grid">${filtered.filter(row => row.Year === year).map(row => publicationCard(row, people)).join('')}</div>
       </section>`).join('') || '<p class="portfolio-empty">No matching publications.</p>';
     }
-    if (input) input.addEventListener('input', event => draw(event.target.value));
-    draw('');
+    if (input) input.oninput = event => draw(event.target.value);
+    draw(input ? input.value : '');
   }
 
   async function renderProjects(root) {
@@ -251,6 +278,20 @@
     document.addEventListener('portfolio:languagechange', () => {
       document.querySelectorAll('[data-portfolio-projects]').forEach(renderProjects);
       document.querySelectorAll('[data-portfolio-credentials]').forEach(renderCredentials);
+    });
+    document.addEventListener('portfolio:dataupdated', event => {
+      const sheet = event.detail && event.detail.sheet;
+      if (sheet === 'Publications' || sheet === 'DB_People') {
+        document.querySelectorAll('[data-portfolio-publications]').forEach(root =>
+          renderPublications(root, Number(root.dataset.limit || 0))
+        );
+      }
+      if (sheet === 'Projects') {
+        document.querySelectorAll('[data-portfolio-projects]').forEach(renderProjects);
+      }
+      if (sheet === 'Professional_Credentials') {
+        document.querySelectorAll('[data-portfolio-credentials]').forEach(renderCredentials);
+      }
     });
   }
 

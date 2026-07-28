@@ -11,13 +11,24 @@ Additional portfolio-only fields begin at column O.
    value-only `WEB_Publications` compatibility tab are populated.
 3. Open **Extensions → Apps Script**.
 4. Replace the editor contents with [google-sheets-code.gs](google-sheets-code.gs).
-5. Select **Deploy → New deployment → Web app**.
+5. For the first deployment, select **Deploy → New deployment → Web app**.
 6. Use **Execute as: Me** and **Who has access: Anyone**.
-7. Copy the URL ending in `/exec`.
-8. Set `portfolio_api_url` in `_config.yml` to that URL.
+7. After changing `Code.gs`, select **Deploy → Manage deployments → Edit**,
+   choose **New version**, and deploy it. Saving the editor alone does not update
+   an existing `/exec` deployment.
+8. Copy the URL ending in `/exec`.
+9. Set `portfolio_api_url` in `_config.yml` to that URL.
 
 Cell edits are served immediately. A new deployment is only needed when
 `Code.gs` itself changes.
+
+The publication check must report `"sheet":"DB_Publications"`. If it reports
+`WEB_Publications`, the `/exec` URL is still running an older Apps Script
+version:
+
+```text
+.../exec?sheet=07_Publications&lang=all
+```
 
 ## Browser checks
 
