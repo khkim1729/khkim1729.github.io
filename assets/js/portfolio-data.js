@@ -3,6 +3,8 @@
 
   const API_URL = window.PORTFOLIO_API_URL || '';
   const FALLBACK_URL = '/assets/data/portfolio-data.json';
+  const IMSI_PEOPLE_URL =
+    'https://docs.google.com/spreadsheets/d/1nr8EWtSU3Y50oK7oeKvwIZ1tHBUMmOhiSjtFYYufSYI/gviz/tq';
   const cache = new Map();
   const remoteLoads = new Map();
   let fallbackPromise;
@@ -16,11 +18,23 @@
 
   const expectedApiSheets = {
     Publications: 'DB_Publications',
-    DB_People: 'WEB_People',
     Projects: 'Projects',
     Project_Content: 'Project_Content',
     Professional_Credentials: 'Professional_Credentials'
   };
+
+  const requestedAuthorUrls = new Map(Object.entries({
+    'Eunseob Choi': 'https://eunseob.kr/',
+    'Youngung Han': 'https://github.com/youngunghan',
+    'Hyuk-Jae Lee': 'http://capp.snu.ac.kr/?p=people#Prof',
+    'Jaehyeok Bae': 'https://jaehyeokbae.me/',
+    'Nam-Joon Kim': 'https://imsilab.github.io/imsi/authors/investigators/nam-joon-kim/',
+    'Seoyoung Ju': 'https://standyoung.github.io/',
+    'Anna Jung': 'https://imsilab.github.io/imsi/authors/undergraduate_interns/anna-jung/',
+    'Pa Hong': 'https://smc.skku.edu/smc/medical/intro.do?mId=100',
+    'Sumin Lee': 'https://suminxlee.com/',
+    'Hyunsu Go': 'https://gohyunsu.github.io/'
+  }).map(([name, url]) => [name.toLowerCase(), url]));
 
   function currentLanguage() {
     const value = localStorage.getItem('language') || 'en';
@@ -74,6 +88,46 @@
     }
   }
 
+  async function fetchTextWithTimeout(url, timeoutMs) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const response = await fetch(url, {
+        signal: controller.signal,
+        cache: 'no-store'
+      });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return await response.text();
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  function parseGoogleVisualization(text) {
+    const start = text.indexOf('{');
+    const end = text.lastIndexOf('}');
+    if (start < 0 || end < start) throw new Error('Invalid Google Sheets response');
+    const payload = JSON.parse(text.slice(start, end + 1));
+    if (payload.status && payload.status !== 'ok') {
+      throw new Error('Google Sheets query failed');
+    }
+    const table = payload.table || {};
+    const headers = (table.cols || []).map((column, index) =>
+      String(column.label || `Column_${index}`).trim()
+    );
+    return (table.rows || []).map(row => {
+      const result = {};
+      const cells = row.c || [];
+      headers.forEach((header, index) => {
+        const cell = cells[index];
+        const value = cell && cell.v != null ? cell.v : '';
+        result[header] = value;
+        result[`Column_${index}`] = value;
+      });
+      return result;
+    });
+  }
+
   async function fallback() {
     if (!fallbackPromise) {
       fallbackPromise = fetch(FALLBACK_URL, {cache: 'force-cache'}).then(response => {
@@ -85,9 +139,33 @@
   }
 
   function loadRemote(name) {
-    if (!API_URL) return;
     if (remoteLoads.has(name)) return remoteLoads.get(name);
 
+    if (name === 'DB_People') {
+      const peoplePromise = (async () => {
+        try {
+          const query = new URLSearchParams({
+            tqx: `out:json;reqId:${Date.now()}`,
+            sheet: 'DB_People',
+            headers: '1'
+          });
+          const text = await fetchTextWithTimeout(`${IMSI_PEOPLE_URL}?${query}`, 5000);
+          const rows = parseGoogleVisualization(text);
+          cache.set(name, rows);
+          document.dispatchEvent(new CustomEvent('portfolio:dataupdated', {
+            detail: {sheet: name}
+          }));
+          return rows;
+        } catch (error) {
+          console.warn('IMSI DB_People live update unavailable:', error.message);
+          return null;
+        }
+      })();
+      remoteLoads.set(name, peoplePromise);
+      return peoplePromise;
+    }
+
+    if (!API_URL) return;
     const promise = (async () => {
       try {
         const queryName = aliases[name] || name;
@@ -133,16 +211,32 @@
   }
 
   function buildAuthorLinks(authors, people) {
-    const byName = new Map(people.map(person => [String(person.Name_EN || person.Name_EN_FULL || '').trim(), person]));
+    const displayName = value => String(value || '')
+      .replace(/[\*\u2020\u2021]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+    const normalizedName = value => displayName(value).toLowerCase();
+    const byName = new Map();
+    people.forEach(person => {
+      const key = normalizedName(person.Name_EN_FULL || person.Name_EN);
+      if (!key) return;
+      const existing = byName.get(key);
+      if (!existing || (!existing.Homepage && person.Homepage)) byName.set(key, person);
+    });
     return String(authors || '').split(',').map(raw => {
       const marked = raw.trim();
-      const name = marked.replace(/[\*†‡]+$/g, '').trim();
-      const suffix = marked.slice(name.length);
-      const person = byName.get(name) || {};
-      const url = person.Primary_URL || person.Primary_URL_EN || person.Github ||
-        `https://github.com/search?q=${encodeURIComponent(name)}&type=users`;
+      const name = displayName(marked);
+      const suffix = (marked.match(/[\*\u2020\u2021]/g) || []).join('');
+      const key = normalizedName(name);
+      const person = byName.get(key) || {};
+      const url = String(
+        person.Homepage || person.Column_24 || requestedAuthorUrls.get(key) || ''
+      ).trim();
       const label = name === 'Kyeonghun Kim' ? `<strong>${escapeHtml(name)}</strong>` : escapeHtml(name);
-      return `<a class="portfolio-author" href="${escapeHtml(url)}" target="_blank" rel="noopener">${label}</a>${escapeHtml(suffix)}`;
+      const linkedLabel = /^https?:\/\//i.test(url)
+        ? `<a class="portfolio-author" href="${escapeHtml(url)}" target="_blank" rel="noopener">${label}</a>`
+        : label;
+      return `${linkedLabel}${escapeHtml(suffix)}`;
     }).join(', ');
   }
 
@@ -156,7 +250,8 @@
     const titleLink = pub.Paper_Link && pub.Paper_Link !== '-'
       ? `<a href="${escapeHtml(pub.Paper_Link)}" target="_blank" rel="noopener">${escapeHtml(pub.Title)}</a>`
       : escapeHtml(pub.Title);
-    const status = /under review/i.test(pub.Status || pub.Venue_Name || '') ? '<span class="portfolio-status">Under Review</span>' : '';
+    const statusText = `${pub.Status || ''} ${pub.Venue_Name || ''}`;
+    const status = /under review/i.test(statusText) ? '<span class="portfolio-status">Under Review</span>' : '';
     return `<article class="portfolio-card publication-card">
       <h3>${titleLink}</h3>
       <p class="portfolio-authors">${buildAuthorLinks(pub.Authors, people)}</p>
