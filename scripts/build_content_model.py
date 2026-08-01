@@ -22,6 +22,13 @@ PUBLICATION_HEADERS = [
     "Notes_KO", "Is_Visible", "Source",
 ]
 
+CV_CONTENT_HEADERS = [
+    "content_id", "section_id", "section_title_en", "section_title_ko",
+    "entry_type", "title_en", "title_ko", "subtitle_en", "subtitle_ko",
+    "period_en", "period_ko", "description_en", "description_ko", "link_url",
+    "icon", "display_order", "is_visible",
+]
+
 
 EXTRA_PAPERS = [
     ("KHK_UR_001", 2026, "Automated dental caries segmentation in panoramic radiographs using a lightweight dual-stage deep learning framework", "Scientific Reports", "Yeongseok Seo, Kyeonghun Kim, Jong-yeol Lee, Jihun Kim, Dohyun Chun†"),
@@ -160,6 +167,8 @@ def build(args):
     publications = make_publications(imsi)
     people = people_rows(imsi, publications)
     credentials = credential_rows(args.credentials)
+    cv_path = Path(__file__).resolve().parents[1] / "assets/data/cv-content.json"
+    cv_content = json.loads(cv_path.read_text(encoding="utf-8"))
 
     wb = Workbook()
     wb.remove(wb.active)
@@ -184,6 +193,15 @@ def build(args):
         ["ABOUT", "About Me", "소개", "AI researcher working across medical imaging, generative AI, multimodal learning, and hyperspectral imaging. Research Assistant at IMSI Lab and AI Researcher at GNEWSOFT.", "의료영상, 생성형 AI, 멀티모달 학습, 초분광 영상을 연구하는 AI 연구자입니다. IMSI Lab 연구조교이자 GNEWSOFT AI 연구원으로 활동하고 있습니다.", 10, True],
         ["RESEARCH", "Research & Leadership", "연구 및 리더십", "I lead medical imaging research teams, maintain the IMSI Lab website, and collaborate with clinical and NVIDIA researchers.", "의료영상 연구팀을 이끌고 IMSI Lab 웹사이트를 운영하며 임상·NVIDIA 연구진과 협업하고 있습니다.", 20, True],
     ])
+    add_sheet(
+        wb,
+        "CV_Content",
+        CV_CONTENT_HEADERS,
+        [[row.get(header, "") for header in CV_CONTENT_HEADERS] for row in cv_content],
+        {"section_title_en": 28, "section_title_ko": 24, "title_en": 42,
+         "title_ko": 35, "description_en": 75, "description_ko": 75,
+         "link_url": 50},
+    )
     add_sheet(wb, "Experience_Education", ["entry_id", "category", "organization_en", "organization_ko", "role_en", "role_ko", "period_en", "period_ko", "description_en", "description_ko", "display_order", "is_visible"], [
         ["EXP_001", "Research", "IMSI Lab, Seoul National University", "서울대학교 IMSI Lab", "Research Assistant", "연구조교", "Sep. 2024 – Present", "2024년 9월 – 현재", "Multimodal medical AI research and team leadership.", "멀티모달 의료 AI 연구 및 팀 리더십.", 10, True],
         ["EXP_002", "Professional", "GNEWSOFT", "지뉴스프트", "AI Researcher", "AI 연구원", "Oct. 2024 – Present", "2024년 10월 – 현재", "Foundation models and applied AI systems.", "파운데이션 모델 및 응용 AI 시스템 개발.", 20, True],
@@ -234,6 +252,7 @@ def build(args):
     sheets = {
         "Site_Config": table(wb["Site_Config"]),
         "Home_Sections": table(wb["Home_Sections"]),
+        "CV_Content": table(wb["CV_Content"]),
         "DB_People": table(wb["DB_People"]),
         "Publications": [dict(zip(PUBLICATION_HEADERS, row)) for row in publications],
         "Projects": table(wb["Projects"]),

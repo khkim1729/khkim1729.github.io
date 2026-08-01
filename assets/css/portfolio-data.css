@@ -39,6 +39,23 @@
 .credential-grid { display: grid; gap: .7rem; margin-bottom: 2rem; }
 .credential-item { display: grid; grid-template-columns: minmax(220px, 1.5fr) 1fr 1.4fr; gap: .7rem; padding: .75rem 0; border-bottom: 1px solid #e6ebef; }
 .credential-item small { color: #687782; }
+.cv-download-wrap { text-align: center; margin: 20px 0 30px; }
+.cv-download-button {
+  display: inline-block; background: #007bff; color: #fff; padding: 12px 24px;
+  text-decoration: none; border-radius: 5px; font-weight: 700;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .1); transition: background-color .3s;
+}
+.cv-download-button:hover, .cv-download-button:focus { background: #0069d9; color: #fff; }
+.cv-section > h1 { border-bottom: 1px solid #e6ebef; padding-bottom: .35rem; }
+.cv-entry { margin: 1.45rem 0; }
+.cv-entry h3 { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .35rem 1rem; margin-bottom: .35rem; }
+.cv-entry h3 span { color: #687782; font-size: .9em; font-weight: 500; }
+.cv-entry h4 { margin: .25rem 0 .45rem; }
+.cv-entry ul { margin-top: .4rem; }
+.cv-skill { margin: .6rem 0; }
+.cv-contact-grid { display: flex; flex-wrap: wrap; gap: .8rem 1.3rem; margin: 1rem 0 2rem; }
+.cv-contact-link { display: inline-flex; align-items: center; gap: .4rem; text-decoration: none; }
+.cv-note { border-left: 3px solid #008aff; padding-left: 1rem; color: #596773; }
 .portfolio-search-button { border: 0; background: transparent; color: inherit; padding: .5rem .65rem; cursor: pointer; }
 #portfolio-search-overlay {
   position: fixed; inset: 0; z-index: 9999; background: rgba(16, 29, 43, .78);

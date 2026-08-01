@@ -41,6 +41,7 @@ version:
 .../exec?sheet=09_Project_Content&lang=ko&project_id=PROJ_3DLLDM
 .../exec?sheet=10_Credentials&lang=all
 .../exec?sheet=Site_Config&lang=all
+.../exec?sheet=06_CV_Content&lang=all
 ```
 
 The API publishes `khkim1729@gmail.com` from `Site_Config` and publishes
@@ -54,6 +55,9 @@ phone-number column or any other private contact data to a public sheet.
   `DB_Publications!A:N`. The API reads `DB_Publications` directly, avoiding
   upload-time formula compatibility problems.
 - Korean text: optional. Empty Korean values fall back to English.
+- CV: edit `CV_Content`; each row is one CV entry. Use line breaks in
+  `description_en`/`description_ko` to create bullet points. The EN/KO switch
+  redraws every CV section from these localized columns.
 - Projects: use public HTTPS URLs in `cover_image_url`.
 - Project details: add ordered blocks in `Project_Content`.
 - Visibility: set `Is_Visible`/`is_visible` to false to hide a row.

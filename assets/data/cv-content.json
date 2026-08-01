@@ -1,0 +1,145 @@
+[
+  {
+    "content_id": "CV_EDU_001", "section_id": "education", "section_title_en": "Education", "section_title_ko": "학력", "entry_type": "entry",
+    "title_en": "Kookmin University", "title_ko": "국민대학교", "subtitle_en": "Master of Science in Artificial Intelligence (GPA: 4.03/4.5)", "subtitle_ko": "인공지능학과 석사 (학점: 4.03/4.5)",
+    "period_en": "Sep. 2022 – Feb. 2024", "period_ko": "2022년 9월 – 2024년 2월", "description_en": "Specialized in generative AI and deep learning applications with a focus on multimodal data integration", "description_ko": "멀티모달 데이터 통합을 중심으로 생성형 AI와 딥러닝 응용을 연구", "link_url": "", "display_order": 10, "is_visible": true
+  },
+  {
+    "content_id": "CV_EDU_002", "section_id": "education", "section_title_en": "Education", "section_title_ko": "학력", "entry_type": "entry",
+    "title_en": "Hankyong National University", "title_ko": "한경국립대학교", "subtitle_en": "Bachelor of Science in Computer Science (GPA: 4.12/4.5)", "subtitle_ko": "컴퓨터공학과 학사 (학점: 4.12/4.5)",
+    "period_en": "Mar. 2018 – Aug. 2022", "period_ko": "2018년 3월 – 2022년 8월", "description_en": "Awarded a full scholarship for academic excellence\nCompleted 158 credits (graduation requirement: 130)", "description_ko": "우수한 학업 성취로 전액 장학금 수혜\n졸업요건 130학점을 초과한 158학점 이수", "link_url": "", "display_order": 20, "is_visible": true
+  },
+  {
+    "content_id": "CV_RES_001", "section_id": "research", "section_title_en": "Research Experience", "section_title_ko": "연구 경력", "entry_type": "entry",
+    "title_en": "Medical Imaging Lab, Seoul National University", "title_ko": "서울대학교 의료영상 연구실", "subtitle_en": "Research Assistant", "subtitle_ko": "연구조교",
+    "period_en": "Sep. 2024 – Present", "period_ko": "2024년 9월 – 현재", "description_en": "Advisor: Prof. Nam-Joon Kim (SNU) and Prof. Wonjae Lee, Radiologist (Samsung Medical Center)\nLead the SUDAL Medical Imaging Team, organizing weekly journal clubs and mentoring junior researchers\nBuilt the official IMSI Lab website from the ground up\nConduct research on conditional abdominal MRI synthesis using segmentation-guided ControlNet pipelines\nCollaborate with Samsung Medical Center radiologists and NVIDIA researchers on medical AI projects", "description_ko": "지도교수: 김남준 교수(서울대학교), 이원재 교수·영상의학과 전문의(삼성서울병원)\nSUDAL 의료영상팀을 이끌며 주간 저널클럽 운영 및 주니어 연구자 멘토링\nIMSI Lab 공식 홈페이지를 처음부터 구축\n분할 정보 기반 ControlNet 파이프라인을 활용한 조건부 복부 MRI 합성 연구\n삼성서울병원 영상의학과 및 NVIDIA 연구진과 의료 AI 프로젝트 협업", "link_url": "https://imsilab.github.io/imsi/", "display_order": 100, "is_visible": true
+  },
+  {
+    "content_id": "CV_PRO_001", "section_id": "professional", "section_title_en": "Professional Experience", "section_title_ko": "경력", "entry_type": "entry",
+    "title_en": "GNEWSOFT", "title_ko": "지뉴스프트", "subtitle_en": "AI Researcher", "subtitle_ko": "AI 연구원", "period_en": "Oct. 2024 – Present", "period_ko": "2024년 10월 – 현재",
+    "description_en": "Designed and led the development of HyperspectralMAE, achieving state-of-the-art classification performance\nExtended the foundation model to unmixing, denoising, and pixel-wise classification\nFine-tuned LLaMA 3.1 8B and Gemma-based multimodal medical vision-language models", "description_ko": "분류 과제에서 최고 수준 성능을 달성한 HyperspectralMAE 설계 및 개발 주도\n파운데이션 모델을 분광 혼합분해, 잡음 제거, 픽셀 단위 분류 과제로 확장\nLLaMA 3.1 8B 및 Gemma 기반 멀티모달 의료 비전-언어 모델 미세조정", "link_url": "https://www.gnewsoft.com/", "display_order": 200, "is_visible": true
+  },
+  {
+    "content_id": "CV_PRO_002", "section_id": "professional", "section_title_en": "Professional Experience", "section_title_ko": "경력", "entry_type": "entry",
+    "title_en": "OUTTA", "title_ko": "OUTTA", "subtitle_en": "Medical Imaging Team Lead", "subtitle_ko": "의료영상팀 리드", "period_en": "Jul. 2023 – Present", "period_ko": "2023년 7월 – 현재",
+    "description_en": "Contribute to an AI organization at Seoul National University\nLed facial image generation and detection projects using DDPM and ProGAN\nTaught deep learning and Python bootcamps to 450+ participants in 2023 and 650+ participants in 2024", "description_ko": "서울대학교 기반 AI 교육·연구 조직에서 활동\nDDPM과 ProGAN을 활용한 얼굴 이미지 생성 및 탐지 프로젝트 주도\n2023년 450명 이상, 2024년 650명 이상을 대상으로 딥러닝·Python 부트캠 교육", "link_url": "https://outta.ai/", "display_order": 210, "is_visible": true
+  },
+  {
+    "content_id": "CV_PRO_003", "section_id": "professional", "section_title_en": "Professional Experience", "section_title_ko": "경력", "entry_type": "entry",
+    "title_en": "Weatherpia", "title_ko": "웨더피아", "subtitle_en": "AI Researcher", "subtitle_ko": "AI 연구원", "period_en": "Mar. 2024 – Aug. 2024", "period_ko": "2024년 3월 – 2024년 8월",
+    "description_en": "Built a weather integration platform providing KMA-based datasets through MariaDB and APIs\nDelivered reliable weather data to clients including the Korean Broadcasting System (KBS)", "description_ko": "MariaDB와 API를 통해 기상청 기반 데이터셋을 제공하는 기상 통합 플랫폼 구축\n한국방송공사(KBS)를 포함한 고객사에 신뢰도 높은 기상 데이터 제공", "link_url": "http://www.weatherpia.com/", "display_order": 220, "is_visible": true
+  },
+  {
+    "content_id": "CV_PRO_004", "section_id": "professional", "section_title_en": "Professional Experience", "section_title_ko": "경력", "entry_type": "entry",
+    "title_en": "LG Uplus", "title_ko": "LG유플러스", "subtitle_en": "Data Scientist", "subtitle_ko": "데이터 사이언티스트", "period_en": "Jan. 2024 – Mar. 2024", "period_ko": "2024년 1월 – 2024년 3월",
+    "description_en": "Built a Python parser for extracting credit-card application data\nAutomated data transformation and database insertion processes", "description_ko": "신용카드 신청 데이터 추출을 위한 Python 파서 개발\n데이터 변환 및 데이터베이스 적재 프로세스 자동화", "link_url": "https://www.lguplus.com/about/en", "display_order": 230, "is_visible": true
+  },
+  {
+    "content_id": "CV_PRO_005", "section_id": "professional", "section_title_en": "Professional Experience", "section_title_ko": "경력", "entry_type": "entry",
+    "title_en": "SK Telecom", "title_ko": "SK텔레콤", "subtitle_en": "AI Instructor (Contract)", "subtitle_ko": "AI 강사 (계약)", "period_en": "Dec. 2023", "period_ko": "2023년 12월",
+    "description_en": "Delivered a three-day Stable Diffusion course to more than 30 engineers from multiple technology teams\nLed hands-on Text-to-Image and Image-to-Image sessions", "description_ko": "여러 기술팀 소속 엔지니어 30명 이상에게 3일간 Stable Diffusion 교육 진행\nText-to-Image 및 Image-to-Image 실습 세션 주도", "link_url": "https://www.sktelecom.com/index_en.html", "display_order": 240, "is_visible": true
+  },
+  {
+    "content_id": "CV_PRO_006", "section_id": "professional", "section_title_en": "Professional Experience", "section_title_ko": "경력", "entry_type": "entry",
+    "title_en": "AI O2O Inc.", "title_ko": "AI O2O", "subtitle_en": "AI Software Engineer", "subtitle_ko": "AI 소프트웨어 엔지니어", "period_en": "Aug. 2023 – Dec. 2023", "period_ko": "2023년 8월 – 2023년 12월",
+    "description_en": "Developed Django-based recommendation systems for travel routes and food preferences\nImplemented a RAG-based chatbot for personalized interaction", "description_ko": "여행 경로 및 음식 선호도 추천을 위한 Django 기반 시스템 개발\n개인화 상호작용을 위한 RAG 기반 챗봇 구현", "link_url": "https://www.o2osolution.ai/", "display_order": 250, "is_visible": true
+  },
+  {
+    "content_id": "CV_PRO_007", "section_id": "professional", "section_title_en": "Professional Experience", "section_title_ko": "경력", "entry_type": "entry",
+    "title_en": "OESON", "title_ko": "OESON", "subtitle_en": "Data Analyst", "subtitle_ko": "데이터 분석가", "period_en": "Jan. 2023 – Mar. 2023", "period_ko": "2023년 1월 – 2023년 3월",
+    "description_en": "Performed sentiment analysis and statistical modeling on complex datasets in Sydney, Australia", "description_ko": "호주 시드니에서 복합 데이터셋을 대상으로 감성 분석 및 통계 모델링 수행", "link_url": "https://in.linkedin.com/company/oeson", "display_order": 260, "is_visible": true
+  },
+  {
+    "content_id": "CV_PRO_008", "section_id": "professional", "section_title_en": "Professional Experience", "section_title_ko": "경력", "entry_type": "entry",
+    "title_en": "NuriFlex Holdings Inc.", "title_ko": "누리플렉스 홀딩스", "subtitle_en": "Software Engineer", "subtitle_ko": "소프트웨어 엔지니어", "period_en": "Nov. 2021 – Dec. 2022", "period_ko": "2021년 11월 – 2022년 12월",
+    "description_en": "Developed REST APIs and batch programs using Java and Spring Boot\nMaintained CI/CD pipelines in a Kubernetes environment", "description_ko": "Java와 Spring Boot를 활용한 REST API 및 배치 프로그램 개발\nKubernetes 환경의 CI/CD 파이프라인 유지보수", "link_url": "http://nuriflex.co.kr/", "display_order": 270, "is_visible": true
+  },
+  {
+    "content_id": "CV_PRO_009", "section_id": "professional", "section_title_en": "Professional Experience", "section_title_ko": "경력", "entry_type": "entry",
+    "title_en": "AST Global", "title_ko": "AST Global", "subtitle_en": "Junior Developer", "subtitle_ko": "주니어 개발자", "period_en": "Oct. 2020 – Apr. 2021", "period_ko": "2020년 10월 – 2021년 4월",
+    "description_en": "Created immersive AR/VR content using Unity and C#", "description_ko": "Unity와 C#을 활용한 몰입형 AR/VR 콘텐츠 제작", "link_url": "https://www.astkorea.net/en", "display_order": 280, "is_visible": true
+  },
+  {
+    "content_id": "CV_COL_001", "section_id": "collaborations", "section_title_en": "Research Collaborations", "section_title_ko": "연구 협력", "entry_type": "entry",
+    "title_en": "TEAM CEUS (NVIDIA Collaboration)", "title_ko": "TEAM CEUS (NVIDIA 협력)", "subtitle_en": "", "subtitle_ko": "", "period_en": "", "period_ko": "",
+    "description_en": "Collaborate with NVIDIA researchers Ping Shu Ho (Cliff) and Ivan Au-Yeung\nFocus on diffusion-based contrast-enhanced ultrasound reconstruction and noise reduction", "description_ko": "NVIDIA 연구진 Ping Shu Ho(Cliff), Ivan Au-Yeung과 협력\n확산 모델 기반 조영증강 초음파 재구성 및 잡음 제거 연구", "link_url": "", "display_order": 300, "is_visible": true
+  },
+  {
+    "content_id": "CV_COL_002", "section_id": "collaborations", "section_title_en": "Research Collaborations", "section_title_ko": "연구 협력", "entry_type": "entry",
+    "title_en": "TEAM PNI (NVIDIA Collaboration)", "title_ko": "TEAM PNI (NVIDIA 협력)", "subtitle_en": "", "subtitle_ko": "", "period_en": "", "period_ko": "",
+    "description_en": "Collaborate with Ka-Chun (Charles) Cheung, Ph.D. and Ginny Wong, Ph.D.\nFocus on physiology-informed MRI generation and neural parameterization", "description_ko": "Ka-Chun (Charles) Cheung 박사, Ginny Wong 박사와 협력\n생리학 정보를 반영한 MRI 생성 및 신경망 파라미터화 연구", "link_url": "", "display_order": 310, "is_visible": true
+  },
+  {
+    "content_id": "CV_PRJ_001", "section_id": "projects", "section_title_en": "Key Projects", "section_title_ko": "주요 프로젝트", "entry_type": "entry",
+    "title_en": "HyperspectralMAE Foundation Model", "title_ko": "HyperspectralMAE 파운데이션 모델", "subtitle_en": "", "subtitle_ko": "", "period_en": "", "period_ko": "",
+    "description_en": "Developed a full-stack hyperspectral analysis platform with PyTorch, FastAPI, Docker, and MariaDB\nAchieved state-of-the-art performance on Indian Pines pixel-wise classification\nBuilt a lightweight anomaly detection model achieving AUC 92.7% and OA 99.9%", "description_ko": "PyTorch, FastAPI, Docker, MariaDB를 활용한 풀스택 초분광 분석 플랫폼 개발\nIndian Pines 픽셀 단위 분류에서 최고 수준 성능 달성\nAUC 92.7%, OA 99.9%를 달성한 경량 이상 탐지 모델 개발", "link_url": "", "display_order": 400, "is_visible": true
+  },
+  {
+    "content_id": "CV_PRJ_002", "section_id": "projects", "section_title_en": "Key Projects", "section_title_ko": "주요 프로젝트", "entry_type": "entry",
+    "title_en": "Bilingual LLaMA 3.1 8B Fine-tuning", "title_ko": "이중언어 LLaMA 3.1 8B 미세조정", "subtitle_en": "", "subtitle_ko": "", "period_en": "", "period_ko": "",
+    "description_en": "Fine-tuned the model using the Stanford Alpaca dataset for Korean-English instruction following\nImplemented an evaluation harness for alignment quality and hallucination suppression", "description_ko": "Stanford Alpaca 데이터셋을 활용해 한국어-영어 지시 수행 모델 미세조정\n정렬 품질 및 환각 억제를 평가하는 평가 도구 구현", "link_url": "", "display_order": 410, "is_visible": true
+  },
+  {
+    "content_id": "CV_PRJ_003", "section_id": "projects", "section_title_en": "Key Projects", "section_title_ko": "주요 프로젝트", "entry_type": "entry",
+    "title_en": "Medical Vision-Language Model Development", "title_ko": "의료 비전-언어 모델 개발", "subtitle_en": "", "subtitle_ko": "", "period_en": "", "period_ko": "",
+    "description_en": "Fine-tuned Gemma-based VLMs on ultrasound, CT, and MRI image-report pairs\nImproved clinical visual reasoning and multimodal understanding", "description_ko": "초음파·CT·MRI 영상-판독문 쌍으로 Gemma 기반 VLM 미세조정\n임상 시각 추론 및 멀티모달 이해 성능 향상", "link_url": "", "display_order": 420, "is_visible": true
+  },
+  {
+    "content_id": "CV_PAT_001", "section_id": "patents", "section_title_en": "Patents", "section_title_ko": "특허", "entry_type": "entry",
+    "title_en": "Method for Refining Hyperspectral Images Using Deep Learning", "title_ko": "딥러닝을 이용한 초분광 영상 정제 방법", "subtitle_en": "Patent Application Filed", "subtitle_ko": "특허 출원", "period_en": "Dec. 2024", "period_ko": "2024년 12월",
+    "description_en": "Inventors: Hyunjae Park, Seonghun Jeong, Kyeonghun Kim, Taehoon Lim, Dongil Kim\nApplication No.: 10-2024-0199713 (Korea)\nApplicant: Gnewsoft Co., Ltd.", "description_ko": "발명자: 박현재, 정성훈, 김경훈, 임태훈, 김동일\n출원번호: 10-2024-0199713 (대한민국)\n출원인: 주식회사 지뉴스프트", "link_url": "", "display_order": 500, "is_visible": true
+  },
+  {
+    "content_id": "CV_CRE_001", "section_id": "credentials", "section_title_en": "Certifications & Licenses", "section_title_ko": "자격증 및 면허", "entry_type": "credentials",
+    "title_en": "", "title_ko": "", "subtitle_en": "", "subtitle_ko": "", "period_en": "", "period_ko": "", "description_en": "", "description_ko": "", "link_url": "", "display_order": 600, "is_visible": true
+  },
+  {
+    "content_id": "CV_SKL_001", "section_id": "skills", "section_title_en": "Technical Skills", "section_title_ko": "기술 역량", "entry_type": "skill",
+    "title_en": "Programming Languages", "title_ko": "프로그래밍 언어", "subtitle_en": "Python, Java, SQL, Bash, C#, JavaScript, TypeScript", "subtitle_ko": "Python, Java, SQL, Bash, C#, JavaScript, TypeScript", "period_en": "", "period_ko": "", "description_en": "", "description_ko": "", "link_url": "", "display_order": 700, "is_visible": true
+  },
+  {
+    "content_id": "CV_SKL_002", "section_id": "skills", "section_title_en": "Technical Skills", "section_title_ko": "기술 역량", "entry_type": "skill",
+    "title_en": "AI/ML Frameworks", "title_ko": "AI/ML 프레임워크", "subtitle_en": "PyTorch, TensorFlow, MONAI, Hugging Face Transformers, scikit-learn", "subtitle_ko": "PyTorch, TensorFlow, MONAI, Hugging Face Transformers, scikit-learn", "period_en": "", "period_ko": "", "description_en": "", "description_ko": "", "link_url": "", "display_order": 710, "is_visible": true
+  },
+  {
+    "content_id": "CV_SKL_003", "section_id": "skills", "section_title_en": "Technical Skills", "section_title_ko": "기술 역량", "entry_type": "skill",
+    "title_en": "LLM & Vision Models", "title_ko": "LLM 및 비전 모델", "subtitle_en": "LLaMA, Gemma VLM, LoRA, RAG, Diffusion Models (DDPM, ControlNet)", "subtitle_ko": "LLaMA, Gemma VLM, LoRA, RAG, 확산 모델(DDPM, ControlNet)", "period_en": "", "period_ko": "", "description_en": "", "description_ko": "", "link_url": "", "display_order": 720, "is_visible": true
+  },
+  {
+    "content_id": "CV_SKL_004", "section_id": "skills", "section_title_en": "Technical Skills", "section_title_ko": "기술 역량", "entry_type": "skill",
+    "title_en": "Backend & Infrastructure", "title_ko": "백엔드 및 인프라", "subtitle_en": "Django, FastAPI, Node.js, Nginx, Gunicorn, Docker, Kubernetes", "subtitle_ko": "Django, FastAPI, Node.js, Nginx, Gunicorn, Docker, Kubernetes", "period_en": "", "period_ko": "", "description_en": "", "description_ko": "", "link_url": "", "display_order": 730, "is_visible": true
+  },
+  {
+    "content_id": "CV_SKL_005", "section_id": "skills", "section_title_en": "Technical Skills", "section_title_ko": "기술 역량", "entry_type": "skill",
+    "title_en": "Specialized Domains", "title_ko": "전문 분야", "subtitle_en": "Hyperspectral Imaging, Medical Imaging, Spectral Analysis, Anomaly Detection", "subtitle_ko": "초분광 영상, 의료영상, 분광 분석, 이상 탐지", "period_en": "", "period_ko": "", "description_en": "", "description_ko": "", "link_url": "", "display_order": 740, "is_visible": true
+  },
+  {
+    "content_id": "CV_SKL_006", "section_id": "skills", "section_title_en": "Technical Skills", "section_title_ko": "기술 역량", "entry_type": "skill",
+    "title_en": "Tools", "title_ko": "도구", "subtitle_en": "Git, Linux, VS Code, PyCharm, Docker Compose, Unity", "subtitle_ko": "Git, Linux, VS Code, PyCharm, Docker Compose, Unity", "period_en": "", "period_ko": "", "description_en": "", "description_ko": "", "link_url": "", "display_order": 750, "is_visible": true
+  },
+  {
+    "content_id": "CV_CON_001", "section_id": "contact", "section_title_en": "Contact Information", "section_title_ko": "연락처", "entry_type": "link",
+    "title_en": "Email", "title_ko": "이메일", "subtitle_en": "", "subtitle_ko": "", "period_en": "", "period_ko": "", "description_en": "", "description_ko": "", "link_url": "mailto:khkim1729@gmail.com", "icon": "📧", "display_order": 800, "is_visible": true
+  },
+  {
+    "content_id": "CV_CON_002", "section_id": "contact", "section_title_en": "Contact Information", "section_title_ko": "연락처", "entry_type": "link",
+    "title_en": "GitHub", "title_ko": "GitHub", "subtitle_en": "", "subtitle_ko": "", "period_en": "", "period_ko": "", "description_en": "", "description_ko": "", "link_url": "https://github.com/khkim1729", "icon": "💻", "display_order": 810, "is_visible": true
+  },
+  {
+    "content_id": "CV_CON_003", "section_id": "contact", "section_title_en": "Contact Information", "section_title_ko": "연락처", "entry_type": "link",
+    "title_en": "LinkedIn", "title_ko": "LinkedIn", "subtitle_en": "", "subtitle_ko": "", "period_en": "", "period_ko": "", "description_en": "", "description_ko": "", "link_url": "https://www.linkedin.com/in/kyeonghun-kim-50705525b/", "icon": "🔗", "display_order": 820, "is_visible": true
+  },
+  {
+    "content_id": "CV_CON_004", "section_id": "contact", "section_title_en": "Contact Information", "section_title_ko": "연락처", "entry_type": "link",
+    "title_en": "Google Scholar", "title_ko": "Google Scholar", "subtitle_en": "", "subtitle_ko": "", "period_en": "", "period_ko": "", "description_en": "", "description_ko": "", "link_url": "https://scholar.google.com/citations?user=N3LVcyEAAAAJ&hl=ko", "icon": "🎓", "display_order": 830, "is_visible": true
+  },
+  {
+    "content_id": "CV_CON_005", "section_id": "contact", "section_title_en": "Contact Information", "section_title_ko": "연락처", "entry_type": "link",
+    "title_en": "Blog", "title_ko": "블로그", "subtitle_en": "", "subtitle_ko": "", "period_en": "", "period_ko": "", "description_en": "", "description_ko": "", "link_url": "https://blog.naver.com/kgh9080", "icon": "📝", "display_order": 840, "is_visible": true
+  },
+  {
+    "content_id": "CV_NOTE_001", "section_id": "note", "section_title_en": "Profile", "section_title_ko": "소개", "entry_type": "note",
+    "title_en": "", "title_ko": "", "subtitle_en": "", "subtitle_ko": "", "period_en": "", "period_ko": "",
+    "description_en": "My work connects foundations in computer science with advanced AI research, focusing on medical imaging and practical systems that can benefit society. I aim to bridge academic research and real-world clinical solutions.", "description_ko": "컴퓨터과학의 기반 위에서 첨단 AI 연구를 수행하며, 의료영상과 사회에 기여할 수 있는 실용적 시스템에 집중하고 있습니다. 학술 연구와 실제 임상 솔루션 사이의 간극을 연결하는 것을 목표로 합니다.", "link_url": "", "display_order": 900, "is_visible": true
+  }
+]

@@ -3,24 +3,28 @@
 
   const API_URL = window.PORTFOLIO_API_URL || '';
   const FALLBACK_URL = '/assets/data/portfolio-data.json';
+  const CV_FALLBACK_URL = '/assets/data/cv-content.json';
   const IMSI_PEOPLE_URL =
     'https://docs.google.com/spreadsheets/d/1nr8EWtSU3Y50oK7oeKvwIZ1tHBUMmOhiSjtFYYufSYI/gviz/tq';
   const cache = new Map();
   const remoteLoads = new Map();
   let fallbackPromise;
+  let cvFallbackPromise;
 
   const aliases = {
     Publications: '07_Publications',
     Projects: '08_Projects',
     Project_Content: '09_Project_Content',
-    Professional_Credentials: '10_Credentials'
+    Professional_Credentials: '10_Credentials',
+    CV_Content: '06_CV_Content'
   };
 
   const expectedApiSheets = {
     Publications: 'DB_Publications',
     Projects: 'Projects',
     Project_Content: 'Project_Content',
-    Professional_Credentials: 'Professional_Credentials'
+    Professional_Credentials: 'Professional_Credentials',
+    CV_Content: 'CV_Content'
   };
 
   const requestedAuthorUrls = new Map(Object.entries({
@@ -138,6 +142,16 @@
     return fallbackPromise;
   }
 
+  async function cvFallback() {
+    if (!cvFallbackPromise) {
+      cvFallbackPromise = fetch(CV_FALLBACK_URL, {cache: 'force-cache'}).then(response => {
+        if (!response.ok) throw new Error(`CV fallback HTTP ${response.status}`);
+        return response.json();
+      });
+    }
+    return cvFallbackPromise;
+  }
+
   function loadRemote(name) {
     if (remoteLoads.has(name)) return remoteLoads.get(name);
 
@@ -201,8 +215,10 @@
   async function getSheet(name) {
     if (cache.has(name)) return cache.get(name);
     const localPromise = (async () => {
-      const payload = await fallback();
-      const rows = (payload.sheets[name] || []).map(row => normalizeRow(name, row));
+      const source = name === 'CV_Content'
+        ? await cvFallback()
+        : (await fallback()).sheets[name] || [];
+      const rows = source.map(row => normalizeRow(name, row));
       if (!cache.has(name)) cache.set(name, rows);
       return cache.get(name);
     })();
@@ -323,6 +339,86 @@
     }).join('')}</div>`;
   }
 
+  function safeLink(url) {
+    const value = String(url || '').trim();
+    return /^(https?:\/\/|mailto:)/i.test(value) ? value : '';
+  }
+
+  function cvDescription(row, lang) {
+    const items = String(localized(row, 'description', lang) || '')
+      .split(/\r?\n/)
+      .map(item => item.trim())
+      .filter(Boolean);
+    return items.length
+      ? `<ul>${items.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`
+      : '';
+  }
+
+  function cvEntry(row, lang) {
+    const type = String(row.entry_type || 'entry').toLowerCase();
+    const title = localized(row, 'title', lang);
+    const subtitle = localized(row, 'subtitle', lang);
+    const period = localized(row, 'period', lang);
+    const url = safeLink(row.link_url);
+    if (type === 'skill') {
+      return `<p class="cv-skill"><strong>${escapeHtml(title)}</strong>: ${escapeHtml(subtitle)}</p>`;
+    }
+    if (type === 'link') {
+      const external = /^https?:\/\//i.test(url);
+      return `<a class="cv-contact-link" href="${escapeHtml(url)}"${external ? ' target="_blank" rel="noopener noreferrer"' : ''}>
+        <span aria-hidden="true">${escapeHtml(row.icon || '🔗')}</span>${escapeHtml(title)}</a>`;
+    }
+    if (type === 'note') {
+      return `<p class="cv-note">${escapeHtml(localized(row, 'description', lang))}</p>`;
+    }
+    const linkedTitle = url
+      ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(title)}</a>`
+      : escapeHtml(title);
+    return `<article class="cv-entry">
+      <h3>${linkedTitle}${period ? `<span>${escapeHtml(period)}</span>` : ''}</h3>
+      ${subtitle ? `<h4>${escapeHtml(subtitle)}</h4>` : ''}
+      ${cvDescription(row, lang)}
+    </article>`;
+  }
+
+  async function renderCV(root) {
+    const lang = currentLanguage();
+    const rows = (await getSheet('CV_Content'))
+      .filter(row => row.is_visible === undefined || truthy(row.is_visible))
+      .sort((a, b) => Number(a.display_order || 0) - Number(b.display_order || 0));
+    const sections = [];
+    const byId = new Map();
+    rows.forEach(row => {
+      const id = String(row.section_id || 'other');
+      if (!byId.has(id)) {
+        const section = {
+          id: id.toLowerCase().replace(/[^a-z0-9_-]/g, ''),
+          title: localized(row, 'section_title', lang),
+          rows: []
+        };
+        byId.set(id, section);
+        sections.push(section);
+      }
+      byId.get(id).rows.push(row);
+    });
+    root.innerHTML = sections.map((section, index) => {
+      const credentials = section.rows.some(row => row.entry_type === 'credentials');
+      const contacts = section.rows.every(row => row.entry_type === 'link');
+      const content = credentials
+        ? '<div data-cv-credentials><p>Loading credentials…</p></div>'
+        : section.rows.map(row => cvEntry(row, lang)).join('');
+      return `${index ? '<br>' : ''}<section class="cv-section" id="${escapeHtml(section.id)}">
+        <h1>${escapeHtml(section.title)}</h1>
+        <div${contacts ? ' class="cv-contact-grid"' : ''}>${content}</div>
+      </section>`;
+    }).join('');
+    const credentialRoot = root.querySelector('[data-cv-credentials]');
+    if (credentialRoot) await renderCredentials(credentialRoot);
+    document.querySelectorAll('[data-cv-download]').forEach(link => {
+      link.textContent = lang === 'ko' ? '📄 CV 폴더 열기 (PDF)' : '📄 Download CV (PDF)';
+    });
+  }
+
   async function openGlobalSearch() {
     const overlay = document.getElementById('portfolio-search-overlay');
     if (!overlay) return;
@@ -361,6 +457,7 @@
     document.querySelectorAll('[data-portfolio-publications]').forEach(root => renderPublications(root, Number(root.dataset.limit || 0)));
     document.querySelectorAll('[data-portfolio-projects]').forEach(renderProjects);
     document.querySelectorAll('[data-portfolio-credentials]').forEach(renderCredentials);
+    document.querySelectorAll('[data-portfolio-cv]').forEach(renderCV);
     document.querySelectorAll('[data-open-portfolio-search]').forEach(button => button.addEventListener('click', openGlobalSearch));
     document.querySelectorAll('[data-close-portfolio-search]').forEach(button => button.addEventListener('click', closeGlobalSearch));
     document.addEventListener('keydown', event => {
@@ -373,6 +470,7 @@
     document.addEventListener('portfolio:languagechange', () => {
       document.querySelectorAll('[data-portfolio-projects]').forEach(renderProjects);
       document.querySelectorAll('[data-portfolio-credentials]').forEach(renderCredentials);
+      document.querySelectorAll('[data-portfolio-cv]').forEach(renderCV);
     });
     document.addEventListener('portfolio:dataupdated', event => {
       const sheet = event.detail && event.detail.sheet;
@@ -386,6 +484,10 @@
       }
       if (sheet === 'Professional_Credentials') {
         document.querySelectorAll('[data-portfolio-credentials]').forEach(renderCredentials);
+        document.querySelectorAll('[data-portfolio-cv]').forEach(renderCV);
+      }
+      if (sheet === 'CV_Content') {
+        document.querySelectorAll('[data-portfolio-cv]').forEach(renderCV);
       }
     });
   }
