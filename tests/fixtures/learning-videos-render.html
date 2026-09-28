@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Learning video gallery test</title></head>
+<body>
+  <section data-learning-videos aria-live="polite">
+    <div data-learning-video-content>Loading learning videos…</div>
+    <div class="learning-video-modal" data-learning-video-modal role="dialog" aria-modal="true" aria-label="Video player" hidden>
+      <button type="button" data-learning-video-close aria-label="Close video">×</button>
+      <div data-learning-video-player></div>
+    </div>
+  </section>
+  <script>
+    localStorage.setItem('language', 'en');
+    window.PORTFOLIO_API_URL = '/tests/fixtures/learning-videos-api.json?fixture=1';
+  </script>
+  <script src="/assets/js/portfolio-data.js"></script>
+  <script src="/assets/js/learning-videos.js"></script>
+</body>
+</html>

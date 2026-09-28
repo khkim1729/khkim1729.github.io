@@ -151,6 +151,70 @@ class BrowserSmokeTests(unittest.TestCase):
         self.assertTrue(all(set(row) == expected_keys for row in result))
         self.assertNotIn("Private Notes", json.dumps(result))
 
+    def test_learning_video_gallery_groups_and_opens_safe_modal(self):
+        self.request("POST", f"/session/{self.session_id}/url", {
+            "url": f"http://127.0.0.1:{self.web_port}/tests/fixtures/learning-videos-render.html"
+        })
+        result = self.execute("""
+          const done = arguments[arguments.length - 1];
+          const deadline = Date.now() + 10000;
+          (function poll() {
+            const cards = [...document.querySelectorAll('.learning-video-card')];
+            if (cards.length === 3 && window.LearningVideos) {
+              done({
+                cards: cards.length,
+                headings: [...document.querySelectorAll('.learning-video-series h2')].map(x => x.textContent),
+                text: document.body.innerText,
+                injectedImages: document.querySelectorAll('.learning-video-card h3 img').length,
+                thumbnails: [...document.querySelectorAll('.learning-video-thumbnail img')].map(x => x.src),
+                externalLinks: [...document.querySelectorAll('.learning-video-external')].map(x => x.href),
+                malformed: window.LearningVideos.youtubeVideoId('https://youtu.be/short')
+              });
+            } else if (Date.now() > deadline) done({error: document.body.innerText, cards: cards.length});
+            else setTimeout(poll, 50);
+          })();
+        """)
+        self.assertNotIn("error", result)
+        self.assertEqual(3, result["cards"])
+        self.assertEqual(["Beta Learning", "Lambda Course"], result["headings"])
+        self.assertIn("<img src=x onerror=alert(1)>", result["text"])
+        self.assertEqual(0, result["injectedImages"])
+        self.assertEqual(2, len(result["thumbnails"]))
+        self.assertTrue(all("i.ytimg.com/vi/" in url for url in result["thumbnails"]))
+        self.assertEqual(1, len(result["externalLinks"]))
+        self.assertIn("example.com/paper-review", result["externalLinks"][0])
+        self.assertIsNone(result["malformed"])
+
+        opened = self.execute("""
+          const done = arguments[arguments.length - 1];
+          document.querySelector('[data-video-id]').click();
+          setTimeout(() => done({
+            hidden: document.querySelector('[data-learning-video-modal]').hidden,
+            src: document.querySelector('[data-learning-video-player] iframe').src
+          }), 100);
+        """)
+        self.assertFalse(opened["hidden"])
+        self.assertIn("youtube-nocookie.com/embed/AAAAAAAAAAA", opened["src"])
+
+        closed = self.execute("""
+          const done = arguments[arguments.length - 1];
+          document.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape', bubbles: true}));
+          setTimeout(() => done({
+            hidden: document.querySelector('[data-learning-video-modal]').hidden,
+            frames: document.querySelectorAll('[data-learning-video-player] iframe').length
+          }), 100);
+        """)
+        self.assertTrue(closed["hidden"])
+        self.assertEqual(0, closed["frames"])
+
+        korean = self.execute("""
+          const done = arguments[arguments.length - 1];
+          localStorage.setItem('language', 'kr');
+          document.dispatchEvent(new CustomEvent('portfolio:languagechange'));
+          setTimeout(() => done([...document.querySelectorAll('.learning-video-series h2')].map(x => x.textContent)), 150);
+        """)
+        self.assertEqual(["베타러닝", "람다코스"], korean)
+
 
 if __name__ == "__main__":
     unittest.main()

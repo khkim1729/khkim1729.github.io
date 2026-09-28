@@ -23,7 +23,8 @@
     Projects: '08_Projects',
     Project_Content: '09_Project_Content',
     Professional_Credentials: '10_Credentials',
-    CV_Content: '06_CV_Content'
+    CV_Content: '06_CV_Content',
+    Learning_Videos: 'Learning_Videos'
   };
 
   const expectedApiSheets = {
@@ -31,7 +32,8 @@
     Projects: 'Projects',
     Project_Content: 'Project_Content',
     Professional_Credentials: 'Professional_Credentials',
-    CV_Content: 'CV_Content'
+    CV_Content: 'CV_Content',
+    Learning_Videos: 'Learning_Videos'
   };
 
   const requestedAuthorUrls = new Map(Object.entries({
@@ -236,6 +238,10 @@
 
   async function getSheet(name) {
     if (cache.has(name)) return cache.get(name);
+    if (name === 'Learning_Videos') {
+      const remote = loadRemote(name);
+      return remote ? (await remote || []) : [];
+    }
     const localPromise = (async () => {
       const source = name === 'CV_Content'
         ? await cvFallback()

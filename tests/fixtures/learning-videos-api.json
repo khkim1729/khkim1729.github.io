@@ -1,0 +1,48 @@
+{
+  "ok": true,
+  "sheet": "Learning_Videos",
+  "lang": "all",
+  "count": 5,
+  "data": [
+    {
+      "series": "beta",
+      "series_label_en": "Beta Learning",
+      "series_label_ko": "베타러닝",
+      "title": "ML Foundations <img src=x onerror=alert(1)>",
+      "url": "https://www.youtube.com/watch?v=AAAAAAAAAAA",
+      "display_order": 1
+    },
+    {
+      "series": "beta",
+      "series_label_en": "Beta Learning",
+      "series_label_ko": "베타러닝",
+      "title": "Computer Vision",
+      "url": "https://youtu.be/BBBBBBBBBBB",
+      "display_order": 2
+    },
+    {
+      "series": "beta",
+      "series_label_en": "Beta Learning",
+      "series_label_ko": "베타러닝",
+      "title": "Duplicate",
+      "url": "https://www.youtube.com/watch?v=AAAAAAAAAAA",
+      "display_order": 3
+    },
+    {
+      "series": "lambda",
+      "series_label_en": "Lambda Course",
+      "series_label_ko": "람다코스",
+      "title": "Paper review notes",
+      "url": "https://example.com/paper-review",
+      "display_order": 4
+    },
+    {
+      "series": "lambda",
+      "series_label_en": "Lambda Course",
+      "series_label_ko": "람다코스",
+      "title": "Malformed YouTube URL",
+      "url": "https://youtu.be/short",
+      "display_order": 5
+    }
+  ]
+}
