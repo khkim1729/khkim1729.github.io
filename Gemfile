@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-gem "jekyll", "~> 3.8.0"
+gem "jekyll", "~> 4.2.2"
 gem "minima", "~> 2.0"
 gem "jekyll-feed", "~> 0.6"
 gem "jekyll-paginate", "~> 1.1"
@@ -26,4 +26,3 @@ gem "http_parser.rb", "~> 0.6.0", :platforms => [:jruby]
 
 # Fix ffi compatibility issue
 gem "ffi", "< 1.17"
-
