@@ -442,9 +442,12 @@
     const lang = currentLanguage();
     const sectionFilter = new Set(String(root.dataset.sectionFilter || '')
       .split(',').map(value => value.trim()).filter(Boolean));
+    const sectionExclude = new Set(String(root.dataset.sectionExclude || '')
+      .split(',').map(value => value.trim()).filter(Boolean));
     const rows = (await getSheet('CV_Content'))
       .filter(row => row.is_visible === undefined || truthy(row.is_visible))
       .filter(row => !sectionFilter.size || sectionFilter.has(String(row.section_id || '')))
+      .filter(row => !sectionExclude.has(String(row.section_id || '')))
       .sort((a, b) => Number(a.display_order || 0) - Number(b.display_order || 0));
     const sections = [];
     const byId = new Map();

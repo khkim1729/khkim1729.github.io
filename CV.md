@@ -11,6 +11,6 @@ title: CV
      rel="noopener noreferrer">📄 Download CV (PDF)</a>
 </div>
 
-<section data-portfolio-cv aria-live="polite">
+<section data-portfolio-cv data-section-exclude="lectures" aria-live="polite">
   <p>Loading CV…</p>
 </section>

@@ -122,6 +122,13 @@ class PortfolioDataTests(unittest.TestCase):
         self.assertIn('data-section-filter="lectures"', page)
         self.assertIn('portfolio-data.js', (ROOT / "_includes/footer-scripts.html").read_text(encoding="utf-8"))
 
+    def test_cv_page_excludes_lectures_without_hardcoding_other_sections(self):
+        page = (ROOT / "CV.md").read_text(encoding="utf-8")
+        javascript = (ROOT / "assets/js/portfolio-data.js").read_text(encoding="utf-8")
+        self.assertIn('data-section-exclude="lectures"', page)
+        self.assertNotIn('data-section-filter=', page)
+        self.assertIn("sectionExclude", javascript)
+
 
 if __name__ == "__main__":
     unittest.main()

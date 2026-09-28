@@ -92,7 +92,8 @@ class BrowserSmokeTests(unittest.TestCase):
                 cards: cards.length,
                 count: document.querySelector('[data-publication-count]').innerText,
                 labels: [...document.querySelectorAll('.publication-card .portfolio-chip')].map(x => x.innerText),
-                images: document.querySelectorAll('.cv-entry-media img').length
+                images: document.querySelectorAll('.cv-entry-media img').length,
+                text
               });
             } else if (Date.now() > deadline) done({error: text});
             else setTimeout(poll, 100);
@@ -101,7 +102,10 @@ class BrowserSmokeTests(unittest.TestCase):
         self.assertNotIn("error", result)
         self.assertIn(str(result["cards"]), result["count"])
         self.assertIn("GDrive", result["labels"])
-        self.assertGreaterEqual(result["images"], 6)
+        self.assertGreaterEqual(result["images"], 2)
+        self.assertIn("Research Highlights", result["text"])
+        self.assertIn("Volunteering & Giving", result["text"])
+        self.assertNotIn("Lectures & Teaching", result["text"])
 
         korean = self.execute("""
           const done = arguments[arguments.length - 1];
@@ -109,8 +113,9 @@ class BrowserSmokeTests(unittest.TestCase):
           document.dispatchEvent(new CustomEvent('portfolio:languagechange'));
           setTimeout(() => done(document.body.innerText), 200);
         """)
-        self.assertIn("강의 및 교육", korean)
+        self.assertIn("연구 하이라이트", korean)
         self.assertIn("봉사 및 나눔", korean)
+        self.assertNotIn("강의 및 교육", korean)
 
 
 if __name__ == "__main__":
