@@ -117,6 +117,40 @@ class BrowserSmokeTests(unittest.TestCase):
         self.assertIn("봉사 및 나눔", korean)
         self.assertNotIn("강의 및 교육", korean)
 
+    def test_apps_script_learning_video_adapter_extracts_only_rich_text_links(self):
+        self.request("POST", f"/session/{self.session_id}/url", {
+            "url": f"http://127.0.0.1:{self.web_port}/tests/fixtures/apps-script-learning-videos.html"
+        })
+        result = self.execute("""
+          const done = arguments[arguments.length - 1];
+          const deadline = Date.now() + 10000;
+          (function poll() {
+            if (window.adapterResult) done(window.adapterResult);
+            else if (window.adapterError) done({error: window.adapterError});
+            else if (Date.now() > deadline) done({error: 'adapter timeout'});
+            else setTimeout(poll, 50);
+          })();
+        """)
+        self.assertNotIn("error", result)
+        self.assertEqual(5, len(result))
+        self.assertEqual(
+            ["beta", "beta", "beta", "lambda", "lambda"],
+            [row["series"] for row in result],
+        )
+        self.assertEqual(
+            [
+                "Beta Foundations", "Routing lecture", "Vision lecture",
+                "https://youtu.be/CCCCCCCCCCC", "https://example.com/reading",
+            ],
+            [row["title"] for row in result],
+        )
+        self.assertEqual([1, 2, 3, 4, 5], [row["display_order"] for row in result])
+        expected_keys = {
+            "series", "series_label_en", "series_label_ko", "title", "url", "display_order"
+        }
+        self.assertTrue(all(set(row) == expected_keys for row in result))
+        self.assertNotIn("Private Notes", json.dumps(result))
+
 
 if __name__ == "__main__":
     unittest.main()

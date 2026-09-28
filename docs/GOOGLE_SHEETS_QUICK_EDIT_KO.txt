@@ -17,6 +17,11 @@ Portfolio_Website_Content_Model 빠른 수정 안내
    - description_en/description_ko 안에서 줄바꿈하면 화면에서 글머리표로 표시됩니다.
    - 숨길 행은 is_visible을 FALSE로 바꿉니다.
 
+3-1. 베타러닝·람다코스 영상 수정
+   - DB_Publications 탭의 '베타러닝 유튜브'와 '람다코스 유튜브' 컬럼만 사용합니다.
+   - 셀 텍스트에 삽입한 하이퍼링크와 셀에 직접 입력한 https:// 주소를 모두 읽습니다.
+   - 홈페이지 API는 두 컬럼에서 추출한 제목과 링크만 반환하며 DB_Publications 전체를 공개하지 않습니다.
+
 4. Publications 안내문에서 실제 구글시트 열기
    - 홈페이지 링크는 비공개 Portfolio_Website_Content_Model 구글시트 주소로 고정되어 있습니다.
    - 구글드라이브 공유 설정은 '제한됨'으로 유지하고 khkim1729 계정에만 접근 권한을 둡니다.
@@ -35,6 +40,8 @@ Portfolio_Website_Content_Model 빠른 수정 안내
      "ok":true와 "sheet":"WEB_Publications"가 보이는지 확인합니다.
    - /exec?sheet=06_CV_Content&lang=all도 열어
      "ok":true와 "sheet":"CV_Content"가 보이는지 확인합니다.
+   - /exec?sheet=Learning_Videos&lang=all도 열어
+     "ok":true, "sheet":"Learning_Videos"와 series/title/url/display_order만 보이는지 확인합니다.
    - "Unknown sheet"가 나오면 예전 Code.gs 배포본이므로 새 버전 재배포가 필요합니다.
 
 주의

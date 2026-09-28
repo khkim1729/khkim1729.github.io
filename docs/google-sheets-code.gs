@@ -40,13 +40,31 @@ const REQUIRED_HEADERS = {
 function doGet(e) {
   const params = (e && e.parameter) || {};
   const requested = params.sheet || "Site_Config";
+  const lang = ["en", "ko", "all"].includes(params.lang) ? params.lang : "all";
+  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+
+  if (requested === "Learning_Videos") {
+    const source = spreadsheet.getSheetByName("DB_Publications");
+    if (!source) return jsonResponse_({ok: false, error: "Missing sheet: DB_Publications"});
+    let videos = learningVideos_(source);
+    const videoLimit = Math.max(0, Number(params.limit || 0));
+    if (videoLimit) videos = videos.slice(0, videoLimit);
+    return jsonResponse_({
+      ok: true,
+      sheet: "Learning_Videos",
+      lang: lang,
+      count: videos.length,
+      updated_at: new Date().toISOString(),
+      data: videos
+    });
+  }
+
   const sheetName = SHEETS[requested];
   if (!sheetName) {
     return jsonResponse_({ok: false, error: "Unknown sheet", allowed: Object.keys(SHEETS)});
   }
 
-  const lang = ["en", "ko", "all"].includes(params.lang) ? params.lang : "all";
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
+  const sheet = spreadsheet.getSheetByName(sheetName);
   if (!sheet) return jsonResponse_({ok: false, error: "Missing sheet: " + sheetName});
 
   const values = sheet.getDataRange().getDisplayValues();
@@ -76,6 +94,66 @@ function doGet(e) {
     updated_at: new Date().toISOString(),
     data: rows
   });
+}
+
+function richTextLinks_(value) {
+  if (!value) return [];
+  const text = String(value.getText ? value.getText() : "").trim();
+  const wholeLink = value.getLinkUrl ? value.getLinkUrl() : "";
+  if (wholeLink) return [{title: text || wholeLink, url: wholeLink}];
+  const runs = value.getRuns ? value.getRuns() : [];
+  return runs.map(run => {
+    const url = run.getLinkUrl ? run.getLinkUrl() : "";
+    const title = String(run.getText ? run.getText() : "").trim();
+    return url ? {title: title || url, url: url} : null;
+  }).filter(Boolean);
+}
+
+function plainHttpsLinks_(text) {
+  const matches = String(text || "").match(/https:\/\/[^\s<>"']+/g) || [];
+  return matches.map(url => {
+    const cleanUrl = url.replace(/[),.;]+$/, "");
+    return {title: cleanUrl, url: cleanUrl};
+  });
+}
+
+function learningVideos_(sheet) {
+  const range = sheet.getDataRange();
+  const displayValues = range.getDisplayValues();
+  if (!displayValues.length) return [];
+  const richTextValues = range.getRichTextValues();
+  const headers = displayValues[0].map(value => String(value).trim());
+  const series = [
+    {header: "베타러닝 유튜브", id: "beta", en: "Beta Learning", ko: "베타러닝"},
+    {header: "람다코스 유튜브", id: "lambda", en: "Lambda Course", ko: "람다코스"}
+  ];
+  const records = [];
+  let displayOrder = 1;
+
+  series.forEach(group => {
+    const column = headers.indexOf(group.header);
+    if (column < 0) return;
+    const seen = new Set();
+    for (let row = 1; row < displayValues.length; row += 1) {
+      const richValue = richTextValues[row] && richTextValues[row][column];
+      let links = richTextLinks_(richValue);
+      if (!links.length) links = plainHttpsLinks_(displayValues[row][column]);
+      links.forEach(link => {
+        const url = String(link.url || "").trim();
+        if (!/^https:\/\//i.test(url) || seen.has(url)) return;
+        seen.add(url);
+        records.push({
+          series: group.id,
+          series_label_en: group.en,
+          series_label_ko: group.ko,
+          title: String(link.title || url).trim(),
+          url: url,
+          display_order: displayOrder++
+        });
+      });
+    }
+  });
+  return records;
 }
 
 function validateHeaders_(sheetName, headers) {

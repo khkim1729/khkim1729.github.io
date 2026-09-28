@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Apps Script learning videos adapter test</title></head>
+<body>
+<script>
+  function richText(text, wholeLink, runs) {
+    return {
+      getText: () => text,
+      getLinkUrl: () => wholeLink || null,
+      getRuns: () => (runs || []).map(run => ({
+        getText: () => run.text,
+        getLinkUrl: () => run.url || null
+      }))
+    };
+  }
+
+  const displayValues = [
+    ['Private Notes', '베타러닝 유튜브', '람다코스 유튜브'],
+    ['do not expose', 'Beta Foundations', ''],
+    ['secret', 'Routing lecture · Vision lecture', 'https://youtu.be/CCCCCCCCCCC'],
+    ['hidden', 'Duplicate', 'https://example.com/reading']
+  ];
+  const richTextValues = [
+    displayValues[0].map(value => richText(value)),
+    [richText('do not expose'), richText('Beta Foundations', 'https://youtu.be/AAAAAAAAAAA'), richText('')],
+    [richText('secret'), richText('Routing lecture · Vision lecture', null, [
+      {text: 'Routing lecture', url: 'https://www.youtube.com/watch?v=BBBBBBBBBBB'},
+      {text: ' · ', url: null},
+      {text: 'Vision lecture', url: 'https://youtu.be/DDDDDDDDDDD'}
+    ]), richText('https://youtu.be/CCCCCCCCCCC')],
+    [richText('hidden'), richText('Duplicate', 'https://youtu.be/AAAAAAAAAAA'), richText('https://example.com/reading')]
+  ];
+  const fakeSheet = {
+    getDataRange: () => ({
+      getDisplayValues: () => displayValues,
+      getRichTextValues: () => richTextValues
+    })
+  };
+
+  fetch('/docs/google-sheets-code.gs')
+    .then(response => response.text())
+    .then(source => {
+      const adapter = new Function(`${source}\nreturn learningVideos_;`)();
+      window.adapterResult = adapter(fakeSheet);
+    })
+    .catch(error => { window.adapterError = String(error); });
+</script>
+</body>
+</html>

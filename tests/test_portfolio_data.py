@@ -60,6 +60,16 @@ class PortfolioDataTests(unittest.TestCase):
         for header in PUBLICATION_HEADERS:
             self.assertIn(f'"{header}"', source)
 
+    def test_learning_video_endpoint_is_restricted(self):
+        source = (ROOT / "docs/google-sheets-code.gs").read_text(encoding="utf-8")
+        guide = (ROOT / "docs/GOOGLE_SHEETS_QUICK_EDIT_KO.txt").read_text(encoding="utf-8")
+        self.assertIn('requested === "Learning_Videos"', source)
+        self.assertNotIn('"DB_Publications": "DB_Publications"', source)
+        self.assertIn("베타러닝 유튜브", source)
+        self.assertIn("람다코스 유튜브", source)
+        self.assertIn("Learning_Videos&lang=all", guide)
+        self.assertIn("DB_Publications 전체를 공개하지", guide)
+
     def test_korean_quick_guide_covers_copy_personal_and_redeployment(self):
         guide = (ROOT / "docs/GOOGLE_SHEETS_QUICK_EDIT_KO.txt").read_text(encoding="utf-8")
         self.assertIn("A:T", guide)
