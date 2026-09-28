@@ -18,9 +18,9 @@ Portfolio_Website_Content_Model 빠른 수정 안내
    - 숨길 행은 is_visible을 FALSE로 바꿉니다.
 
 3-1. 베타러닝·람다코스 영상 수정
-   - DB_Publications 탭의 '베타러닝 유튜브'와 '람다코스 유튜브' 컬럼만 사용합니다.
+   - Learning_Videos 탭의 '베타러닝 유튜브'와 '람다코스 유튜브' 컬럼만 사용합니다.
    - 셀 텍스트에 삽입한 하이퍼링크와 셀에 직접 입력한 https:// 주소를 모두 읽습니다.
-   - 홈페이지 API는 두 컬럼에서 추출한 제목과 링크만 반환하며 DB_Publications 전체를 공개하지 않습니다.
+   - 홈페이지 API는 두 컬럼에서 추출한 제목과 링크만 반환하며 Learning_Videos 전체를 공개하지 않습니다.
 
 4. Publications 안내문에서 실제 구글시트 열기
    - 홈페이지 링크는 비공개 Portfolio_Website_Content_Model 구글시트 주소로 고정되어 있습니다.

@@ -44,8 +44,9 @@ function doGet(e) {
   const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
 
   if (requested === "Learning_Videos") {
-    const source = spreadsheet.getSheetByName("DB_Publications");
-    if (!source) return jsonResponse_({ok: false, error: "Missing sheet: DB_Publications"});
+    const source = spreadsheet.getSheetByName("Learning_Videos") ||
+      spreadsheet.getSheetByName("DB_Publications");
+    if (!source) return jsonResponse_({ok: false, error: "Missing sheet: Learning_Videos"});
     let videos = learningVideos_(source);
     const videoLimit = Math.max(0, Number(params.limit || 0));
     if (videoLimit) videos = videos.slice(0, videoLimit);

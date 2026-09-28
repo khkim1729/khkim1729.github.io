@@ -434,7 +434,7 @@
     const imageUrl = safeLink(row.image_url) || (/^\/[^/]/.test(String(row.image_url || '')) ? row.image_url : '');
     const imageAlt = localized(row, 'image_alt', lang) || title;
     const media = imageUrl
-      ? `<a class="cv-entry-media" href="${escapeHtml(imageUrl)}" target="_blank" rel="noopener noreferrer"><img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(imageAlt)}" loading="lazy"><span>${escapeHtml(imageAlt)}</span></a>`
+      ? `<button class="cv-entry-media" type="button" data-cv-media="${escapeHtml(imageUrl)}" data-cv-media-alt="${escapeHtml(imageAlt)}" aria-label="${escapeHtml(`Enlarge ${imageAlt}`)}"><img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(imageAlt)}" loading="lazy"><span>${escapeHtml(imageAlt)}</span></button>`
       : '';
     return `<article class="cv-entry">
       <h3>${linkedTitle}${period ? `<span>${escapeHtml(period)}</span>` : ''}</h3>
@@ -442,6 +442,49 @@
       ${cvDescription(row, lang)}
       ${media}
     </article>`;
+  }
+
+  function closeMediaModal() {
+    const modal = document.querySelector('[data-portfolio-media-modal]');
+    if (!modal || modal.hidden) return;
+    modal.hidden = true;
+    const image = modal.querySelector('[data-portfolio-media-image]');
+    if (image) image.removeAttribute('src');
+    document.body.classList.remove('portfolio-media-modal-open');
+    if (modal._trigger && document.contains(modal._trigger)) modal._trigger.focus();
+    modal._trigger = null;
+  }
+
+  function openMediaModal(trigger) {
+    const modal = document.querySelector('[data-portfolio-media-modal]');
+    if (!modal || !trigger) return;
+    const image = modal.querySelector('[data-portfolio-media-image]');
+    const caption = modal.querySelector('[data-portfolio-media-caption]');
+    if (!image || !caption) return;
+    image.src = trigger.dataset.cvMedia || '';
+    image.alt = trigger.dataset.cvMediaAlt || '';
+    caption.textContent = trigger.dataset.cvMediaAlt || '';
+    modal._trigger = trigger;
+    modal.hidden = false;
+    document.body.classList.add('portfolio-media-modal-open');
+    modal.querySelector('[data-portfolio-media-close]')?.focus();
+  }
+
+  function bindMediaModal() {
+    if (document.documentElement.dataset.portfolioMediaBound) return;
+    document.documentElement.dataset.portfolioMediaBound = 'true';
+    document.addEventListener('click', event => {
+      const trigger = event.target.closest('[data-cv-media]');
+      if (trigger) {
+        openMediaModal(trigger);
+        return;
+      }
+      if (event.target.closest('[data-portfolio-media-close]') ||
+          event.target.matches('[data-portfolio-media-modal]')) closeMediaModal();
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') closeMediaModal();
+    });
   }
 
   async function renderCV(root) {
@@ -523,6 +566,7 @@
   }
 
   function initialize() {
+    bindMediaModal();
     document.querySelectorAll('[data-portfolio-publications]').forEach(root => renderPublications(root, Number(root.dataset.limit || 0)));
     document.querySelectorAll('[data-portfolio-projects]').forEach(renderProjects);
     document.querySelectorAll('[data-portfolio-credentials]').forEach(renderCredentials);

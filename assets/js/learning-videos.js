@@ -47,6 +47,7 @@
       button.type = 'button';
       button.className = 'learning-video-thumbnail';
       button.dataset.videoId = videoId;
+      button.dataset.videoTitle = title.textContent;
       button.setAttribute('aria-label', `Play ${title.textContent}`);
       const image = document.createElement('img');
       image.src = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
@@ -75,6 +76,8 @@
     const player = root.querySelector('[data-learning-video-player]');
     if (!modal || !player) return;
     player.replaceChildren();
+    const title = root.querySelector('[data-learning-video-modal-title]');
+    if (title) title.textContent = '';
     modal.hidden = true;
     document.body.classList.remove('learning-video-modal-open');
     const trigger = root._learningVideoTrigger;
@@ -92,6 +95,8 @@
     iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
     iframe.allowFullscreen = true;
     player.replaceChildren(iframe);
+    const title = root.querySelector('[data-learning-video-modal-title]');
+    if (title) title.textContent = trigger.dataset.videoTitle || '';
     root._learningVideoTrigger = trigger;
     modal.hidden = false;
     document.body.classList.add('learning-video-modal-open');
@@ -143,9 +148,36 @@
     });
 
     content.replaceChildren();
+    const toolbar = document.createElement('div');
+    toolbar.className = 'learning-video-toolbar';
+    toolbar.setAttribute('aria-label', language === 'ko' ? '영상 분류' : 'Video categories');
+    const count = document.createElement('span');
+    count.className = 'learning-video-count';
+    count.setAttribute('aria-live', 'polite');
+    const validTotal = [...groups.values()].reduce((total, group) => total + group.cards.length, 0);
+    const filters = [{id: 'all', label: language === 'ko' ? '전체' : 'All', total: validTotal}]
+      .concat([...groups.entries()].map(([id, group]) => ({
+        id,
+        label: language === 'ko'
+          ? (group.row.series_label_ko || group.row.series_label_en || group.row.series)
+          : (group.row.series_label_en || group.row.series_label_ko || group.row.series),
+        total: group.cards.length
+      })));
+    filters.forEach((filter, index) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'learning-video-filter';
+      button.dataset.seriesFilter = filter.id;
+      button.setAttribute('aria-pressed', index === 0 ? 'true' : 'false');
+      button.textContent = `${filter.label} ${filter.total}`;
+      toolbar.append(button);
+    });
+    toolbar.append(count);
+    content.append(toolbar);
     groups.forEach(group => {
       const section = document.createElement('section');
       section.className = 'learning-video-series';
+      section.dataset.videoSeries = String(group.row.series || 'other');
       const heading = document.createElement('h2');
       heading.textContent = language === 'ko'
         ? (group.row.series_label_ko || group.row.series_label_en || group.row.series)
@@ -156,6 +188,23 @@
       section.append(heading, grid);
       content.append(section);
     });
+    const updateFilter = id => {
+      let visible = 0;
+      content.querySelectorAll('.learning-video-series').forEach(section => {
+        const show = id === 'all' || section.dataset.videoSeries === id;
+        section.hidden = !show;
+        if (show) visible += section.querySelectorAll('.learning-video-card').length;
+      });
+      content.querySelectorAll('.learning-video-filter').forEach(button => {
+        button.setAttribute('aria-pressed', button.dataset.seriesFilter === id ? 'true' : 'false');
+      });
+      count.textContent = language === 'ko' ? `영상 ${visible}개` : `${visible} ${visible === 1 ? 'video' : 'videos'}`;
+    };
+    toolbar.addEventListener('click', event => {
+      const button = event.target.closest('.learning-video-filter');
+      if (button) updateFilter(button.dataset.seriesFilter);
+    });
+    updateFilter('all');
     if (!groups.size) {
       const empty = document.createElement('p');
       empty.className = 'portfolio-empty';

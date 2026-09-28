@@ -21,6 +21,9 @@ subtitle: Professional training and teaching experience
   <div data-learning-video-content><p>Loading learning videos…</p></div>
   <div class="learning-video-modal" data-learning-video-modal role="dialog" aria-modal="true" aria-label="Video player" hidden>
     <button type="button" class="learning-video-close" data-learning-video-close aria-label="Close video">×</button>
-    <div class="learning-video-player" data-learning-video-player></div>
+    <div class="learning-video-dialog">
+      <h2 data-learning-video-modal-title></h2>
+      <div class="learning-video-player" data-learning-video-player></div>
+    </div>
   </div>
 </section>

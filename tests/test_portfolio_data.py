@@ -64,11 +64,12 @@ class PortfolioDataTests(unittest.TestCase):
         source = (ROOT / "docs/google-sheets-code.gs").read_text(encoding="utf-8")
         guide = (ROOT / "docs/GOOGLE_SHEETS_QUICK_EDIT_KO.txt").read_text(encoding="utf-8")
         self.assertIn('requested === "Learning_Videos"', source)
+        self.assertIn('getSheetByName("Learning_Videos")', source)
         self.assertNotIn('"DB_Publications": "DB_Publications"', source)
         self.assertIn("베타러닝 유튜브", source)
         self.assertIn("람다코스 유튜브", source)
         self.assertIn("Learning_Videos&lang=all", guide)
-        self.assertIn("DB_Publications 전체를 공개하지", guide)
+        self.assertIn("Learning_Videos 전체를 공개하지", guide)
 
     def test_korean_quick_guide_covers_copy_personal_and_redeployment(self):
         guide = (ROOT / "docs/GOOGLE_SHEETS_QUICK_EDIT_KO.txt").read_text(encoding="utf-8")
@@ -131,6 +132,21 @@ class PortfolioDataTests(unittest.TestCase):
         self.assertIn('data-portfolio-cv', page)
         self.assertIn('data-section-filter="lectures"', page)
         self.assertIn('portfolio-data.js', (ROOT / "_includes/footer-scripts.html").read_text(encoding="utf-8"))
+
+    def test_cv_media_uses_an_accessible_in_page_lightbox(self):
+        javascript = (ROOT / "assets/js/portfolio-data.js").read_text(encoding="utf-8")
+        page = (ROOT / "_includes/footer-scripts.html").read_text(encoding="utf-8")
+        self.assertIn("data-cv-media", javascript)
+        self.assertIn("openMediaModal", javascript)
+        self.assertIn("data-portfolio-media-modal", page)
+        self.assertIn('aria-modal="true"', page)
+
+    def test_learning_video_gallery_exposes_filters_counts_and_modal_title(self):
+        javascript = (ROOT / "assets/js/learning-videos.js").read_text(encoding="utf-8")
+        page = (ROOT / "lectures.md").read_text(encoding="utf-8")
+        for required in ("learning-video-filter", "learning-video-count", "dataset.videoTitle"):
+            self.assertIn(required, javascript)
+        self.assertIn("data-learning-video-modal-title", page)
 
     def test_cv_page_excludes_lectures_without_hardcoding_other_sections(self):
         page = (ROOT / "CV.md").read_text(encoding="utf-8")

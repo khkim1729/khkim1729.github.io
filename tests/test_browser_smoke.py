@@ -107,6 +107,26 @@ class BrowserSmokeTests(unittest.TestCase):
         self.assertIn("Volunteering & Giving", result["text"])
         self.assertNotIn("Lectures & Teaching", result["text"])
 
+        media = self.execute("""
+          const done = arguments[arguments.length - 1];
+          document.querySelector('[data-cv-media]').click();
+          setTimeout(() => done({
+            hidden: document.querySelector('[data-portfolio-media-modal]').hidden,
+            src: document.querySelector('[data-portfolio-media-image]').getAttribute('src'),
+            bodyLocked: document.body.classList.contains('portfolio-media-modal-open')
+          }), 50);
+        """)
+        self.assertFalse(media["hidden"])
+        self.assertTrue(media["src"].startswith("/assets/img/portfolio/"))
+        self.assertTrue(media["bodyLocked"])
+
+        media_closed = self.execute("""
+          const done = arguments[arguments.length - 1];
+          document.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape', bubbles: true}));
+          setTimeout(() => done(document.querySelector('[data-portfolio-media-modal]').hidden), 50);
+        """)
+        self.assertTrue(media_closed)
+
         korean = self.execute("""
           const done = arguments[arguments.length - 1];
           localStorage.setItem('language', 'kr');
@@ -168,6 +188,8 @@ class BrowserSmokeTests(unittest.TestCase):
                 injectedImages: document.querySelectorAll('.learning-video-card h3 img').length,
                 thumbnails: [...document.querySelectorAll('.learning-video-thumbnail img')].map(x => x.src),
                 externalLinks: [...document.querySelectorAll('.learning-video-external')].map(x => x.href),
+                filters: [...document.querySelectorAll('.learning-video-filter')].map(x => x.textContent.trim()),
+                count: document.querySelector('.learning-video-count')?.textContent || '',
                 malformed: window.LearningVideos.youtubeVideoId('https://youtu.be/short')
               });
             } else if (Date.now() > deadline) done({error: document.body.innerText, cards: cards.length});
@@ -183,6 +205,8 @@ class BrowserSmokeTests(unittest.TestCase):
         self.assertTrue(all("i.ytimg.com/vi/" in url for url in result["thumbnails"]))
         self.assertEqual(1, len(result["externalLinks"]))
         self.assertIn("example.com/paper-review", result["externalLinks"][0])
+        self.assertEqual(["All 3", "Beta Learning 2", "Lambda Course 1"], result["filters"])
+        self.assertEqual("3 videos", result["count"])
         self.assertIsNone(result["malformed"])
 
         opened = self.execute("""
@@ -190,11 +214,13 @@ class BrowserSmokeTests(unittest.TestCase):
           document.querySelector('[data-video-id]').click();
           setTimeout(() => done({
             hidden: document.querySelector('[data-learning-video-modal]').hidden,
-            src: document.querySelector('[data-learning-video-player] iframe').src
+            src: document.querySelector('[data-learning-video-player] iframe').src,
+            title: document.querySelector('[data-learning-video-modal-title]').textContent
           }), 100);
         """)
         self.assertFalse(opened["hidden"])
         self.assertIn("youtube-nocookie.com/embed/AAAAAAAAAAA", opened["src"])
+        self.assertEqual("ML Foundations <img src=x onerror=alert(1)>", opened["title"])
 
         closed = self.execute("""
           const done = arguments[arguments.length - 1];
