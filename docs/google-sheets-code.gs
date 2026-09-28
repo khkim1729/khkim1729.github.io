@@ -9,7 +9,7 @@ const SHEETS = {
   "02_Home_Sections": "Home_Sections",
   "05_People": "WEB_People",
   "06_CV_Content": "CV_Content",
-  "07_Publications": "DB_Publications",
+  "07_Publications": "WEB_Publications",
   "08_Projects": "Projects",
   "09_Project_Content": "Project_Content",
   "10_Credentials": "Professional_Credentials",
@@ -19,14 +19,22 @@ const SHEETS = {
   "Home_Sections": "Home_Sections",
   "WEB_People": "WEB_People",
   "CV_Content": "CV_Content",
-  "WEB_Publications": "DB_Publications",
-  "DB_Publications": "DB_Publications",
-  "Publications": "DB_Publications",
+  "WEB_Publications": "WEB_Publications",
+  "Publications": "WEB_Publications",
   "Projects": "Projects",
   "Project_Content": "Project_Content",
   "Professional_Credentials": "Professional_Credentials",
   "News": "News",
   "Skills": "Skills"
+};
+
+const REQUIRED_HEADERS = {
+  "WEB_Publications": [
+    "Pub_ID", "Year", "Title", "Venue_Name", "Authors", "Spacer",
+    "Project_Link", "GDrive_Link", "arXiv_Link", "Paper_Link", "Venue_Link",
+    "Code", "Model", "Poster_Link", "Slides_link", "Cite",
+    "In Google Scholar", "Cited at Least Once", "Notes", "Remarks"
+  ]
 };
 
 function doGet(e) {
@@ -45,6 +53,10 @@ function doGet(e) {
   if (!values.length) return jsonResponse_({ok: true, sheet: sheetName, lang: lang, data: []});
 
   const headers = values.shift().map(String);
+  const headerError = validateHeaders_(sheetName, headers);
+  if (headerError) {
+    return jsonResponse_({ok: false, sheet: sheetName, error: headerError});
+  }
   let rows = values
     .filter(row => row.some(value => String(value).trim() !== ""))
     .map(row => rowToObject_(headers, row))
@@ -64,6 +76,12 @@ function doGet(e) {
     updated_at: new Date().toISOString(),
     data: rows
   });
+}
+
+function validateHeaders_(sheetName, headers) {
+  const required = REQUIRED_HEADERS[sheetName] || [];
+  const missing = required.filter(header => !headers.includes(header));
+  return missing.length ? "Missing required columns: " + missing.join(", ") : "";
 }
 
 function rowToObject_(headers, row) {
@@ -135,8 +153,19 @@ function validatePortfolio() {
   const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   const missing = [...new Set(Object.values(SHEETS))]
     .filter(name => !spreadsheet.getSheetByName(name));
-  const message = missing.length
-    ? "Missing sheets: " + missing.join(", ")
+  const headerErrors = Object.keys(REQUIRED_HEADERS).map(name => {
+    const sheet = spreadsheet.getSheetByName(name);
+    if (!sheet) return "";
+    const width = Math.max(1, sheet.getLastColumn());
+    const headers = sheet.getRange(1, 1, 1, width).getDisplayValues()[0].map(String);
+    const error = validateHeaders_(name, headers);
+    return error ? name + " — " + error : "";
+  }).filter(Boolean);
+  const problems = [];
+  if (missing.length) problems.push("Missing sheets: " + missing.join(", "));
+  problems.push.apply(problems, headerErrors);
+  const message = problems.length
+    ? problems.join("\n")
     : "All public sheets are ready. Re-deploy only when Code.gs changes; cell edits are live immediately.";
   SpreadsheetApp.getUi().alert(message);
 }

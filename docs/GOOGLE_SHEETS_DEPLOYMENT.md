@@ -1,14 +1,12 @@
 # Portfolio Google Sheets deployment
 
-The workbook is designed so that the first 14 columns of IMSI Lab's
-`WEB_Publications` tab can be pasted directly into `DB_Publications`.
-Additional portfolio-only fields begin at column O.
+The workbook uses the same A:T publication schema as IMSI Lab. Copy the entire
+`WEB_Publications!A:T` range into this workbook's `WEB_Publications!A:T`.
 
 ## Upload and deploy
 
 1. Upload `Portfolio_Website_Content_Model.xlsx` to Google Drive.
-2. Open it with Google Sheets and confirm that `DB_Publications` and the
-   value-only `WEB_Publications` compatibility tab are populated.
+2. Open it with Google Sheets and confirm that `WEB_Publications` is populated.
 3. Open **Extensions → Apps Script**.
 4. Replace the editor contents with [google-sheets-code.gs](google-sheets-code.gs).
 5. For the first deployment, select **Deploy → New deployment → Web app**.
@@ -22,9 +20,8 @@ Additional portfolio-only fields begin at column O.
 Cell edits are served immediately. A new deployment is only needed when
 `Code.gs` itself changes.
 
-The publication check must report `"sheet":"DB_Publications"`. If it reports
-`WEB_Publications`, the `/exec` URL is still running an older Apps Script
-version:
+The publication check must report `"sheet":"WEB_Publications"` and
+`"ok":true`:
 
 ```text
 .../exec?sheet=07_Publications&lang=all
@@ -50,10 +47,11 @@ phone-number column or any other private contact data to a public sheet.
 
 ## Editing rules
 
-- Publications: edit `DB_Publications`; keep `Pub_ID` unique.
-- IMSI import: paste the IMSI roster's `WEB_Publications!A:N` into
-  `DB_Publications!A:N`. The API reads `DB_Publications` directly, avoiding
-  upload-time formula compatibility problems.
+- Publications: edit `WEB_Publications`; keep `Pub_ID` unique.
+- IMSI backup: paste the IMSI roster's `WEB_Publications!A:T` into
+  `WEB_Publications!A:T` without changing the header row.
+- Personal-only papers: enter the exact token `PERSONAL` in `Remarks`. P1 keeps
+  Kyeonghun Kim's rows; P2 hides rows carrying this token.
 - Korean text: optional. Empty Korean values fall back to English.
 - CV: edit `CV_Content`; each row is one CV entry. Use line breaks in
   `description_en`/`description_ko` to create bullet points. The EN/KO switch
@@ -72,3 +70,6 @@ python3 scripts/build_content_model.py \
   --output docs/Portfolio_Website_Content_Model.xlsx \
   --json-output assets/data/portfolio-data.json
 ```
+
+For the short Korean editing checklist, see
+`docs/GOOGLE_SHEETS_QUICK_EDIT_KO.txt`.

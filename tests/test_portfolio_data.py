@@ -79,6 +79,23 @@ class PortfolioDataTests(unittest.TestCase):
         self.assertNotIn("DB_Publications", names)
         self.assertEqual(PUBLICATION_HEADERS, headers)
 
+    def test_apps_script_aliases_and_validates_web_publications(self):
+        source = (ROOT / "docs/google-sheets-code.gs").read_text(encoding="utf-8")
+        self.assertIn('"07_Publications": "WEB_Publications"', source)
+        self.assertIn('"Publications": "WEB_Publications"', source)
+        self.assertNotIn('"DB_Publications": "DB_Publications"', source)
+        self.assertIn("validateHeaders_", source)
+        self.assertIn("Missing required columns", source)
+        for header in PUBLICATION_HEADERS:
+            self.assertIn(f'"{header}"', source)
+
+    def test_korean_quick_guide_covers_copy_personal_and_redeployment(self):
+        guide = (ROOT / "docs/GOOGLE_SHEETS_QUICK_EDIT_KO.txt").read_text(encoding="utf-8")
+        self.assertIn("A:T", guide)
+        self.assertIn("PERSONAL", guide)
+        self.assertIn("새 버전", guide)
+        self.assertIn("WEB_Publications", guide)
+
 
 if __name__ == "__main__":
     unittest.main()

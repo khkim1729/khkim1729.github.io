@@ -1,0 +1,36 @@
+Portfolio_Website_Content_Model 빠른 수정 안내
+===============================================
+
+1. 논문 백업·동기화
+   - P2 구글시트의 WEB_Publications 탭에서 A:T 전체를 복사합니다.
+   - P1 구글시트의 WEB_Publications 탭 A1에 그대로 붙여넣습니다.
+   - 첫 행 컬럼명과 순서를 바꾸지 마세요.
+   - Spacer는 비워 두는 열이며 홈페이지에서 무시합니다.
+
+2. IMSI 외부에서 작성한 개인 논문
+   - 해당 행의 Remarks 셀에 PERSONAL이라고 입력합니다.
+   - P1에는 표시되고, P2 IMSI Publications에서는 숨겨집니다.
+   - 여러 메모가 필요하면 예: PERSONAL; external collaboration
+
+3. 경력·강의·봉사·CV 수정
+   - CV_Content에서 영어(_en)와 한국어(_ko)를 같은 행에 입력합니다.
+   - description_en/description_ko 안에서 줄바꿈하면 화면에서 글머리표로 표시됩니다.
+   - 숨길 행은 is_visible을 FALSE로 바꿉니다.
+
+4. 변경사항 확인
+   - 셀 내용만 수정했다면 Apps Script를 다시 배포할 필요가 없습니다.
+   - 홈페이지를 새로고침하면 최신 값이 반영됩니다.
+   - 구글시트 메뉴 Portfolio > Validate public sheets로 컬럼 오류를 확인합니다.
+
+5. Code.gs를 수정했을 때만 재배포
+   - 확장 프로그램 > Apps Script에서 Code.gs를 저장합니다.
+   - 배포 > 배포 관리 > 수정 > 새 버전을 선택하여 배포합니다.
+   - 기존 /exec 주소는 그대로 사용합니다.
+   - /exec?sheet=07_Publications&lang=all을 열어
+     "ok":true와 "sheet":"WEB_Publications"가 보이는지 확인합니다.
+
+주의
+----
+- P1과 P2의 WEB_Publications는 서로 다른 백업입니다. 양쪽 A:T를 직접 동일하게 유지합니다.
+- 전화번호 등 비공개 개인정보는 공개 탭에 입력하지 마세요.
+- 홈페이지에 문제가 생겨도 저장소의 portfolio-data.json fallback이 먼저 표시됩니다.
