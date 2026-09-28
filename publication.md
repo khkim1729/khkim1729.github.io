@@ -5,10 +5,10 @@ subtitle: Live publication archive
 ---
 
 <div class="lang-en">
-  <p>This archive is maintained from Google Sheets. Authors link to their personal website or GitHub profile when available.</p>
+  <p>This archive is maintained from the <a data-content-model-link href="/docs/Portfolio_Website_Content_Model.xlsx" target="_blank" rel="noopener">Portfolio_Website_Content_Model Google Sheet</a>. Authors link to their personal website or GitHub profile when available.</p>
 </div>
 <div class="lang-kr" style="display:none">
-  <p>이 논문 목록은 Google Sheets에서 실시간으로 관리됩니다. 저자 이름을 누르면 개인 홈페이지 또는 GitHub 프로필로 이동합니다.</p>
+  <p>이 논문 목록은 <a data-content-model-link href="/docs/Portfolio_Website_Content_Model.xlsx" target="_blank" rel="noopener">Portfolio_Website_Content_Model Google Sheet</a>에서 관리됩니다. 저자 이름을 누르면 개인 홈페이지 또는 GitHub 프로필로 이동합니다.</p>
 </div>
 
 <p>

@@ -11,6 +11,13 @@
   let fallbackPromise;
   let cvFallbackPromise;
 
+  const PUBLICATION_HEADERS = [
+    'Pub_ID', 'Year', 'Title', 'Venue_Name', 'Authors', 'Spacer',
+    'Project_Link', 'GDrive_Link', 'arXiv_Link', 'Paper_Link', 'Venue_Link',
+    'Code', 'Model', 'Poster_Link', 'Slides_link', 'Cite',
+    'In Google Scholar', 'Cited at Least Once', 'Notes', 'Remarks'
+  ];
+
   const aliases = {
     Publications: '07_Publications',
     Projects: '08_Projects',
@@ -82,6 +89,16 @@
       });
     }
     return normalized;
+  }
+
+  function validateRemoteRows(name, rows) {
+    if (name !== 'Publications') return;
+    const first = rows[0] || {};
+    const missing = PUBLICATION_HEADERS.filter(header => !Object.prototype.hasOwnProperty.call(first, header));
+    const hasRealRow = rows.some(row => String(row.Title || '').trim() && String(row.Authors || '').trim());
+    if (missing.length || !hasRealRow) {
+      throw new Error(`Invalid WEB_Publications schema${missing.length ? `; missing ${missing.join(', ')}` : ''}`);
+    }
   }
 
   async function fetchWithTimeout(url, timeoutMs) {
@@ -202,6 +219,7 @@
         const source = Array.isArray(payload) ? payload : payload.data;
         if (!Array.isArray(source)) throw new Error('API data is not an array');
         const rows = source.map(row => normalizeRow(name, row));
+        validateRemoteRows(name, rows);
         cache.set(name, rows);
         document.dispatchEvent(new CustomEvent('portfolio:dataupdated', {
           detail: {sheet: name}
@@ -407,17 +425,26 @@
     const linkedTitle = url
       ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(title)}</a>`
       : escapeHtml(title);
+    const imageUrl = safeLink(row.image_url) || (/^\/[^/]/.test(String(row.image_url || '')) ? row.image_url : '');
+    const imageAlt = localized(row, 'image_alt', lang) || title;
+    const media = imageUrl
+      ? `<a class="cv-entry-media" href="${escapeHtml(imageUrl)}" target="_blank" rel="noopener noreferrer"><img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(imageAlt)}" loading="lazy"><span>${escapeHtml(imageAlt)}</span></a>`
+      : '';
     return `<article class="cv-entry">
       <h3>${linkedTitle}${period ? `<span>${escapeHtml(period)}</span>` : ''}</h3>
       ${subtitle ? `<h4>${escapeHtml(subtitle)}</h4>` : ''}
       ${cvDescription(row, lang)}
+      ${media}
     </article>`;
   }
 
   async function renderCV(root) {
     const lang = currentLanguage();
+    const sectionFilter = new Set(String(root.dataset.sectionFilter || '')
+      .split(',').map(value => value.trim()).filter(Boolean));
     const rows = (await getSheet('CV_Content'))
       .filter(row => row.is_visible === undefined || truthy(row.is_visible))
+      .filter(row => !sectionFilter.size || sectionFilter.has(String(row.section_id || '')))
       .sort((a, b) => Number(a.display_order || 0) - Number(b.display_order || 0));
     const sections = [];
     const byId = new Map();
@@ -491,6 +518,13 @@
     document.querySelectorAll('[data-portfolio-projects]').forEach(renderProjects);
     document.querySelectorAll('[data-portfolio-credentials]').forEach(renderCredentials);
     document.querySelectorAll('[data-portfolio-cv]').forEach(renderCV);
+    document.querySelectorAll('[data-content-model-link]').forEach(link => {
+      getSheet('Site_Config').then(rows => {
+        const entry = rows.find(row => row.config_key === 'content_model_url');
+        const url = entry && (entry.value_en || entry.value_ko);
+        if (/^(https?:\/\/|\/)/i.test(String(url || ''))) link.href = url;
+      });
+    });
     document.querySelectorAll('[data-open-portfolio-search]').forEach(button => button.addEventListener('click', openGlobalSearch));
     document.querySelectorAll('[data-close-portfolio-search]').forEach(button => button.addEventListener('click', closeGlobalSearch));
     document.addEventListener('keydown', event => {

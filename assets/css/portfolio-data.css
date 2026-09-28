@@ -54,6 +54,9 @@
 .cv-entry h3 span { color: #687782; font-size: .9em; font-weight: 500; }
 .cv-entry h4 { margin: .25rem 0 .45rem; }
 .cv-entry ul { margin-top: .4rem; }
+.cv-entry-media { display: block; max-width: 720px; margin: .9rem 0 1.4rem; text-decoration: none; }
+.cv-entry-media img { width: 100%; border: 1px solid #dce4ea; border-radius: 12px; box-shadow: 0 4px 18px rgba(31, 78, 120, .1); }
+.cv-entry-media span { display: block; color: #687782; font-size: .8rem; margin-top: .35rem; }
 .cv-skill { margin: .6rem 0; }
 .cv-contact-grid { display: flex; flex-wrap: wrap; gap: .8rem 1.3rem; margin: 1rem 0 2rem; }
 .cv-contact-link { display: inline-flex; align-items: center; gap: .4rem; text-decoration: none; }

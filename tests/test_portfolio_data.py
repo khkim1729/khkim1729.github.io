@@ -67,6 +67,12 @@ class PortfolioDataTests(unittest.TestCase):
         self.assertIn("Kyeonghun Kim", source)
         self.assertNotIn("const titleLink =", source)
 
+    def test_remote_publications_are_schema_validated_before_cache_replacement(self):
+        source = (ROOT / "assets/js/portfolio-data.js").read_text(encoding="utf-8")
+        self.assertIn("PUBLICATION_HEADERS", source)
+        self.assertIn("validateRemoteRows", source)
+        self.assertIn("Invalid WEB_Publications schema", source)
+
     def test_author_url_overrides_include_hospital_profiles(self):
         source = (ROOT / "assets/js/portfolio-data.js").read_text(encoding="utf-8")
         self.assertIn("medDrSeq=274", source)
@@ -95,6 +101,46 @@ class PortfolioDataTests(unittest.TestCase):
         self.assertIn("PERSONAL", guide)
         self.assertIn("새 버전", guide)
         self.assertIn("WEB_Publications", guide)
+
+    def test_cv_content_covers_research_patent_teaching_and_volunteering(self):
+        rows = json.loads((ROOT / "assets/data/cv-content.json").read_text(encoding="utf-8"))
+        text = json.dumps(rows, ensure_ascii=False)
+        for required in (
+            "Two Papers Accepted to NeurIPS 2026",
+            "10-3010471-0000",
+            "Registered Patent",
+            "Korean Red Cross Blood Services",
+            "2020.10.08",
+            "2021.08.21",
+            "NAVER Happy Bean",
+            "NAVER Corp",
+            "SK Telecom",
+            "OUTTA AI Bootcamp",
+            "KCA / Kyobo Life",
+            "Busan Metropolitan City",
+            "Kookmin University AX-Startup Bootcamp",
+            "2026.08.29 and 2026.09.01",
+        ):
+            self.assertIn(required, text)
+        image_rows = [row for row in rows if row.get("image_url")]
+        self.assertGreaterEqual(len(image_rows), 6)
+        for row in image_rows:
+            self.assertTrue((ROOT / row["image_url"].lstrip("/")).is_file(), row["image_url"])
+
+    def test_home_and_cv_use_bilingual_sheet_renderer_with_media(self):
+        index = (ROOT / "index.md").read_text(encoding="utf-8")
+        javascript = (ROOT / "assets/js/portfolio-data.js").read_text(encoding="utf-8")
+        self.assertIn("data-portfolio-cv", index)
+        self.assertIn("data-section-filter", index)
+        self.assertNotIn("## Teaching & Mentoring", index)
+        self.assertIn("sectionFilter", javascript)
+        self.assertIn("image_url", javascript)
+        self.assertIn("portfolio:languagechange", javascript)
+
+    def test_publication_note_links_the_content_model(self):
+        source = (ROOT / "publication.md").read_text(encoding="utf-8")
+        self.assertIn('data-content-model-link', source)
+        self.assertIn('Portfolio_Website_Content_Model', source)
 
 
 if __name__ == "__main__":
