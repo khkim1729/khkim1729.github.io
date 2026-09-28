@@ -17,12 +17,17 @@ Portfolio_Website_Content_Model 빠른 수정 안내
    - description_en/description_ko 안에서 줄바꿈하면 화면에서 글머리표로 표시됩니다.
    - 숨길 행은 is_visible을 FALSE로 바꿉니다.
 
-4. 변경사항 확인
+4. Publications 안내문에서 실제 구글시트 열기
+   - Site_Config 탭에서 config_key가 content_model_url인 행을 찾습니다.
+   - value_en과 value_ko에 Portfolio_Website_Content_Model 구글시트 공유 주소를 똑같이 붙여넣습니다.
+   - 입력 전에는 저장소의 XLSX 백업 파일이 열리고, 입력 후에는 실제 구글시트가 새 탭으로 열립니다.
+
+5. 변경사항 확인
    - 셀 내용만 수정했다면 Apps Script를 다시 배포할 필요가 없습니다.
    - 홈페이지를 새로고침하면 최신 값이 반영됩니다.
    - 구글시트 메뉴 Portfolio > Validate public sheets로 컬럼 오류를 확인합니다.
 
-5. Code.gs를 수정했을 때만 재배포
+6. Code.gs를 수정했을 때만 재배포
    - 확장 프로그램 > Apps Script에서 Code.gs를 저장합니다.
    - 배포 > 배포 관리 > 수정 > 새 버전을 선택하여 배포합니다.
    - 기존 /exec 주소는 그대로 사용합니다.
