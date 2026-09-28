@@ -10,4 +10,4 @@ It posts my blog, or my CV.
 
 - [Google Sheets deployment guide](docs/GOOGLE_SHEETS_DEPLOYMENT.md)
 - [Apps Script API](docs/google-sheets-code.gs)
-- [Portfolio content workbook](docs/Portfolio_Website_Content_Model.xlsx)
+- [Portfolio content model (restricted Google Sheet)](https://docs.google.com/spreadsheets/d/160B7eluBKDU2f8tFonL6resy1zAnTPkPVd0_BeBwMLE/edit?usp=sharing)

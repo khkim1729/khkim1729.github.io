@@ -199,7 +199,7 @@ def build(args):
         ["github_url", "https://github.com/khkim1729", "https://github.com/khkim1729", "url", ""],
         ["google_scholar_url", "https://scholar.google.com/citations?user=N3LVcyEAAAAJ&hl=en", "https://scholar.google.com/citations?user=N3LVcyEAAAAJ&hl=ko", "url", ""],
         ["portfolio_url", "https://docs.google.com/presentation/d/1Ns0ebR9yU-mzKa_Ua9e0_YRzSjMfQzVUia90qfQuW5E/edit?usp=sharing", "https://docs.google.com/presentation/d/1Ns0ebR9yU-mzKa_Ua9e0_YRzSjMfQzVUia90qfQuW5E/edit?usp=sharing", "url", ""],
-        ["content_model_url", "/docs/Portfolio_Website_Content_Model.xlsx", "/docs/Portfolio_Website_Content_Model.xlsx", "url", "Replace with the private Google Sheet URL after upload."],
+        ["content_model_url", "https://docs.google.com/spreadsheets/d/160B7eluBKDU2f8tFonL6resy1zAnTPkPVd0_BeBwMLE/edit?usp=sharing", "https://docs.google.com/spreadsheets/d/160B7eluBKDU2f8tFonL6resy1zAnTPkPVd0_BeBwMLE/edit?usp=sharing", "url", "Private content model; access is controlled by Google Drive permissions."],
         ["public_email", "khkim1729@gmail.com", "khkim1729@gmail.com", "email", "Public contact email; do not add a phone number."],
     ])
     add_sheet(wb, "Home_Sections", ["section_id", "title_en", "title_ko", "body_en", "body_ko", "display_order", "is_visible"], [

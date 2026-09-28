@@ -5,7 +5,7 @@ The workbook uses the same A:T publication schema as IMSI Lab. Copy the entire
 
 ## Upload and deploy
 
-1. Upload `Portfolio_Website_Content_Model.xlsx` to Google Drive.
+1. Upload your private `Portfolio_Website_Content_Model.xlsx` backup to Google Drive. Keep the XLSX outside this public repository.
 2. Open it with Google Sheets and confirm that `WEB_Publications` is populated.
 3. Open **Extensions → Apps Script**.
 4. Replace the editor contents with [google-sheets-code.gs](google-sheets-code.gs).
@@ -67,7 +67,7 @@ fallback used when Apps Script is unavailable; regenerate it with:
 python3 scripts/build_content_model.py \
   --imsi /path/to/latest-imsi-export.xlsx \
   --credentials /path/to/KHKIM_Certifications_Licenses.xlsx \
-  --output docs/Portfolio_Website_Content_Model.xlsx \
+  --output ../Portfolio_Website_Content_Model.xlsx \
   --json-output assets/data/portfolio-data.json
 ```
 

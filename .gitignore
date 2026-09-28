@@ -12,3 +12,6 @@ Gemfile.lock
 
 beautiful-jekyll-theme-*.gem
 __pycache__/
+
+# Private Google Sheets workbook backup; never publish it with GitHub Pages.
+docs/Portfolio_Website_Content_Model.xlsx

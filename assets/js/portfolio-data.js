@@ -518,13 +518,6 @@
     document.querySelectorAll('[data-portfolio-projects]').forEach(renderProjects);
     document.querySelectorAll('[data-portfolio-credentials]').forEach(renderCredentials);
     document.querySelectorAll('[data-portfolio-cv]').forEach(renderCV);
-    document.querySelectorAll('[data-content-model-link]').forEach(link => {
-      getSheet('Site_Config').then(rows => {
-        const entry = rows.find(row => row.config_key === 'content_model_url');
-        const url = entry && (entry.value_en || entry.value_ko);
-        if (/^(https?:\/\/|\/)/i.test(String(url || ''))) link.href = url;
-      });
-    });
     document.querySelectorAll('[data-open-portfolio-search]').forEach(button => button.addEventListener('click', openGlobalSearch));
     document.querySelectorAll('[data-close-portfolio-search]').forEach(button => button.addEventListener('click', closeGlobalSearch));
     document.addEventListener('keydown', event => {

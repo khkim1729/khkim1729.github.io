@@ -46,10 +46,10 @@
       },
       {
         "config_key": "content_model_url",
-        "value_en": "/docs/Portfolio_Website_Content_Model.xlsx",
-        "value_ko": "/docs/Portfolio_Website_Content_Model.xlsx",
+        "value_en": "https://docs.google.com/spreadsheets/d/160B7eluBKDU2f8tFonL6resy1zAnTPkPVd0_BeBwMLE/edit?usp=sharing",
+        "value_ko": "https://docs.google.com/spreadsheets/d/160B7eluBKDU2f8tFonL6resy1zAnTPkPVd0_BeBwMLE/edit?usp=sharing",
         "data_type": "url",
-        "notes": "Replace with the private Google Sheet URL after upload."
+        "notes": "Private content model; access is controlled by Google Drive permissions."
       },
       {
         "config_key": "public_email",

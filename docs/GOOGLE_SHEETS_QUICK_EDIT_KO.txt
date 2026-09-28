@@ -18,9 +18,9 @@ Portfolio_Website_Content_Model 빠른 수정 안내
    - 숨길 행은 is_visible을 FALSE로 바꿉니다.
 
 4. Publications 안내문에서 실제 구글시트 열기
-   - Site_Config 탭에서 config_key가 content_model_url인 행을 찾습니다.
-   - value_en과 value_ko에 Portfolio_Website_Content_Model 구글시트 공유 주소를 똑같이 붙여넣습니다.
-   - 입력 전에는 저장소의 XLSX 백업 파일이 열리고, 입력 후에는 실제 구글시트가 새 탭으로 열립니다.
+   - 홈페이지 링크는 비공개 Portfolio_Website_Content_Model 구글시트 주소로 고정되어 있습니다.
+   - 구글드라이브 공유 설정은 '제한됨'으로 유지하고 khkim1729 계정에만 접근 권한을 둡니다.
+   - 홈페이지 방문자는 링크 주소는 볼 수 있지만 구글 계정 권한이 없으면 시트 내용에 접근할 수 없습니다.
 
 5. 변경사항 확인
    - 셀 내용만 수정했다면 Apps Script를 다시 배포할 필요가 없습니다.
@@ -33,6 +33,9 @@ Portfolio_Website_Content_Model 빠른 수정 안내
    - 기존 /exec 주소는 그대로 사용합니다.
    - /exec?sheet=07_Publications&lang=all을 열어
      "ok":true와 "sheet":"WEB_Publications"가 보이는지 확인합니다.
+   - /exec?sheet=06_CV_Content&lang=all도 열어
+     "ok":true와 "sheet":"CV_Content"가 보이는지 확인합니다.
+   - "Unknown sheet"가 나오면 예전 Code.gs 배포본이므로 새 버전 재배포가 필요합니다.
 
 주의
 ----
