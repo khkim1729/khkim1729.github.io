@@ -20,5 +20,6 @@ subtitle: Live publication archive
   <label for="publication-search"><strong>Search publications</strong></label>
   <input id="publication-search" class="portfolio-search-input" data-publication-search type="search"
          placeholder="Title, author, venue, or year">
+  <p class="portfolio-result-count" data-publication-count aria-live="polite"></p>
   <div data-publication-list><p>Loading publications…</p></div>
 </section>

@@ -7,6 +7,7 @@
   font-size: 1rem;
 }
 .portfolio-grid { display: grid; gap: 1rem; }
+.portfolio-result-count { color: #596773; font-size: .92rem; font-weight: 600; margin: -1rem 0 1.2rem; }
 .portfolio-year { margin: 2rem 0; }
 .portfolio-year > h2 { border-bottom: 2px solid #008aff; padding-bottom: .35rem; }
 .portfolio-card {
@@ -28,6 +29,7 @@
   font-weight: 700;
 }
 .portfolio-chip { border: 1px solid #008aff; }
+.portfolio-cite { background: transparent; color: #008aff; cursor: pointer; font-family: inherit; }
 .portfolio-status { background: #f1f3f5; color: #495057; }
 .portfolio-oral { background: #d32f2f; color: #fff; margin-left: .3rem; }
 .portfolio-project-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.4rem; }

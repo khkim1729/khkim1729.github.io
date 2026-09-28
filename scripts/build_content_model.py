@@ -15,11 +15,10 @@ from openpyxl.worksheet.datavalidation import DataValidation
 
 
 PUBLICATION_HEADERS = [
-    "Pub_ID", "Year", "Title", "Venue_Name", "Authors", "Paper_Link",
-    "Venue_Link", "Notes", "Code", "Poster_Link", "Slides_link", "Cite",
-    "In Google Scholar", "Cited at Least Once", "Status", "Type",
-    "Oral", "Featured", "Display_Order", "Title_KO", "Venue_Name_KO",
-    "Notes_KO", "Is_Visible", "Source",
+    "Pub_ID", "Year", "Title", "Venue_Name", "Authors", "Spacer",
+    "Project_Link", "GDrive_Link", "arXiv_Link", "Paper_Link", "Venue_Link",
+    "Code", "Model", "Poster_Link", "Slides_link", "Cite",
+    "In Google Scholar", "Cited at Least Once", "Notes", "Remarks",
 ]
 
 CV_CONTENT_HEADERS = [
@@ -79,25 +78,37 @@ def status_for(venue):
 def make_publications(imsi):
     source = table(imsi["WEB_Publications"])
     selected = []
-    for order, row in enumerate(reversed(source), 1):
+    seen_titles = set()
+    for row in reversed(source):
         if "Kyeonghun Kim" not in str(row.get("Authors", "")):
             continue
-        venue = str(row.get("Venue_Name", ""))
-        selected.append([
-            *[row.get(h, "") for h in PUBLICATION_HEADERS[:14]],
-            status_for(venue),
-            "Journal" if any(x in venue.lower() for x in ("ultrasonics", "scientific reports")) else "Conference",
-            "oral" in venue.lower(),
-            order <= 6,
-            order * 10,
-            "", "", "", True, "IMSI WEB_Publications",
-        ])
-    base_order = len(selected) + 1
+        record = {header: row.get(header, "") for header in PUBLICATION_HEADERS}
+        legacy_paper = str(row.get("Paper_Link", "") or "").strip()
+        if legacy_paper and not any((record["GDrive_Link"], record["arXiv_Link"])):
+            if "drive.google.com" in legacy_paper:
+                record["GDrive_Link"] = legacy_paper
+                record["Paper_Link"] = ""
+            elif "arxiv.org" in legacy_paper:
+                record["arXiv_Link"] = legacy_paper
+                record["Paper_Link"] = ""
+        if not record["Remarks"] and str(row.get("Source", "")).lower() == "personal":
+            record["Remarks"] = "PERSONAL"
+        title_key = str(record["Title"]).strip().lower()
+        if title_key:
+            seen_titles.add(title_key)
+        selected.append([record[header] for header in PUBLICATION_HEADERS])
+
     for offset, (pid, year, title, venue, authors) in enumerate(EXTRA_PAPERS):
+        if title.strip().lower() in seen_titles:
+            continue
+        record = {header: "" for header in PUBLICATION_HEADERS}
+        record.update({
+            "Pub_ID": pid, "Year": year, "Title": title,
+            "Venue_Name": venue, "Authors": authors,
+            "Notes": "Under review", "Remarks": "PERSONAL",
+        })
         selected.insert(0, [
-            pid, year, title, venue, authors, "", "", "Under review", "", "", "", "",
-            "-", "-", "Under Review", "Journal" if venue == "Scientific Reports" else "Conference",
-            False, offset < 4, (base_order + offset) * 10, "", "", "심사 중", True, "Personal",
+            record[header] for header in PUBLICATION_HEADERS
         ])
     return selected
 
@@ -173,8 +184,9 @@ def build(args):
     wb = Workbook()
     wb.remove(wb.active)
     add_sheet(wb, "README", ["Item", "Guideline"], [
-        ["Editing flow", "Google Sheets에 업로드한 뒤 DB_* 탭만 편집합니다. WEB_* 탭은 웹 공개용입니다."],
-        ["IMSI copy/paste", "IMSI WEB_Publications의 A:N 열을 DB_Publications A:N에 그대로 붙여넣을 수 있습니다."],
+        ["Editing flow", "WEB_Publications와 콘텐츠 탭을 편집합니다. 배포 API는 이 값을 그대로 읽습니다."],
+        ["IMSI copy/paste", "IMSI WEB_Publications의 A:T 열을 WEB_Publications A:T에 그대로 붙여넣습니다."],
+        ["Personal papers", "IMSI 홈페이지에서 숨길 개인 논문은 Remarks에 PERSONAL을 입력합니다."],
         ["Languages", "한국어 열이 비어 있으면 Apps Script와 웹사이트가 영어 값을 fallback으로 사용합니다."],
         ["Projects/images", "Projects의 cover_image_url과 Project_Content의 media_url에 공개 HTTPS 이미지 URL을 입력합니다."],
         ["Deploy", "docs/GOOGLE_SHEETS_DEPLOYMENT.md와 docs/google-sheets-code.gs를 사용해 웹 앱으로 배포합니다."],
@@ -209,21 +221,10 @@ def build(args):
         ["EDU_002", "Education", "Hankyong National University", "한경국립대학교", "B.S. in Computer Science", "컴퓨터공학과 학사", "Mar. 2018 – Aug. 2022", "2018년 3월 – 2022년 8월", "GPA 4.12/4.5; 158 credits.", "학점 4.12/4.5; 158학점 이수.", 40, True],
     ])
     add_sheet(wb, "DB_People", ["Person_ID", "Name_KO", "Name_EN", "Github", "Blog", "Linkedin", "Primary_URL", "Is_Visible"], people, {"Name_KO": 18, "Name_EN": 24, "Primary_URL": 45})
-    pubs_ws = add_sheet(wb, "DB_Publications", PUBLICATION_HEADERS, publications, {"Title": 55, "Venue_Name": 42, "Authors": 70, "Paper_Link": 42, "Cite": 55})
-    status_validation = DataValidation(type="list", formula1='"Published,Accepted,Under Review,Preprint"', allow_blank=False)
-    pubs_ws.add_data_validation(status_validation)
-    status_validation.add(f"O2:O{max(2, pubs_ws.max_row)}")
-    author_rows = []
-    person_ids = {row[2]: row[0] for row in people}
-    for pub in publications:
-        for order, raw in enumerate(str(pub[4]).split(","), 1):
-            marked = raw.strip()
-            name = re.sub(r"[\*†‡]+$", "", marked)
-            author_rows.append([pub[0], order, person_ids.get(name, ""), name, "*" in marked, "†" in marked])
-    add_sheet(wb, "DB_PublicationAuthor", ["Pub_ID", "Author_Order", "Person_ID", "Author_Name_Display", "Is_CoFirst_Author", "Is_Corresponding"], author_rows)
-    # Keep a value-only compatibility view. ARRAYFORMULA is not evaluated by
-    # Excel/openpyxl and can become #NAME? when the XLSX is first uploaded.
-    add_sheet(wb, "WEB_Publications", PUBLICATION_HEADERS, publications, {"Title": 55, "Venue_Name": 42, "Authors": 70})
+    add_sheet(wb, "WEB_Publications", PUBLICATION_HEADERS, publications, {
+        "Title": 55, "Venue_Name": 42, "Authors": 70, "GDrive_Link": 42,
+        "arXiv_Link": 42, "Paper_Link": 42, "Cite": 55, "Remarks": 24,
+    })
     add_sheet(wb, "WEB_People", ["Person_ID", "Name_KO", "Name_EN", "Primary_URL"], [[p[0], p[1], p[2], p[6]] for p in people])
     add_sheet(wb, "Projects", ["project_id", "slug", "title_en", "title_ko", "summary_en", "summary_ko", "tags", "cover_image_url", "github_link", "paper_or_demo_link", "featured_on_home", "display_order", "is_visible"], [
         [*p, i < 4, i * 10, True] for i, p in enumerate(PROJECTS, 1)

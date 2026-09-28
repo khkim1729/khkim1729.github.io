@@ -20,7 +20,7 @@
   };
 
   const expectedApiSheets = {
-    Publications: 'DB_Publications',
+    Publications: 'WEB_Publications',
     Projects: 'Projects',
     Project_Content: 'Project_Content',
     Professional_Credentials: 'Professional_Credentials',
@@ -35,7 +35,8 @@
     'Nam-Joon Kim': 'https://imsilab.github.io/imsi/authors/investigators/nam-joon-kim/',
     'Seoyoung Ju': 'https://standyoung.github.io/',
     'Anna Jung': 'https://imsilab.github.io/imsi/authors/undergraduate_interns/anna-jung/',
-    'Pa Hong': 'https://smc.skku.edu/smc/medical/intro.do?mId=100',
+    'Pa Hong': 'https://smc.skku.edu/doctor/main/main.do?mId=1&medDrSeq=274',
+    'Won Jae Lee': 'https://smc.skku.edu/doctor/main/main.do?mId=1&medDrSeq=286',
     'Sumin Lee': 'https://suminxlee.com/',
     'Hyunsu Go': 'https://gohyunsu.github.io/'
   }).map(([name, url]) => [name.toLowerCase(), url]));
@@ -63,9 +64,12 @@
     const normalized = Object.assign({}, row);
     const publicationKeys = {
       Pub_ID: ['pub_id'], Year: ['year'], Title: ['title'], Venue_Name: ['venue_name'],
-      Authors: ['authors'], Paper_Link: ['paper_link'], Venue_Link: ['venue_link'],
+      Authors: ['authors'], Spacer: ['spacer'], Project_Link: ['project_link'],
+      GDrive_Link: ['gdrive_link'], arXiv_Link: ['arxiv_link'],
+      Paper_Link: ['paper_link'], Venue_Link: ['venue_link'],
       Notes: ['notes', 'abstract_or_notes_en'], Code: ['code', 'code_link'],
-      Poster_Link: ['poster_link'], Slides_link: ['slides_link'], Cite: ['cite', 'bibtex'],
+      Model: ['model', 'model_link'], Poster_Link: ['poster_link'],
+      Slides_link: ['slides_link'], Cite: ['cite', 'bibtex'], Remarks: ['remarks'],
       Status: ['status', 'publication_status'], Oral: ['oral'],
       Featured: ['featured', 'featured_on_home'], Display_Order: ['display_order'],
       Is_Visible: ['is_visible']
@@ -257,47 +261,76 @@
   }
 
   function actionLink(url, label) {
-    if (!url || url === '-') return '';
+    if (!/^https?:\/\//i.test(String(url || '').trim())) return '';
     return `<a class="portfolio-chip" href="${escapeHtml(url)}" target="_blank" rel="noopener">${label}</a>`;
   }
 
+  function publicationActions(pub) {
+    const citeLabel = 'Cite';
+    return [
+      actionLink(pub.Project_Link, 'Project'),
+      actionLink(pub.GDrive_Link, 'GDrive'),
+      actionLink(pub.arXiv_Link, 'arXiv'),
+      actionLink(pub.Paper_Link, 'Paper'),
+      actionLink(pub.Venue_Link, 'Venue'),
+      actionLink(pub.Code, 'Code'),
+      actionLink(pub.Model, 'Model'),
+      actionLink(pub.Poster_Link, 'Poster'),
+      actionLink(pub.Slides_link, 'Slides'),
+      pub.Cite && pub.Cite !== '-'
+        ? `<button class="portfolio-chip portfolio-cite" type="button" data-cite="${escapeHtml(pub.Cite)}">${citeLabel}</button>`
+        : ''
+    ].join('');
+  }
+
   function publicationCard(pub, people) {
-    const oral = truthy(pub.Oral) || /oral/i.test(pub.Venue_Name || '');
-    const titleLink = pub.Paper_Link && pub.Paper_Link !== '-'
-      ? `<a href="${escapeHtml(pub.Paper_Link)}" target="_blank" rel="noopener">${escapeHtml(pub.Title)}</a>`
-      : escapeHtml(pub.Title);
-    const statusText = `${pub.Status || ''} ${pub.Venue_Name || ''}`;
+    const oral = /oral/i.test(`${pub.Venue_Name || ''} ${pub.Notes || ''}`);
+    const statusText = `${pub.Venue_Name || ''} ${pub.Notes || ''} ${pub.Remarks || ''}`;
     const status = /under review/i.test(statusText) ? '<span class="portfolio-status">Under Review</span>' : '';
     return `<article class="portfolio-card publication-card">
-      <h3>${titleLink}</h3>
+      <h3>${escapeHtml(pub.Title)}</h3>
       <p class="portfolio-authors">${buildAuthorLinks(pub.Authors, people)}</p>
       <p class="portfolio-meta">${escapeHtml(pub.Venue_Name)} · ${escapeHtml(pub.Year)} ${oral ? '<span class="portfolio-oral">Oral</span>' : ''} ${status}</p>
       <div class="portfolio-actions">
-        ${actionLink(pub.Paper_Link, 'Paper')}
-        ${actionLink(pub.Code, 'Code')}
-        ${actionLink(pub.Poster_Link, 'Poster')}
-        ${actionLink(pub.Slides_link, 'Slides')}
-        ${actionLink(pub.Venue_Link, 'Venue')}
+        ${publicationActions(pub)}
       </div>
     </article>`;
   }
 
   async function renderPublications(root, limit) {
     const [publications, people] = await Promise.all([getSheet('Publications'), getSheet('DB_People')]);
-    const visible = publications.filter(row => row.Is_Visible === undefined || truthy(row.Is_Visible));
-    visible.sort((a, b) => Number(b.Year || 0) - Number(a.Year || 0) || Number(a.Display_Order || 0) - Number(b.Display_Order || 0));
+    const visible = publications.filter(row => String(row.Authors || '').split(',').some(author =>
+      author.replace(/[\*\u2020\u2021]/g, '').trim().toLowerCase() === 'kyeonghun kim'
+    ));
+    visible.sort((a, b) => Number(b.Year || 0) - Number(a.Year || 0) ||
+      Number((String(b.Pub_ID || '').match(/\d+/g) || [0]).pop()) - Number((String(a.Pub_ID || '').match(/\d+/g) || [0]).pop()));
     const rows = limit ? visible.slice(0, limit) : visible;
     const input = root.querySelector('[data-publication-search]');
+    const count = root.querySelector('[data-publication-count]');
     const list = root.querySelector('[data-publication-list]') || root;
     function draw(query) {
       const term = String(query || '').trim().toLowerCase();
-      const filtered = rows.filter(row => !term || [row.Title, row.Authors, row.Venue_Name, row.Year].join(' ').toLowerCase().includes(term));
+      const filtered = rows.filter(row => !term || [row.Title, row.Authors, row.Venue_Name, row.Year, row.Notes, row.Remarks].join(' ').toLowerCase().includes(term));
+      if (count) count.textContent = term ? `${filtered.length} results` : `${filtered.length} publications`;
       const years = [...new Set(filtered.map(row => row.Year))];
       list.innerHTML = years.map(year => `<section class="portfolio-year"><h2>${escapeHtml(year)}</h2>
         <div class="portfolio-grid">${filtered.filter(row => row.Year === year).map(row => publicationCard(row, people)).join('')}</div>
       </section>`).join('') || '<p class="portfolio-empty">No matching publications.</p>';
     }
     if (input) input.oninput = event => draw(event.target.value);
+    root.addEventListener('click', async event => {
+      const button = event.target.closest('[data-cite]');
+      if (!button || !root.contains(button)) return;
+      const citation = button.dataset.cite || '';
+      try {
+        await navigator.clipboard.writeText(citation);
+        const original = button.textContent;
+        button.textContent = 'Copied';
+        setTimeout(() => { button.textContent = original; }, 1200);
+      } catch (error) {
+        window.prompt('Copy citation', citation);
+      }
+    });
     draw(input ? input.value : '');
   }
 
