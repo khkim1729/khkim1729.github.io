@@ -9,10 +9,15 @@
   const cache = new Map();
   const remoteLoads = new Map();
   const remoteStates = new Map();
+  const cacheSources = new Map();
   const syncStatusByRoot = new WeakMap();
-  const syncHideTimers = new WeakMap();
   const REMOTE_TIMEOUT_MS = 30000;
   const REMOTE_ATTEMPTS = 2;
+  const SESSION_CACHE_PREFIX = 'portfolio-sheet-v3:';
+  const PREFETCH_SHEETS = window.PORTFOLIO_PREFETCH_SHEETS || [
+    'CV_Content', 'Professional_Credentials', 'Publications',
+    'Projects', 'Learning_Videos', 'DB_People'
+  ];
   let fallbackPromise;
   let cvFallbackPromise;
 
@@ -105,6 +110,30 @@
     const hasRealRow = rows.some(row => String(row.Title || '').trim() && String(row.Authors || '').trim());
     if (missing.length || !hasRealRow) {
       throw new Error(`Invalid WEB_Publications schema${missing.length ? `; missing ${missing.join(', ')}` : ''}`);
+    }
+  }
+
+  function readSessionSheet(name) {
+    try {
+      const stored = JSON.parse(sessionStorage.getItem(`${SESSION_CACHE_PREFIX}${name}`));
+      if (!stored || !Array.isArray(stored.rows)) return null;
+      const rows = stored.rows.map(row => normalizeRow(name, row));
+      if (name === 'Publications') validateRemoteRows(name, rows);
+      return rows;
+    } catch (error) {
+      sessionStorage.removeItem(`${SESSION_CACHE_PREFIX}${name}`);
+      return null;
+    }
+  }
+
+  function writeSessionSheet(name, rows) {
+    try {
+      sessionStorage.setItem(`${SESSION_CACHE_PREFIX}${name}`, JSON.stringify({
+        savedAt: new Date().toISOString(),
+        rows
+      }));
+    } catch (error) {
+      console.warn(`Session cache unavailable for ${name}:`, error.message);
     }
   }
 
@@ -217,32 +246,20 @@
       const sheets = syncSheetsForRoot(root);
       const entries = sheets.map(sheet => ({sheet, state: remoteStates.get(sheet)}))
         .filter(entry => entry.state);
-      if (!entries.length) return;
-      const status = ensureSyncStatus(root);
-      const oldTimer = syncHideTimers.get(root);
-      if (oldTimer) clearTimeout(oldTimer);
-      const loading = entries.filter(entry => entry.state === 'loading');
       const errors = entries.filter(entry => entry.state === 'error');
-      const state = loading.length ? 'loading' : (errors.length ? 'error' : 'success');
-      status.dataset.state = state;
-      status.classList.remove('is-hidden');
-
-      if (state === 'loading') {
-        status.innerHTML = `<span class="portfolio-sync-orb" aria-hidden="true"></span>
-          <span>${lang === 'ko' ? 'Google Sheets 최신 내용을 불러오는 중' : 'Syncing the latest content from Google Sheets'}</span>
-          <span class="portfolio-sync-track" aria-hidden="true"><span></span></span>`;
-      } else if (state === 'error') {
-        status.innerHTML = `<span class="portfolio-sync-dot" aria-hidden="true"></span>
-          <span>${lang === 'ko' ? '저장된 버전을 표시하고 있습니다.' : 'Showing the saved version.'}</span>
-          <button type="button" data-portfolio-sync-retry="${errors.map(entry => escapeHtml(entry.sheet)).join(',')}">
-            ${lang === 'ko' ? '다시 시도' : 'Retry'}
-          </button>`;
-      } else {
-        status.innerHTML = `<span class="portfolio-sync-check" aria-hidden="true">✓</span>
-          <span>${lang === 'ko' ? 'Google Sheets 최신 내용으로 업데이트했습니다.' : 'Updated from Google Sheets.'}</span>`;
-        const timer = setTimeout(() => status.classList.add('is-hidden'), 1400);
-        syncHideTimers.set(root, timer);
+      const existing = syncStatusByRoot.get(root);
+      if (!errors.length) {
+        if (existing) existing.classList.add('is-hidden');
+        return;
       }
+      const status = ensureSyncStatus(root);
+      status.dataset.state = 'error';
+      status.classList.remove('is-hidden');
+      status.innerHTML = `<span class="portfolio-sync-dot" aria-hidden="true"></span>
+        <span>${lang === 'ko' ? '저장된 버전을 표시하고 있습니다.' : 'Showing the saved version.'}</span>
+        <button type="button" data-portfolio-sync-retry="${errors.map(entry => escapeHtml(entry.sheet)).join(',')}">
+          ${lang === 'ko' ? '다시 시도' : 'Retry'}
+        </button>`;
     });
   }
 
@@ -282,6 +299,8 @@
           const text = await fetchTextWithTimeout(`${IMSI_PEOPLE_URL}?${query}`, 5000);
           const rows = parseGoogleVisualization(text);
           cache.set(name, rows);
+          cacheSources.set(name, 'remote');
+          writeSessionSheet(name, rows);
           document.dispatchEvent(new CustomEvent('portfolio:dataupdated', {
             detail: {sheet: name}
           }));
@@ -292,6 +311,9 @@
         }
       })();
       remoteLoads.set(name, peoplePromise);
+      peoplePromise.then(() => {
+        if (remoteLoads.get(name) === peoplePromise) remoteLoads.delete(name);
+      });
       return peoplePromise;
     }
 
@@ -317,6 +339,8 @@
         const rows = source.map(row => normalizeRow(name, row));
         validateRemoteRows(name, rows);
         cache.set(name, rows);
+        cacheSources.set(name, 'remote');
+        writeSessionSheet(name, rows);
         setRemoteState(name, 'success');
         document.dispatchEvent(new CustomEvent('portfolio:dataupdated', {
           detail: {sheet: name}
@@ -342,20 +366,35 @@
 
   async function getSheet(name) {
     if (cache.has(name)) return cache.get(name);
-    if (name === 'Learning_Videos') {
-      const remote = loadRemote(name);
-      return remote ? (await remote || []) : [];
+    const saved = readSessionSheet(name);
+    if (saved) {
+      cache.set(name, saved);
+      cacheSources.set(name, 'session');
+      return saved;
     }
-    const localPromise = (async () => {
-      const source = name === 'CV_Content'
-        ? await cvFallback()
-        : (await fallback()).sheets[name] || [];
-      const rows = source.map(row => normalizeRow(name, row));
-      if (!cache.has(name)) cache.set(name, rows);
-      return cache.get(name);
-    })();
-    loadRemote(name);
-    return localPromise;
+    const source = name === 'CV_Content'
+      ? await cvFallback()
+      : (await fallback()).sheets[name] || [];
+    const rows = source.map(row => normalizeRow(name, row));
+    if (!cache.has(name)) {
+      cache.set(name, rows);
+      cacheSources.set(name, 'fallback');
+    }
+    return cache.get(name);
+  }
+
+  function navigationIsReload() {
+    const entries = typeof performance.getEntriesByType === 'function'
+      ? performance.getEntriesByType('navigation') : [];
+    return Boolean(entries[0] && entries[0].type === 'reload');
+  }
+
+  async function startBackgroundSync() {
+    const force = navigationIsReload();
+    await Promise.all(PREFETCH_SHEETS.map(name => getSheet(name)));
+    PREFETCH_SHEETS.forEach(name => {
+      if (force || cacheSources.get(name) !== 'session') loadRemote(name);
+    });
   }
 
   function buildAuthorLinks(authors, people) {
@@ -717,6 +756,8 @@
         document.querySelectorAll('[data-portfolio-cv]').forEach(renderCV);
       }
     });
+    const schedule = window.requestIdleCallback || (callback => setTimeout(callback, 0));
+    schedule(startBackgroundSync);
   }
 
   window.PortfolioData = {getSheet, currentLanguage};

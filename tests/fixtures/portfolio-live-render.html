@@ -11,8 +11,11 @@
     <div data-publication-list></div>
   </section>
   <script>
-    const mode = new URLSearchParams(location.search).get('mode');
+    const params = new URLSearchParams(location.search);
+    const mode = params.get('mode');
+    if (params.get('clear') === '1') sessionStorage.clear();
     window.PORTFOLIO_API_URL = `/tests/fixtures/portfolio-live-api?mode=${mode}`;
+    window.PORTFOLIO_PREFETCH_SHEETS = ['Publications'];
   </script>
   <script src="/assets/js/portfolio-data.js"></script>
 </body>

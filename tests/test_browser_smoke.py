@@ -191,26 +191,27 @@ class BrowserSmokeTests(unittest.TestCase):
         self.assertIn("봉사 및 나눔", korean)
         self.assertNotIn("강의 및 교육", korean)
 
-    def test_slow_remote_sheet_keeps_loading_indicator_and_replaces_fallback(self):
+    def test_slow_remote_sheet_shows_saved_content_without_loading_indicator_then_updates(self):
         QuietHandler.request_counts["slow"] = 0
         self.request("POST", f"/session/{self.session_id}/url", {
-            "url": f"http://127.0.0.1:{self.web_port}/tests/fixtures/portfolio-live-render.html?mode=slow"
+            "url": f"http://127.0.0.1:{self.web_port}/tests/fixtures/portfolio-live-render.html?mode=slow&clear=1"
         })
-        loading = self.execute("""
+        saved = self.execute("""
           const done = arguments[arguments.length - 1];
           const deadline = Date.now() + 2000;
           (function poll() {
+            const cards = document.querySelectorAll('.publication-card');
             const status = document.querySelector('[data-portfolio-sync-status]');
-            if (status?.dataset.state === 'loading') {
-              done({state: status.dataset.state, text: status.innerText});
+            if (cards.length > 1) {
+              done({cards: cards.length, status: status?.dataset.state || '', text: document.body.innerText});
             } else if (Date.now() > deadline) {
               done({error: document.body.innerText});
             } else setTimeout(poll, 25);
           })();
         """)
-        self.assertNotIn("error", loading)
-        self.assertEqual("loading", loading["state"])
-        self.assertIn("Google Sheets", loading["text"])
+        self.assertNotIn("error", saved)
+        self.assertEqual("", saved["status"])
+        self.assertNotIn("Syncing the latest content", saved["text"])
 
         updated = self.execute("""
           const done = arguments[arguments.length - 1];
@@ -227,10 +228,46 @@ class BrowserSmokeTests(unittest.TestCase):
         self.assertNotIn("error", updated)
         self.assertEqual("1 publication", updated["count"])
 
+    def test_same_tab_navigation_reuses_session_snapshot_without_refetch(self):
+        QuietHandler.request_counts["session"] = 0
+        first_url = (
+            f"http://127.0.0.1:{self.web_port}/tests/fixtures/portfolio-live-render.html"
+            "?mode=session&clear=1"
+        )
+        self.request("POST", f"/session/{self.session_id}/url", {"url": first_url})
+        first = self.execute("""
+          const done = arguments[arguments.length - 1];
+          const deadline = Date.now() + 5000;
+          (function poll() {
+            const title = document.querySelector('.publication-card h3')?.innerText || '';
+            if (title === 'Remote session publication') done({title});
+            else if (Date.now() > deadline) done({error: document.body.innerText});
+            else setTimeout(poll, 25);
+          })();
+        """)
+        self.assertNotIn("error", first)
+        self.assertEqual(1, QuietHandler.request_counts["session"])
+
+        second_url = (
+            f"http://127.0.0.1:{self.web_port}/tests/fixtures/portfolio-live-render.html"
+            "?mode=session&visit=2"
+        )
+        self.request("POST", f"/session/{self.session_id}/url", {"url": second_url})
+        second = self.execute("""
+          const done = arguments[arguments.length - 1];
+          setTimeout(() => done({
+            title: document.querySelector('.publication-card h3')?.innerText || '',
+            status: document.querySelector('[data-portfolio-sync-status]')?.dataset.state || ''
+          }), 800);
+        """)
+        self.assertEqual("Remote session publication", second["title"])
+        self.assertEqual("", second["status"])
+        self.assertEqual(1, QuietHandler.request_counts["session"])
+
     def test_failed_remote_sheet_offers_retry_and_recovers_without_reload(self):
         QuietHandler.request_counts["retry"] = 0
         self.request("POST", f"/session/{self.session_id}/url", {
-            "url": f"http://127.0.0.1:{self.web_port}/tests/fixtures/portfolio-live-render.html?mode=retry"
+            "url": f"http://127.0.0.1:{self.web_port}/tests/fixtures/portfolio-live-render.html?mode=retry&clear=1"
         })
         failed = self.execute("""
           const done = arguments[arguments.length - 1];

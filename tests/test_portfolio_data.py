@@ -24,6 +24,14 @@ class PortfolioDataTests(unittest.TestCase):
         self.assertEqual(PUBLICATION_HEADERS, list(rows[0].keys()))
         self.assertTrue(all("Kyeonghun Kim" in row["Authors"] for row in rows))
 
+    def test_offline_snapshot_contains_current_publications_and_learning_videos(self):
+        payload = json.loads((ROOT / "assets/data/portfolio-data.json").read_text(encoding="utf-8"))
+        self.assertEqual(50, len(payload["sheets"]["Publications"]))
+        self.assertEqual(20, len(payload["sheets"]["Learning_Videos"]))
+        self.assertEqual(43, len(json.loads(
+            (ROOT / "assets/data/cv-content.json").read_text(encoding="utf-8")
+        )))
+
     def test_publication_renderer_has_all_actions_and_result_count(self):
         source = (ROOT / "assets/js/portfolio-data.js").read_text(encoding="utf-8")
         self.assertIn("expectedApiSheets", source)
