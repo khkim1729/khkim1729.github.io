@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Portfolio live loader test</title>
+  <link rel="stylesheet" href="/assets/css/portfolio-data.css">
+</head>
+<body>
+  <section data-portfolio-publications>
+    <p data-publication-count aria-live="polite"></p>
+    <div data-publication-list></div>
+  </section>
+  <script>
+    const mode = new URLSearchParams(location.search).get('mode');
+    window.PORTFOLIO_API_URL = `/tests/fixtures/portfolio-live-api?mode=${mode}`;
+  </script>
+  <script src="/assets/js/portfolio-data.js"></script>
+</body>
+</html>

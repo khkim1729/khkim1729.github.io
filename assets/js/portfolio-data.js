@@ -8,6 +8,11 @@
     'https://docs.google.com/spreadsheets/d/1nr8EWtSU3Y50oK7oeKvwIZ1tHBUMmOhiSjtFYYufSYI/gviz/tq';
   const cache = new Map();
   const remoteLoads = new Map();
+  const remoteStates = new Map();
+  const syncStatusByRoot = new WeakMap();
+  const syncHideTimers = new WeakMap();
+  const REMOTE_TIMEOUT_MS = 30000;
+  const REMOTE_ATTEMPTS = 2;
   let fallbackPromise;
   let cvFallbackPromise;
 
@@ -175,6 +180,94 @@
     return cvFallbackPromise;
   }
 
+  function syncSheetsForRoot(root) {
+    if (root.matches('[data-portfolio-publications]')) return ['Publications'];
+    if (root.matches('[data-portfolio-projects]')) return ['Projects'];
+    if (root.matches('[data-portfolio-credentials]')) return ['Professional_Credentials'];
+    if (root.matches('[data-portfolio-cv]')) return ['CV_Content', 'Professional_Credentials'];
+    if (root.matches('[data-learning-videos]')) return ['Learning_Videos'];
+    return [];
+  }
+
+  function syncRoots() {
+    return document.querySelectorAll([
+      '[data-portfolio-publications]',
+      '[data-portfolio-projects]',
+      '[data-portfolio-credentials]',
+      '[data-portfolio-cv]',
+      '[data-learning-videos]'
+    ].join(','));
+  }
+
+  function ensureSyncStatus(root) {
+    if (syncStatusByRoot.has(root)) return syncStatusByRoot.get(root);
+    const status = document.createElement('div');
+    status.className = 'portfolio-sync-status is-hidden';
+    status.dataset.portfolioSyncStatus = '';
+    status.setAttribute('role', 'status');
+    status.setAttribute('aria-live', 'polite');
+    root.parentNode.insertBefore(status, root);
+    syncStatusByRoot.set(root, status);
+    return status;
+  }
+
+  function refreshSyncStatuses() {
+    const lang = currentLanguage();
+    syncRoots().forEach(root => {
+      const sheets = syncSheetsForRoot(root);
+      const entries = sheets.map(sheet => ({sheet, state: remoteStates.get(sheet)}))
+        .filter(entry => entry.state);
+      if (!entries.length) return;
+      const status = ensureSyncStatus(root);
+      const oldTimer = syncHideTimers.get(root);
+      if (oldTimer) clearTimeout(oldTimer);
+      const loading = entries.filter(entry => entry.state === 'loading');
+      const errors = entries.filter(entry => entry.state === 'error');
+      const state = loading.length ? 'loading' : (errors.length ? 'error' : 'success');
+      status.dataset.state = state;
+      status.classList.remove('is-hidden');
+
+      if (state === 'loading') {
+        status.innerHTML = `<span class="portfolio-sync-orb" aria-hidden="true"></span>
+          <span>${lang === 'ko' ? 'Google Sheets 최신 내용을 불러오는 중' : 'Syncing the latest content from Google Sheets'}</span>
+          <span class="portfolio-sync-track" aria-hidden="true"><span></span></span>`;
+      } else if (state === 'error') {
+        status.innerHTML = `<span class="portfolio-sync-dot" aria-hidden="true"></span>
+          <span>${lang === 'ko' ? '저장된 버전을 표시하고 있습니다.' : 'Showing the saved version.'}</span>
+          <button type="button" data-portfolio-sync-retry="${errors.map(entry => escapeHtml(entry.sheet)).join(',')}">
+            ${lang === 'ko' ? '다시 시도' : 'Retry'}
+          </button>`;
+      } else {
+        status.innerHTML = `<span class="portfolio-sync-check" aria-hidden="true">✓</span>
+          <span>${lang === 'ko' ? 'Google Sheets 최신 내용으로 업데이트했습니다.' : 'Updated from Google Sheets.'}</span>`;
+        const timer = setTimeout(() => status.classList.add('is-hidden'), 1400);
+        syncHideTimers.set(root, timer);
+      }
+    });
+  }
+
+  function setRemoteState(name, state) {
+    remoteStates.set(name, state);
+    refreshSyncStatuses();
+  }
+
+  function wait(milliseconds) {
+    return new Promise(resolve => setTimeout(resolve, milliseconds));
+  }
+
+  async function fetchRemotePayload(url) {
+    let lastError;
+    for (let attempt = 1; attempt <= REMOTE_ATTEMPTS; attempt += 1) {
+      try {
+        return await fetchWithTimeout(url, REMOTE_TIMEOUT_MS);
+      } catch (error) {
+        lastError = error;
+        if (attempt < REMOTE_ATTEMPTS) await wait(650 * attempt);
+      }
+    }
+    throw lastError;
+  }
+
   function loadRemote(name) {
     if (remoteLoads.has(name)) return remoteLoads.get(name);
 
@@ -203,12 +296,13 @@
     }
 
     if (!API_URL) return;
+    setRemoteState(name, 'loading');
     const promise = (async () => {
       try {
         const queryName = aliases[name] || name;
         const separator = API_URL.includes('?') ? '&' : '?';
-        const url = `${API_URL}${separator}sheet=${encodeURIComponent(queryName)}&lang=all&_=${Date.now()}`;
-        const payload = await fetchWithTimeout(url, 5000);
+        const url = `${API_URL}${separator}sheet=${encodeURIComponent(queryName)}&lang=all`;
+        const payload = await fetchRemotePayload(url);
         if (!payload || payload.ok === false) {
           throw new Error(payload && payload.error ? payload.error : 'Invalid API response');
         }
@@ -223,17 +317,27 @@
         const rows = source.map(row => normalizeRow(name, row));
         validateRemoteRows(name, rows);
         cache.set(name, rows);
+        setRemoteState(name, 'success');
         document.dispatchEvent(new CustomEvent('portfolio:dataupdated', {
           detail: {sheet: name}
         }));
         return rows;
       } catch (error) {
+        setRemoteState(name, 'error');
         console.warn(`Portfolio live update unavailable for ${name}:`, error.message);
         return null;
       }
     })();
     remoteLoads.set(name, promise);
+    promise.then(() => {
+      if (remoteLoads.get(name) === promise) remoteLoads.delete(name);
+    });
     return promise;
+  }
+
+  function retryRemote(name) {
+    remoteLoads.delete(name);
+    return loadRemote(name);
   }
 
   async function getSheet(name) {
@@ -335,7 +439,11 @@
     function draw(query) {
       const term = String(query || '').trim().toLowerCase();
       const filtered = rows.filter(row => !term || [row.Title, row.Authors, row.Venue_Name, row.Year, row.Notes, row.Remarks].join(' ').toLowerCase().includes(term));
-      if (count) count.textContent = term ? `${filtered.length} results` : `${filtered.length} publications`;
+      if (count) {
+        const noun = term ? (filtered.length === 1 ? 'result' : 'results') :
+          (filtered.length === 1 ? 'publication' : 'publications');
+        count.textContent = `${filtered.length} ${noun}`;
+      }
       const years = [...new Set(filtered.map(row => row.Year))];
       list.innerHTML = years.map(year => `<section class="portfolio-year"><h2>${escapeHtml(year)}</h2>
         <div class="portfolio-grid">${filtered.filter(row => row.Year === year).map(row => publicationCard(row, people)).join('')}</div>
@@ -567,6 +675,11 @@
 
   function initialize() {
     bindMediaModal();
+    document.addEventListener('click', event => {
+      const retry = event.target.closest('[data-portfolio-sync-retry]');
+      if (!retry) return;
+      String(retry.dataset.portfolioSyncRetry || '').split(',').filter(Boolean).forEach(retryRemote);
+    });
     document.querySelectorAll('[data-portfolio-publications]').forEach(root => renderPublications(root, Number(root.dataset.limit || 0)));
     document.querySelectorAll('[data-portfolio-projects]').forEach(renderProjects);
     document.querySelectorAll('[data-portfolio-credentials]').forEach(renderCredentials);
@@ -581,6 +694,7 @@
       }
     });
     document.addEventListener('portfolio:languagechange', () => {
+      refreshSyncStatuses();
       document.querySelectorAll('[data-portfolio-projects]').forEach(renderProjects);
       document.querySelectorAll('[data-portfolio-credentials]').forEach(renderCredentials);
       document.querySelectorAll('[data-portfolio-cv]').forEach(renderCV);

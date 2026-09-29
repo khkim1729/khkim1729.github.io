@@ -7,6 +7,7 @@ import threading
 import time
 import unittest
 import urllib.request
+from urllib.parse import parse_qs, urlparse
 from pathlib import Path
 
 
@@ -22,8 +23,61 @@ def free_port():
 
 
 class QuietHandler(http.server.SimpleHTTPRequestHandler):
+    request_counts = {}
+
     def log_message(self, _format, *_args):
         pass
+
+    def do_GET(self):
+        parsed = urlparse(self.path)
+        if parsed.path == "/tests/fixtures/portfolio-live-api":
+            mode = parse_qs(parsed.query).get("mode", [""])[0]
+            key = mode or "default"
+            self.request_counts[key] = self.request_counts.get(key, 0) + 1
+            attempt = self.request_counts[key]
+            if mode == "slow":
+                time.sleep(5.25)
+            if mode == "retry" and attempt <= 2:
+                self.send_response(503)
+                self.send_header("Content-Type", "application/json")
+                self.end_headers()
+                self.wfile.write(b'{"ok":false,"error":"temporary"}')
+                return
+            payload = {
+                "ok": True,
+                "sheet": "WEB_Publications",
+                "count": 1,
+                "data": [{
+                    "Pub_ID": "PUB-REMOTE-001",
+                    "Year": "2027",
+                    "Title": f"Remote {mode} publication",
+                    "Venue_Name": "Remote Venue",
+                    "Authors": "Kyeonghun Kim",
+                    "Spacer": "",
+                    "Project_Link": "",
+                    "GDrive_Link": "",
+                    "arXiv_Link": "",
+                    "Paper_Link": "",
+                    "Venue_Link": "",
+                    "Code": "",
+                    "Model": "",
+                    "Poster_Link": "",
+                    "Slides_link": "",
+                    "Cite": "",
+                    "In Google Scholar": "",
+                    "Cited at Least Once": "",
+                    "Notes": "",
+                    "Remarks": "",
+                }],
+            }
+            body = json.dumps(payload).encode()
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+            return
+        super().do_GET()
 
 
 @unittest.skipUnless(FIREFOX.exists() and GECKODRIVER.exists(), "Firefox WebDriver is unavailable")
@@ -136,6 +190,76 @@ class BrowserSmokeTests(unittest.TestCase):
         self.assertIn("연구 하이라이트", korean)
         self.assertIn("봉사 및 나눔", korean)
         self.assertNotIn("강의 및 교육", korean)
+
+    def test_slow_remote_sheet_keeps_loading_indicator_and_replaces_fallback(self):
+        QuietHandler.request_counts["slow"] = 0
+        self.request("POST", f"/session/{self.session_id}/url", {
+            "url": f"http://127.0.0.1:{self.web_port}/tests/fixtures/portfolio-live-render.html?mode=slow"
+        })
+        loading = self.execute("""
+          const done = arguments[arguments.length - 1];
+          const deadline = Date.now() + 2000;
+          (function poll() {
+            const status = document.querySelector('[data-portfolio-sync-status]');
+            if (status?.dataset.state === 'loading') {
+              done({state: status.dataset.state, text: status.innerText});
+            } else if (Date.now() > deadline) {
+              done({error: document.body.innerText});
+            } else setTimeout(poll, 25);
+          })();
+        """)
+        self.assertNotIn("error", loading)
+        self.assertEqual("loading", loading["state"])
+        self.assertIn("Google Sheets", loading["text"])
+
+        updated = self.execute("""
+          const done = arguments[arguments.length - 1];
+          const deadline = Date.now() + 10000;
+          (function poll() {
+            const title = document.querySelector('.publication-card h3')?.innerText || '';
+            if (title === 'Remote slow publication') {
+              done({title, count: document.querySelector('[data-publication-count]').innerText});
+            } else if (Date.now() > deadline) {
+              done({error: document.body.innerText});
+            } else setTimeout(poll, 50);
+          })();
+        """)
+        self.assertNotIn("error", updated)
+        self.assertEqual("1 publication", updated["count"])
+
+    def test_failed_remote_sheet_offers_retry_and_recovers_without_reload(self):
+        QuietHandler.request_counts["retry"] = 0
+        self.request("POST", f"/session/{self.session_id}/url", {
+            "url": f"http://127.0.0.1:{self.web_port}/tests/fixtures/portfolio-live-render.html?mode=retry"
+        })
+        failed = self.execute("""
+          const done = arguments[arguments.length - 1];
+          const deadline = Date.now() + 5000;
+          (function poll() {
+            const status = document.querySelector('[data-portfolio-sync-status]');
+            const retry = status?.querySelector('[data-portfolio-sync-retry]');
+            if (status?.dataset.state === 'error' && retry) {
+              done({state: status.dataset.state, text: status.innerText});
+            } else if (Date.now() > deadline) {
+              done({error: document.body.innerText});
+            } else setTimeout(poll, 25);
+          })();
+        """)
+        self.assertNotIn("error", failed)
+        self.assertIn("saved version", failed["text"].lower())
+
+        recovered = self.execute("""
+          const done = arguments[arguments.length - 1];
+          document.querySelector('[data-portfolio-sync-retry]').click();
+          const deadline = Date.now() + 5000;
+          (function poll() {
+            const title = document.querySelector('.publication-card h3')?.innerText || '';
+            if (title === 'Remote retry publication') done({title});
+            else if (Date.now() > deadline) done({error: document.body.innerText});
+            else setTimeout(poll, 25);
+          })();
+        """)
+        self.assertNotIn("error", recovered)
 
     def test_apps_script_learning_video_adapter_extracts_only_rich_text_links(self):
         self.request("POST", f"/session/{self.session_id}/url", {
