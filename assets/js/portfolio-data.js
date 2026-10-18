@@ -255,6 +255,30 @@
     return [...merged.values()];
   }
 
+  function mergeCvRows(baseRows, updateRows) {
+    const merged = new Map((baseRows || []).map(row => [row.content_id, Object.assign({}, row)]));
+    (updateRows || []).forEach(row => {
+      if (row.content_id) merged.set(row.content_id, nonEmptyMerge(merged.get(row.content_id) || {}, row));
+    });
+    return [...merged.values()];
+  }
+
+  async function addCuratedCvRows(name, rows) {
+    if (name !== 'CV_Content') return rows;
+    const curated = (await cvFallback()).map(row => normalizeRow(name, row));
+    const curatedById = new Map(curated.map(row => [row.content_id, row]));
+    const canonicalResearch = new Set(['CV_RES_001', 'CV_RES_002', 'CV_RES_003']);
+    return mergeCvRows(curated, rows).map(row => {
+      if (canonicalResearch.has(row.content_id)) {
+        return nonEmptyMerge(row, curatedById.get(row.content_id));
+      }
+      if (row.content_id === 'CV_LEC_008') {
+        return Object.assign({}, row, {image_url: '', image_alt_en: '', image_alt_ko: ''});
+      }
+      return row;
+    });
+  }
+
   async function addCuratedProjects(name, rows) {
     if (!['Projects', 'Project_Content'].includes(name)) return rows;
     const showcase = await projectShowcase();
@@ -395,6 +419,7 @@
         if (['Projects', 'Project_Content'].includes(name)) {
           rows = mergeProjectRows(name, cache.get(name) || [], rows);
         }
+        rows = await addCuratedCvRows(name, rows);
         validateRemoteRows(name, rows);
         cache.set(name, rows);
         cacheSources.set(name, 'remote');
@@ -426,15 +451,17 @@
     if (cache.has(name)) return cache.get(name);
     const saved = readSessionSheet(name);
     if (saved) {
-      cache.set(name, saved);
+      const rows = await addCuratedCvRows(name, saved);
+      cache.set(name, rows);
       cacheSources.set(name, 'session');
-      return saved;
+      return rows;
     }
     const source = name === 'CV_Content'
       ? await cvFallback()
       : (await fallback()).sheets[name] || [];
     let rows = source.map(row => normalizeRow(name, row));
     rows = await addCuratedProjects(name, rows);
+    rows = await addCuratedCvRows(name, rows);
     if (!cache.has(name)) {
       cache.set(name, rows);
       cacheSources.set(name, 'fallback');
@@ -703,6 +730,31 @@
       : '';
   }
 
+  function cvRelatedLinks(row) {
+    const links = String(row.related_links || '').split(';;').map(item => {
+      const separator = item.indexOf('|');
+      if (separator < 1) return '';
+      const label = item.slice(0, separator).trim();
+      const url = safeLink(item.slice(separator + 1));
+      return label && url
+        ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(label)}</a>`
+        : '';
+    }).filter(Boolean);
+    return links.length ? `<div class="cv-related-links">${links.join('')}</div>` : '';
+  }
+
+  function cvMedia(row, lang, title) {
+    const rawUrls = String(row.image_url || '').split('|').map(value => value.trim()).filter(Boolean);
+    const alts = String(localized(row, 'image_alt', lang) || '').split('|').map(value => value.trim());
+    const items = rawUrls.map((rawUrl, index) => {
+      const imageUrl = safeLink(rawUrl) || (/^\/[^/]/.test(rawUrl) ? rawUrl : '');
+      if (!imageUrl) return '';
+      const imageAlt = alts[index] || alts[0] || title;
+      return `<button class="cv-entry-media" type="button" data-cv-media="${escapeHtml(imageUrl)}" data-cv-media-alt="${escapeHtml(imageAlt)}" aria-label="${escapeHtml(`Enlarge ${imageAlt}`)}"><img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(imageAlt)}" loading="lazy"><span>${escapeHtml(imageAlt)}</span></button>`;
+    }).filter(Boolean);
+    return items.length ? `<div class="cv-entry-media-grid">${items.join('')}</div>` : '';
+  }
+
   function cvEntry(row, lang) {
     const type = String(row.entry_type || 'entry').toLowerCase();
     const title = localized(row, 'title', lang);
@@ -723,14 +775,11 @@
     const linkedTitle = url
       ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(title)}</a>`
       : escapeHtml(title);
-    const imageUrl = safeLink(row.image_url) || (/^\/[^/]/.test(String(row.image_url || '')) ? row.image_url : '');
-    const imageAlt = localized(row, 'image_alt', lang) || title;
-    const media = imageUrl
-      ? `<button class="cv-entry-media" type="button" data-cv-media="${escapeHtml(imageUrl)}" data-cv-media-alt="${escapeHtml(imageAlt)}" aria-label="${escapeHtml(`Enlarge ${imageAlt}`)}"><img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(imageAlt)}" loading="lazy"><span>${escapeHtml(imageAlt)}</span></button>`
-      : '';
+    const media = cvMedia(row, lang, title);
     return `<article class="cv-entry">
       <h3>${linkedTitle}${period ? `<span>${escapeHtml(period)}</span>` : ''}</h3>
       ${subtitle ? `<h4>${escapeHtml(subtitle)}</h4>` : ''}
+      ${cvRelatedLinks(row)}
       ${cvDescription(row, lang)}
       ${media}
     </article>`;

@@ -192,6 +192,36 @@ class BrowserSmokeTests(unittest.TestCase):
         self.assertIn("봉사 및 나눔", korean)
         self.assertNotIn("강의 및 교육", korean)
 
+    def test_research_entries_render_all_lab_photos_in_the_existing_modal(self):
+        self.request("POST", f"/session/{self.session_id}/url", {
+            "url": f"http://127.0.0.1:{self.web_port}/tests/fixtures/portfolio-render.html"
+        })
+        result = self.execute("""
+          const done = arguments[arguments.length - 1];
+          const deadline = Date.now() + 5000;
+          (function poll() {
+            const section = document.querySelector('#research');
+            const text = section?.innerText || '';
+            const media = [...(section?.querySelectorAll('[data-cv-media]') || [])];
+            if (text.includes('iMoCap Lab') && text.includes('APC Lab') && media.length === 3) {
+              media[1].click();
+              setTimeout(() => done({
+                entries: section.querySelectorAll('.cv-entry').length,
+                media: media.map(node => node.dataset.cvMedia),
+                modalSrc: document.querySelector('[data-portfolio-media-image]').getAttribute('src'),
+                text
+              }), 50);
+            } else if (Date.now() > deadline) done({error: text, media: media.length});
+            else setTimeout(poll, 50);
+          })();
+        """)
+        self.assertNotIn("error", result)
+        self.assertEqual(3, result["entries"])
+        self.assertEqual(3, len(result["media"]))
+        self.assertIn("imocap", result["modalSrc"])
+        self.assertIn("Jetson Thor", result["text"])
+        self.assertIn("RTX 5090", result["text"])
+
     def test_cv_history_renders_canonical_lectures_award_and_patent_media(self):
         self.request("POST", f"/session/{self.session_id}/url", {
             "url": f"http://127.0.0.1:{self.web_port}/tests/fixtures/cv-history-render.html"

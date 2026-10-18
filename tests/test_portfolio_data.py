@@ -28,7 +28,7 @@ class PortfolioDataTests(unittest.TestCase):
         payload = json.loads((ROOT / "assets/data/portfolio-data.json").read_text(encoding="utf-8"))
         self.assertEqual(50, len(payload["sheets"]["Publications"]))
         self.assertEqual(20, len(payload["sheets"]["Learning_Videos"]))
-        self.assertEqual(49, len(json.loads(
+        self.assertEqual(51, len(json.loads(
             (ROOT / "assets/data/cv-content.json").read_text(encoding="utf-8")
         )))
 
@@ -123,7 +123,8 @@ class PortfolioDataTests(unittest.TestCase):
         image_rows = [row for row in rows if row.get("image_url")]
         self.assertGreaterEqual(len(image_rows), 6)
         for row in image_rows:
-            self.assertTrue((ROOT / row["image_url"].lstrip("/")).is_file(), row["image_url"])
+            for image_url in row["image_url"].split("|"):
+                self.assertTrue((ROOT / image_url.lstrip("/")).is_file(), image_url)
 
     def test_cv_content_has_canonical_teaching_award_and_patent_dates(self):
         rows = json.loads((ROOT / "assets/data/cv-content.json").read_text(encoding="utf-8"))
@@ -143,6 +144,7 @@ class PortfolioDataTests(unittest.TestCase):
         self.assertEqual("Oct. 23, 2026", by_id["CV_LEC_008"]["period_en"])
         self.assertEqual("생성형 AI 활용 업무 효율화 및 공공행정 실무 교육", by_id["CV_LEC_008"]["subtitle_ko"])
         self.assertNotIn("forthcoming", json.dumps(by_id["CV_LEC_008"]).lower())
+        self.assertEqual("", by_id["CV_LEC_008"]["image_url"])
         self.assertEqual("Apr. 21, 2026", by_id["CV_LEC_005"]["period_en"])
         self.assertEqual("Aug. 16–18, 2019", by_id["CV_AWD_001"]["period_en"])
         self.assertEqual("/assets/img/portfolio/awards/2019-ksae-team-sv-bronze.png", by_id["CV_AWD_001"]["image_url"])
@@ -151,6 +153,31 @@ class PortfolioDataTests(unittest.TestCase):
             text = (ROOT / filename).read_text(encoding="utf-8")
             for required in ("2,302,547", "5,000+", "3,000+", "102 universities", "10-3010471-0000"):
                 self.assertIn(required, text)
+
+    def test_cv_research_history_has_advisors_hardware_labs_and_public_media(self):
+        rows = json.loads((ROOT / "assets/data/cv-content.json").read_text(encoding="utf-8"))
+        by_id = {row["content_id"]: row for row in rows}
+        research = [row for row in rows if row.get("section_id") == "research"]
+
+        self.assertEqual(["CV_RES_001", "CV_RES_002", "CV_RES_003"],
+                         [row["content_id"] for row in research])
+        medical = by_id["CV_RES_001"]
+        self.assertIn("Advisors: Prof. Nam-joon Kim; Prof. Hyuk-Jae Lee; Woo Kyoung Jeong, Radiologist (SMC)",
+                      medical["subtitle_en"])
+        self.assertIn("Jetson Thor", medical["description_en"])
+        self.assertIn("RTX 5090", medical["description_en"])
+        self.assertEqual("https://imsilab.github.io/imsi/", medical["link_url"])
+
+        imocap = by_id["CV_RES_002"]
+        apc = by_id["CV_RES_003"]
+        self.assertEqual("https://sites.google.com/view/imocap/home", imocap["link_url"])
+        self.assertEqual("https://sites.google.com/view/apcl", apc["link_url"])
+        self.assertIn("Prof. Jung Keun Lee", imocap["subtitle_en"])
+        self.assertIn("Prof. Kwang-Seok Oh", apc["subtitle_en"])
+        image_paths = imocap["image_url"].split("|") + apc["image_url"].split("|")
+        self.assertEqual(3, len(image_paths))
+        for image_path in image_paths:
+            self.assertTrue((ROOT / image_path.lstrip("/")).is_file(), image_path)
 
     def test_home_and_cv_use_bilingual_sheet_renderer_with_media(self):
         index = (ROOT / "index.md").read_text(encoding="utf-8")
