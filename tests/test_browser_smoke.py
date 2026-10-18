@@ -150,6 +150,11 @@ class BrowserSmokeTests(unittest.TestCase):
                 cvLinks: [...document.querySelectorAll('[data-cv-download]')].map(x => ({
                   language: x.dataset.cvDownload, href: x.href, target: x.target, rel: x.rel
                 })),
+                researchMetrics: [...document.querySelectorAll('.cv-research-metric')].map(x => ({
+                  title: x.querySelector('span').innerText,
+                  count: x.querySelector('strong').innerText,
+                  label: x.querySelector('small').innerText
+                })),
                 images: document.querySelectorAll('.cv-entry-media img').length,
                 text
               });
@@ -168,6 +173,11 @@ class BrowserSmokeTests(unittest.TestCase):
         self.assertIn("1UPX3vLzKza-hmvgMHZKkdo47UIrC-MHz", result["cvLinks"][1]["href"])
         self.assertGreaterEqual(result["images"], 2)
         self.assertIn("Research Highlights", result["text"])
+        self.assertIn("Research at a Glance", result["text"])
+        self.assertEqual(9, len(result["researchMetrics"]))
+        self.assertIn({"title": "NeurIPS 2026", "count": "2", "label": "Accepted papers"}, result["researchMetrics"])
+        self.assertIn({"title": "APCCAS", "count": "4", "label": "Including one oral paper"}, result["researchMetrics"])
+        self.assertNotIn("Research portfolio also includes", result["text"])
         self.assertIn("Volunteering & Giving", result["text"])
         self.assertIn("Aug. 27, 2026", result["text"])
         self.assertNotIn("Lectures & Teaching", result["text"])
@@ -198,10 +208,18 @@ class BrowserSmokeTests(unittest.TestCase):
           document.dispatchEvent(new CustomEvent('portfolio:languagechange'));
           setTimeout(() => done({
             text: document.body.innerText,
-            cvLabels: [...document.querySelectorAll('[data-cv-download]')].map(x => x.innerText)
+            cvLabels: [...document.querySelectorAll('[data-cv-download]')].map(x => x.innerText),
+            researchMetrics: [...document.querySelectorAll('.cv-research-metric')].map(x => ({
+              title: x.querySelector('span').innerText,
+              count: x.querySelector('strong').innerText,
+              label: x.querySelector('small').innerText
+            }))
           }), 200);
         """)
         self.assertIn("연구 하이라이트", korean["text"])
+        self.assertIn("연구 성과 한눈에 보기", korean["text"])
+        self.assertEqual(9, len(korean["researchMetrics"]))
+        self.assertIn({"title": "NeurIPS 2026", "count": "2", "label": "채택 논문"}, korean["researchMetrics"])
         self.assertIn("봉사 및 나눔", korean["text"])
         self.assertNotIn("강의 및 교육", korean["text"])
         self.assertEqual(["📄 영문 이력서 열기 (PDF)", "📄 한글 이력서 열기 (PDF)"], korean["cvLabels"])

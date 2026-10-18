@@ -122,6 +122,13 @@
 .cv-entry h3 span { color: #687782; font-size: .9em; font-weight: 500; }
 .cv-entry h4 { margin: .25rem 0 .45rem; }
 .cv-entry ul { margin-top: .4rem; }
+.cv-research-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .85rem; margin: 1.15rem 0 2rem; }
+.cv-research-metric { position: relative; min-height: 132px; padding: 1rem 1.05rem 1rem 1.2rem; overflow: hidden; border: 1px solid #dce7ef; border-radius: 14px; background: linear-gradient(145deg, #fff 35%, #f3f9fc); box-shadow: 0 5px 18px rgba(31, 78, 120, .07); }
+.cv-research-metric::before { position: absolute; inset: 0 auto 0 0; width: 4px; background: linear-gradient(180deg, #008aff, #168d91); content: ""; }
+.cv-research-metric span, .cv-research-metric strong, .cv-research-metric small { display: block; }
+.cv-research-metric span { min-height: 2.65em; color: #244761; font-size: .85rem; font-weight: 750; line-height: 1.35; }
+.cv-research-metric strong { margin: .3rem 0 .12rem; color: #0078c9; font-size: 1.65rem; line-height: 1; }
+.cv-research-metric small { color: #647684; font-size: .78rem; line-height: 1.35; }
 .cv-related-links { display: flex; flex-wrap: wrap; gap: .4rem .65rem; margin: .25rem 0 .6rem; }
 .cv-related-links a { display: inline-flex; padding: .22rem .55rem; border: 1px solid #dce4ea; border-radius: 999px; font-size: .82rem; font-weight: 650; }
 .cv-inline-media { display: inline; padding: 0; border: 0; border-bottom: 1px solid currentColor; background: transparent; color: inherit; font: inherit; font-weight: 700; cursor: zoom-in; }
@@ -186,8 +193,13 @@ body.portfolio-search-open { overflow: hidden; }
 .learning-video-player iframe { width: 100%; height: 100%; border: 0; }
 .learning-video-close { position: fixed; top: 1rem; right: 1.25rem; border: 0; background: transparent; color: #fff; font-size: 2.6rem; line-height: 1; cursor: pointer; }
 body.learning-video-modal-open { overflow: hidden; }
+@media (max-width: 900px) {
+  .cv-research-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 @media (max-width: 640px) {
   .credential-item { grid-template-columns: 1fr; gap: .15rem; }
+  .cv-research-metrics { grid-template-columns: 1fr; }
+  .cv-research-metric { min-height: 118px; }
   .learning-video-grid { grid-template-columns: 1fr; }
   .learning-video-count { width: 100%; margin-left: 0; }
   .learning-video-modal { padding: 3.5rem .75rem 1rem; }

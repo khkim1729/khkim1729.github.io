@@ -267,7 +267,9 @@
     if (name !== 'CV_Content') return rows;
     const curated = (await cvFallback()).map(row => normalizeRow(name, row));
     const curatedById = new Map(curated.map(row => [row.content_id, row]));
-    const canonicalResearch = new Set(['CV_RES_001', 'CV_RES_002', 'CV_RES_003', 'CV_RES_004']);
+    const canonicalResearch = new Set([
+      'CV_RES_001', 'CV_RES_002', 'CV_RES_003', 'CV_RES_004', 'CV_HIL_001'
+    ]);
     return mergeCvRows(curated, rows).map(row => {
       if (canonicalResearch.has(row.content_id)) {
         return nonEmptyMerge(row, curatedById.get(row.content_id));
@@ -797,6 +799,13 @@
     if (type === 'note') {
       return `<p class="cv-note">${escapeHtml(localized(row, 'description', lang))}</p>`;
     }
+    if (type === 'research_metric') {
+      return `<article class="cv-research-metric">
+        <span>${escapeHtml(title)}</span>
+        <strong>${escapeHtml(period)}</strong>
+        <small>${escapeHtml(subtitle)}</small>
+      </article>`;
+    }
     const linkedTitle = url
       ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(title)}</a>`
       : escapeHtml(title);
@@ -882,12 +891,13 @@
     root.innerHTML = sections.map((section, index) => {
       const credentials = section.rows.some(row => row.entry_type === 'credentials');
       const contacts = section.rows.every(row => row.entry_type === 'link');
+      const researchMetrics = section.rows.every(row => row.entry_type === 'research_metric');
       const content = credentials
         ? '<div data-cv-credentials><p>Loading credentials…</p></div>'
         : section.rows.map(row => cvEntry(row, lang)).join('');
       return `${index ? '<br>' : ''}<section class="cv-section" id="${escapeHtml(section.id)}">
         <h1>${escapeHtml(section.title)}</h1>
-        <div${contacts ? ' class="cv-contact-grid"' : ''}>${content}</div>
+        <div${contacts ? ' class="cv-contact-grid"' : researchMetrics ? ' class="cv-research-metrics"' : ''}>${content}</div>
       </section>`;
     }).join('');
     const credentialRoot = root.querySelector('[data-cv-credentials]');

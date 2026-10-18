@@ -6,7 +6,7 @@ cover-img: /assets/img/main1.jpeg
 ---
 
 <section data-portfolio-cv
-         data-section-filter="note,education,research,highlights,collaborations,professional,patents,lectures,volunteering"
+         data-section-filter="note,education,research,highlights,research_metrics,collaborations,professional,patents,lectures,volunteering"
          aria-live="polite">
   <p>Loading profile from Portfolio_Website_Content_Model…</p>
 </section>

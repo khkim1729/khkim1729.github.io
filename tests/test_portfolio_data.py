@@ -36,9 +36,31 @@ class PortfolioDataTests(unittest.TestCase):
         payload = json.loads((ROOT / "assets/data/portfolio-data.json").read_text(encoding="utf-8"))
         self.assertEqual(50, len(payload["sheets"]["Publications"]))
         self.assertEqual(20, len(payload["sheets"]["Learning_Videos"]))
-        self.assertEqual(52, len(json.loads(
+        self.assertEqual(61, len(json.loads(
             (ROOT / "assets/data/cv-content.json").read_text(encoding="utf-8")
         )))
+
+    def test_cv_research_metrics_are_bilingual_and_replace_the_long_summary(self):
+        rows = json.loads((ROOT / "assets/data/cv-content.json").read_text(encoding="utf-8"))
+        snapshot = json.loads((ROOT / "assets/data/portfolio-data.json").read_text(encoding="utf-8"))
+        metrics = sorted(
+            [row for row in rows if row.get("section_id") == "research_metrics"],
+            key=lambda row: int(row["display_order"]),
+        )
+        self.assertEqual(rows, snapshot["sheets"]["CV_Content"])
+        self.assertEqual("Research at a Glance", metrics[0]["section_title_en"])
+        self.assertEqual("연구 성과 한눈에 보기", metrics[0]["section_title_ko"])
+        self.assertEqual([
+            ("NeurIPS 2026", "2"), ("MICCAI Workshops", "2"),
+            ("AAAI Workshop", "1"), ("ISBI Oral", "3"),
+            ("IEEE MedAI", "1"), ("AICAS Oral", "3"),
+            ("APCCAS", "4"), ("NVIDIA GTC Posters", "3"),
+            ("AACL-IJCNLP", "1"),
+        ], [(row["title_en"], row["period_en"]) for row in metrics])
+        self.assertTrue(all(row["entry_type"] == "research_metric" for row in metrics))
+        content = json.dumps(rows, ensure_ascii=False)
+        self.assertNotIn("Research portfolio also includes", content)
+        self.assertNotIn("MICCAI Workshop 2편, ISBI 구두발표 3편", content)
 
     def test_publication_renderer_has_all_actions_and_result_count(self):
         source = (ROOT / "assets/js/portfolio-data.js").read_text(encoding="utf-8")
@@ -202,6 +224,7 @@ class PortfolioDataTests(unittest.TestCase):
         javascript = (ROOT / "assets/js/portfolio-data.js").read_text(encoding="utf-8")
         self.assertIn("data-portfolio-cv", index)
         self.assertIn("data-section-filter", index)
+        self.assertIn("research_metrics", index)
         self.assertNotIn("## Teaching & Mentoring", index)
         self.assertIn("sectionFilter", javascript)
         self.assertIn("image_url", javascript)
