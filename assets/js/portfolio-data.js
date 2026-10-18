@@ -267,7 +267,7 @@
     if (name !== 'CV_Content') return rows;
     const curated = (await cvFallback()).map(row => normalizeRow(name, row));
     const curatedById = new Map(curated.map(row => [row.content_id, row]));
-    const canonicalResearch = new Set(['CV_RES_001', 'CV_RES_002', 'CV_RES_003']);
+    const canonicalResearch = new Set(['CV_RES_001', 'CV_RES_002', 'CV_RES_003', 'CV_RES_004']);
     return mergeCvRows(curated, rows).map(row => {
       if (canonicalResearch.has(row.content_id)) {
         return nonEmptyMerge(row, curatedById.get(row.content_id));
@@ -726,8 +726,33 @@
       .map(item => item.trim())
       .filter(Boolean);
     return items.length
-      ? `<ul>${items.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`
+      ? `<ul>${items.map(item => `<li>${cvInlineLinks(item)}</li>`).join('')}</ul>`
       : '';
+  }
+
+  function cvInlineLinks(value) {
+    const source = String(value || '');
+    const pattern = /\[([^\]]+)\]\(([^)]+)\)/g;
+    let output = '';
+    let cursor = 0;
+    let match;
+    while ((match = pattern.exec(source)) !== null) {
+      output += escapeHtml(source.slice(cursor, match.index));
+      const label = match[1].trim();
+      const rawUrl = match[2].trim();
+      const externalUrl = safeLink(rawUrl);
+      const localImage = /^\/assets\/img\/[A-Za-z0-9_./-]+\.(?:png|jpe?g|webp)$/i.test(rawUrl)
+        ? rawUrl : '';
+      if (localImage) {
+        output += `<button class="cv-inline-media" type="button" data-cv-media="${escapeHtml(localImage)}" data-cv-media-alt="${escapeHtml(label)}">${escapeHtml(label)}</button>`;
+      } else if (externalUrl) {
+        output += `<a href="${escapeHtml(externalUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(label)}</a>`;
+      } else {
+        output += escapeHtml(match[0]);
+      }
+      cursor = pattern.lastIndex;
+    }
+    return output + escapeHtml(source.slice(cursor));
   }
 
   function cvRelatedLinks(row) {

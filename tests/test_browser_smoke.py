@@ -203,8 +203,8 @@ class BrowserSmokeTests(unittest.TestCase):
             const section = document.querySelector('#research');
             const text = section?.innerText || '';
             const media = [...(section?.querySelectorAll('[data-cv-media]') || [])];
-            if (text.includes('iMoCap Lab') && text.includes('APC Lab') && media.length === 3) {
-              media[1].click();
+            if (text.includes('AISE Lab') && text.includes('iMoCap Lab') && text.includes('APC Lab') && media.length === 3) {
+              media[2].click();
               setTimeout(() => done({
                 entries: section.querySelectorAll('.cv-entry').length,
                 media: media.map(node => node.dataset.cvMedia),
@@ -216,9 +216,10 @@ class BrowserSmokeTests(unittest.TestCase):
           })();
         """)
         self.assertNotIn("error", result)
-        self.assertEqual(3, result["entries"])
+        self.assertEqual(4, result["entries"])
         self.assertEqual(3, len(result["media"]))
-        self.assertIn("imocap", result["modalSrc"])
+        self.assertIn("2019-ksae-team-sv-bronze", result["modalSrc"])
+        self.assertTrue("the Bronze Award" in result["text"] or "동상" in result["text"])
         self.assertIn("Jetson Thor", result["text"])
         self.assertIn("RTX 5090", result["text"])
 

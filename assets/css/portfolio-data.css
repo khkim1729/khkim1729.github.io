@@ -122,6 +122,9 @@
 .cv-entry ul { margin-top: .4rem; }
 .cv-related-links { display: flex; flex-wrap: wrap; gap: .4rem .65rem; margin: .25rem 0 .6rem; }
 .cv-related-links a { display: inline-flex; padding: .22rem .55rem; border: 1px solid #dce4ea; border-radius: 999px; font-size: .82rem; font-weight: 650; }
+.cv-inline-media { display: inline; padding: 0; border: 0; border-bottom: 1px solid currentColor; background: transparent; color: inherit; font: inherit; font-weight: 700; cursor: zoom-in; }
+.cv-inline-media:hover { color: #006fce; }
+.cv-inline-media:focus-visible { outline: 2px solid #008aff; outline-offset: 3px; border-radius: 2px; }
 .cv-entry-media-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 1rem; max-width: 920px; margin: .9rem 0 1.4rem; }
 .cv-entry-media { display: block; width: 100%; max-width: 720px; margin: .9rem 0 1.4rem; padding: 0; border: 0; background: transparent; text-align: left; cursor: zoom-in; font: inherit; }
 .cv-entry-media-grid .cv-entry-media { height: 100%; margin: 0; }

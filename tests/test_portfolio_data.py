@@ -28,7 +28,7 @@ class PortfolioDataTests(unittest.TestCase):
         payload = json.loads((ROOT / "assets/data/portfolio-data.json").read_text(encoding="utf-8"))
         self.assertEqual(50, len(payload["sheets"]["Publications"]))
         self.assertEqual(20, len(payload["sheets"]["Learning_Videos"]))
-        self.assertEqual(51, len(json.loads(
+        self.assertEqual(52, len(json.loads(
             (ROOT / "assets/data/cv-content.json").read_text(encoding="utf-8")
         )))
 
@@ -159,7 +159,7 @@ class PortfolioDataTests(unittest.TestCase):
         by_id = {row["content_id"]: row for row in rows}
         research = [row for row in rows if row.get("section_id") == "research"]
 
-        self.assertEqual(["CV_RES_001", "CV_RES_002", "CV_RES_003"],
+        self.assertEqual(["CV_RES_001", "CV_RES_004", "CV_RES_002", "CV_RES_003"],
                          [row["content_id"] for row in research])
         medical = by_id["CV_RES_001"]
         self.assertIn("Advisors: Prof. Nam-joon Kim; Prof. Hyuk-Jae Lee; Woo Kyoung Jeong, Radiologist (SMC)",
@@ -170,12 +170,22 @@ class PortfolioDataTests(unittest.TestCase):
 
         imocap = by_id["CV_RES_002"]
         apc = by_id["CV_RES_003"]
+        aise = by_id["CV_RES_004"]
+        self.assertEqual("AISE Lab, Kookmin University", aise["title_en"])
+        self.assertEqual("Sep. 1, 2022 – Aug. 5, 2024", aise["period_en"])
+        self.assertIn("Prof. Soo-Yeon Yoon|mailto:1104py@kookmin.ac.kr", aise["related_links"])
+        self.assertIn("TimeYOLO", aise["description_en"])
+        self.assertIn("Prompt-Guided Image Generation", aise["description_en"])
         self.assertEqual("https://sites.google.com/view/imocap/home", imocap["link_url"])
         self.assertEqual("https://sites.google.com/view/apcl", apc["link_url"])
         self.assertIn("Prof. Jung Keun Lee", imocap["subtitle_en"])
         self.assertIn("Prof. Kwang-Seok Oh", apc["subtitle_en"])
-        image_paths = imocap["image_url"].split("|") + apc["image_url"].split("|")
-        self.assertEqual(3, len(image_paths))
+        self.assertEqual("", apc["image_url"])
+        award_path = "/assets/img/portfolio/awards/2019-ksae-team-sv-bronze.png"
+        self.assertIn(f"[the Bronze Award]({award_path})", apc["description_en"])
+        self.assertTrue((ROOT / award_path.lstrip("/")).is_file(), award_path)
+        image_paths = imocap["image_url"].split("|")
+        self.assertEqual(2, len(image_paths))
         for image_path in image_paths:
             self.assertTrue((ROOT / image_path.lstrip("/")).is_file(), image_path)
 
