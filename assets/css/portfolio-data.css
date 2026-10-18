@@ -88,6 +88,14 @@
 .project-detail-hero > img { width: 100%; max-height: 360px; object-fit: contain; border-radius: 14px; background: #fff; box-shadow: 0 8px 28px rgba(31,78,120,.14); }
 .project-detail-eyebrow { color: #008aff; font-weight: 800; margin: 0; }
 .project-detail-period { color: #596773; font-weight: 700; }
+.project-scope-metrics { display: grid; grid-template-columns: repeat(auto-fit,minmax(150px,1fr)); gap: .8rem; margin: 1.2rem 0 0; }
+.project-scope-metric { min-height: 104px; padding: 1rem 1.1rem; border: 1px solid #dbe7ef; border-radius: 16px; background: linear-gradient(145deg,#fff,#f4f9fc); box-shadow: 0 5px 18px rgba(31,78,120,.055); }
+.project-scope-metric strong { display: block; color: #087f8c; font-size: clamp(1.35rem,2.8vw,2rem); line-height: 1.1; }
+.project-scope-metric span { display: block; margin-top: .45rem; color: #536a79; font-size: .78rem; font-weight: 800; letter-spacing: .035em; text-transform: uppercase; }
+.project-role-callout { margin: 1rem 0 0; padding: 1.2rem 1.35rem; border: 1px solid rgba(0,138,255,.2); border-left: 5px solid #008aff; border-radius: 16px; background: linear-gradient(135deg,rgba(0,138,255,.055),rgba(8,127,140,.055)); }
+.project-role-callout > span { display: block; margin-bottom: .35rem; color: #008aff; font-size: .76rem; font-weight: 900; letter-spacing: .09em; }
+.project-role-callout > strong { display: block; color: #173e59; font-size: 1.02rem; line-height: 1.55; }
+.project-role-callout > p { margin: .65rem 0 0; color: #435867; line-height: 1.72; }
 .project-detail-content { display: grid; gap: 1.25rem; margin-top: 2rem; }
 .project-detail-block { display: grid; grid-template-columns: minmax(0,1fr); gap: 1.5rem; padding: clamp(1.25rem,3vw,2rem); border: 1px solid #e2eaf0; border-radius: 18px; background: #fff; box-shadow: 0 5px 20px rgba(31,78,120,.055); }
 .project-detail-block:has(figure) { grid-template-columns: minmax(0,1fr) minmax(320px,.95fr); align-items: center; }
@@ -175,6 +183,8 @@ body.learning-video-modal-open { overflow: hidden; }
   .learning-video-count { width: 100%; margin-left: 0; }
   .learning-video-modal { padding: 3.5rem .75rem 1rem; }
   .project-detail-hero, .project-detail-block:has(figure) { grid-template-columns: 1fr; }
+  .project-scope-metrics { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .project-scope-metric { min-height: 92px; padding: .85rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   .portfolio-sync-orb, .portfolio-sync-track span { animation: none; }

@@ -423,6 +423,8 @@ class BrowserSmokeTests(unittest.TestCase):
                 cardImages: cards.filter(x => x.querySelector('img')).length,
                 detailImages: detail.querySelectorAll('img').length,
                 detailImageSources: [...detail.querySelectorAll('img')].map(x => x.getAttribute('src')),
+                metrics: [...detail.querySelectorAll('.project-scope-metric')].map(x => x.innerText),
+                role: detail.querySelector('.project-role-callout')?.innerText || '',
                 detailText: detail.innerText
               });
             } else if (Date.now() > deadline) {
@@ -444,6 +446,9 @@ class BrowserSmokeTests(unittest.TestCase):
         self.assertEqual(17, result["cardImages"])
         self.assertGreaterEqual(result["detailImages"], 2)
         self.assertEqual(len(result["detailImageSources"]), len(set(result["detailImageSources"])))
+        self.assertGreaterEqual(len(result["metrics"]), 3)
+        self.assertIn("5", " ".join(result["metrics"]))
+        self.assertIn("My Role", result["role"])
         self.assertEqual(
             [
                 "All 17", "Medical AI 8", "Computer Vision 11", "GenAI 6",

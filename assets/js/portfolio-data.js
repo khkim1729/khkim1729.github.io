@@ -628,6 +628,9 @@
     const summary = localized(project, 'summary', lang);
     const period = localized(project, 'period', lang);
     const organization = localized(project, 'organization', lang);
+    const role = localized(project, 'role', lang);
+    const contribution = localized(project, 'contribution', lang);
+    const metrics = Array.isArray(project.scope_metrics) ? project.scope_metrics : [];
     const categories = String(project.categories || '').split(';').map(item => item.trim()).filter(Boolean);
     const blocks = content.filter(row => row.project_id === project.project_id &&
       (row.is_visible === undefined || truthy(row.is_visible)))
@@ -640,6 +643,14 @@
         <div class="portfolio-actions">${actionLink(project.github_link, 'GitHub')}${actionLink(project.paper_or_demo_link, 'Paper / Demo')}</div></div>
         <img src="${escapeHtml(project.cover_image_url)}" alt="${escapeHtml(title)}">
       </header>
+      ${metrics.length ? `<section class="project-scope-metrics" aria-label="${lang === 'ko' ? '프로젝트 범위 요약' : 'Project scope at a glance'}">
+        ${metrics.map(metric => `<div class="project-scope-metric"><strong>${escapeHtml(metric.value)}</strong><span>${escapeHtml(lang === 'ko' ? metric.label_ko : metric.label_en)}</span></div>`).join('')}
+      </section>` : ''}
+      ${role || contribution ? `<aside class="project-role-callout">
+        <span>${lang === 'ko' ? '담당 역할' : 'My Role'}</span>
+        ${role ? `<strong>${escapeHtml(role)}</strong>` : ''}
+        ${contribution ? `<p>${escapeHtml(contribution)}</p>` : ''}
+      </aside>` : ''}
       <div class="project-detail-content">${blocks.map(block => {
         const heading = localized(block, 'title', lang);
         const body = localized(block, 'content', lang);

@@ -172,6 +172,24 @@ class PortfolioDataTests(unittest.TestCase):
         self.assertTrue(all(row.get("categories") for row in projects))
         self.assertTrue(all(row.get("sort_date") for row in projects))
         self.assertTrue(all(row.get("cover_image_url", "").startswith("/assets/") for row in projects))
+        for project in projects:
+            self.assertGreaterEqual(len(project.get("scope_metrics", [])), 3, project["project_id"])
+            for metric in project["scope_metrics"]:
+                self.assertTrue(metric.get("value"), project["project_id"])
+                self.assertTrue(metric.get("label_en"), project["project_id"])
+                self.assertTrue(metric.get("label_ko"), project["project_id"])
+            self.assertGreaterEqual(len(project.get("role_en", "")), 40, project["project_id"])
+            self.assertGreaterEqual(len(project.get("role_ko", "")), 20, project["project_id"])
+            self.assertGreaterEqual(len(project.get("contribution_en", "")), 100, project["project_id"])
+            self.assertGreaterEqual(len(project.get("contribution_ko", "")), 50, project["project_id"])
+            project_content = [row for row in content if row["project_id"] == project["project_id"]]
+            self.assertGreaterEqual(len(project_content), 3, project["project_id"])
+            self.assertGreaterEqual(
+                sum(len(row.get("content_en", "")) for row in project_content), 650, project["project_id"]
+            )
+            self.assertGreaterEqual(
+                sum(len(row.get("content_ko", "")) for row in project_content), 300, project["project_id"]
+            )
         media_by_project = {
             project["project_id"]: set([
                 project["cover_image_url"],
@@ -208,6 +226,8 @@ class PortfolioDataTests(unittest.TestCase):
         self.assertNotIn("/project/detail/?project=", javascript)
         self.assertIn("sort_date", javascript)
         self.assertIn("data-project-filter-count", javascript)
+        self.assertIn("project-scope-metrics", javascript)
+        self.assertIn("project-role-callout", javascript)
         self.assertIn("Project_Content", javascript)
         for category in (
             "All", "Medical AI", "Computer Vision", "GenAI", "LLM & NLP",
