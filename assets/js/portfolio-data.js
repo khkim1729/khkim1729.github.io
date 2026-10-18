@@ -4,6 +4,7 @@
   const API_URL = window.PORTFOLIO_API_URL || '';
   const FALLBACK_URL = '/assets/data/portfolio-data.json';
   const CV_FALLBACK_URL = '/assets/data/cv-content.json';
+  const PROJECT_SHOWCASE_URL = '/assets/data/project-showcase.json';
   const IMSI_PEOPLE_URL =
     'https://docs.google.com/spreadsheets/d/1nr8EWtSU3Y50oK7oeKvwIZ1tHBUMmOhiSjtFYYufSYI/gviz/tq';
   const cache = new Map();
@@ -13,13 +14,19 @@
   const syncStatusByRoot = new WeakMap();
   const REMOTE_TIMEOUT_MS = 30000;
   const REMOTE_ATTEMPTS = 2;
-  const SESSION_CACHE_PREFIX = 'portfolio-sheet-v3:';
+  const SESSION_CACHE_PREFIX = 'portfolio-sheet-v4:';
   const PREFETCH_SHEETS = window.PORTFOLIO_PREFETCH_SHEETS || [
     'CV_Content', 'Professional_Credentials', 'Publications',
-    'Projects', 'Learning_Videos', 'DB_People'
+    'Projects', 'Project_Content', 'Learning_Videos', 'DB_People'
   ];
   let fallbackPromise;
   let cvFallbackPromise;
+  let projectShowcasePromise;
+
+  const PROJECT_CATEGORIES = [
+    'All', 'Medical AI', 'Computer Vision', 'GenAI', 'LLM & NLP',
+    'Document AI', 'ML & DL', 'Software', 'Research'
+  ];
 
   const PUBLICATION_HEADERS = [
     'Pub_ID', 'Year', 'Title', 'Venue_Name', 'Authors', 'Spacer',
@@ -209,9 +216,49 @@
     return cvFallbackPromise;
   }
 
+  async function projectShowcase() {
+    if (!projectShowcasePromise) {
+      projectShowcasePromise = fetch(PROJECT_SHOWCASE_URL, {cache: 'force-cache'}).then(response => {
+        if (!response.ok) throw new Error(`Project showcase HTTP ${response.status}`);
+        return response.json();
+      });
+    }
+    return projectShowcasePromise;
+  }
+
+  function projectRowKey(name, row) {
+    return name === 'Projects' ? row.project_id : row.content_id;
+  }
+
+  function nonEmptyMerge(base, update) {
+    const result = Object.assign({}, base);
+    Object.entries(update || {}).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && String(value).trim() !== '') result[key] = value;
+    });
+    return result;
+  }
+
+  function mergeProjectRows(name, baseRows, updateRows) {
+    if (!['Projects', 'Project_Content'].includes(name)) return updateRows;
+    const merged = new Map((baseRows || []).map(row => [projectRowKey(name, row), Object.assign({}, row)]));
+    (updateRows || []).forEach(row => {
+      const key = projectRowKey(name, row);
+      if (key) merged.set(key, nonEmptyMerge(merged.get(key) || {}, row));
+    });
+    return [...merged.values()];
+  }
+
+  async function addCuratedProjects(name, rows) {
+    if (!['Projects', 'Project_Content'].includes(name)) return rows;
+    const showcase = await projectShowcase();
+    const curated = name === 'Projects' ? showcase.projects : showcase.content;
+    return mergeProjectRows(name, rows, curated);
+  }
+
   function syncSheetsForRoot(root) {
     if (root.matches('[data-portfolio-publications]')) return ['Publications'];
     if (root.matches('[data-portfolio-projects]')) return ['Projects'];
+    if (root.matches('[data-portfolio-project-detail]')) return ['Projects', 'Project_Content'];
     if (root.matches('[data-portfolio-credentials]')) return ['Professional_Credentials'];
     if (root.matches('[data-portfolio-cv]')) return ['CV_Content', 'Professional_Credentials'];
     if (root.matches('[data-learning-videos]')) return ['Learning_Videos'];
@@ -222,6 +269,7 @@
     return document.querySelectorAll([
       '[data-portfolio-publications]',
       '[data-portfolio-projects]',
+      '[data-portfolio-project-detail]',
       '[data-portfolio-credentials]',
       '[data-portfolio-cv]',
       '[data-learning-videos]'
@@ -336,7 +384,10 @@
         }
         const source = Array.isArray(payload) ? payload : payload.data;
         if (!Array.isArray(source)) throw new Error('API data is not an array');
-        const rows = source.map(row => normalizeRow(name, row));
+        let rows = source.map(row => normalizeRow(name, row));
+        if (['Projects', 'Project_Content'].includes(name)) {
+          rows = mergeProjectRows(name, cache.get(name) || [], rows);
+        }
         validateRemoteRows(name, rows);
         cache.set(name, rows);
         cacheSources.set(name, 'remote');
@@ -375,7 +426,8 @@
     const source = name === 'CV_Content'
       ? await cvFallback()
       : (await fallback()).sheets[name] || [];
-    const rows = source.map(row => normalizeRow(name, row));
+    let rows = source.map(row => normalizeRow(name, row));
+    rows = await addCuratedProjects(name, rows);
     if (!cache.has(name)) {
       cache.set(name, rows);
       cacheSources.set(name, 'fallback');
@@ -510,16 +562,87 @@
     const projects = (await getSheet('Projects'))
       .filter(row => row.is_visible === undefined || truthy(row.is_visible))
       .sort((a, b) => Number(a.display_order || 0) - Number(b.display_order || 0));
-    root.innerHTML = `<div class="portfolio-project-grid">${projects.map(project => {
+    const categoryCounts = new Map(PROJECT_CATEGORIES.map(category => [category,
+      category === 'All' ? projects.length : projects.filter(project =>
+        String(project.categories || '').split(';').map(item => item.trim()).includes(category)
+      ).length
+    ]));
+    root.innerHTML = `<div class="project-filter-bar" role="group" aria-label="Project categories">
+      ${PROJECT_CATEGORIES.map((category, index) => `<button type="button" class="project-filter" data-project-category="${escapeHtml(category)}" aria-pressed="${index === 0 ? 'true' : 'false'}">${escapeHtml(category)} <span>${categoryCounts.get(category)}</span></button>`).join('')}
+    </div><p class="project-filter-count" data-project-filter-count aria-live="polite"></p>
+    <div class="portfolio-project-grid">${projects.map(project => {
       const title = localized(project, 'title', lang);
       const summary = localized(project, 'summary', lang);
-      return `<article class="portfolio-project-card">
-        <img src="${escapeHtml(project.cover_image_url)}" alt="${escapeHtml(title)}" loading="lazy">
-        <div><h2>${escapeHtml(title)}</h2><p>${escapeHtml(summary)}</p>
+      const categories = String(project.categories || '').split(';').map(item => item.trim()).filter(Boolean);
+      const detailUrl = `/project/detail/?project=${encodeURIComponent(project.slug || project.project_id)}`;
+      return `<article class="portfolio-project-card" data-project-categories="${escapeHtml(categories.join('|'))}">
+        <a class="project-card-visual" href="${detailUrl}" aria-label="${escapeHtml(title)} — ${lang === 'ko' ? '자세히 보기' : 'View details'}"><img src="${escapeHtml(project.cover_image_url)}" alt="${escapeHtml(title)}" loading="lazy"></a>
+        <div><h2><a href="${detailUrl}">${escapeHtml(title)}</a></h2><p>${escapeHtml(summary)}</p>
         <p class="portfolio-tags">${escapeHtml(project.tags)}</p>
-        <div class="portfolio-actions">${actionLink(project.github_link, 'GitHub')}${actionLink(project.paper_or_demo_link, 'Paper / Demo')}</div></div>
+        <div class="project-category-chips">${categories.map(category => `<span>${escapeHtml(category)}</span>`).join('')}</div>
+        <div class="portfolio-actions"><a class="portfolio-chip" href="${detailUrl}">${lang === 'ko' ? '자세히 보기' : 'View Details'}</a>${actionLink(project.github_link, 'GitHub')}${actionLink(project.paper_or_demo_link, 'Paper / Demo')}</div></div>
       </article>`;
     }).join('')}</div>`;
+    const count = root.querySelector('[data-project-filter-count]');
+    const drawCategory = category => {
+      let visible = 0;
+      root.querySelectorAll('.portfolio-project-card').forEach(card => {
+        const categories = String(card.dataset.projectCategories || '').split('|');
+        const show = category === 'All' || categories.includes(category);
+        card.hidden = !show;
+        if (show) visible += 1;
+      });
+      root.querySelectorAll('.project-filter').forEach(button =>
+        button.setAttribute('aria-pressed', button.dataset.projectCategory === category ? 'true' : 'false')
+      );
+      if (count) count.textContent = lang === 'ko'
+        ? `프로젝트 ${visible}개`
+        : `${visible} ${visible === 1 ? 'project' : 'projects'}`;
+    };
+    root.querySelector('.project-filter-bar').addEventListener('click', event => {
+      const button = event.target.closest('.project-filter');
+      if (button) drawCategory(button.dataset.projectCategory);
+    });
+    drawCategory('All');
+  }
+
+  function detailParagraph(value) {
+    return String(value || '').split(/\r?\n/).map(line => line.trim()).filter(Boolean)
+      .map(line => `<p>${escapeHtml(line)}</p>`).join('');
+  }
+
+  async function renderProjectDetail(root) {
+    const lang = currentLanguage();
+    const requested = new URLSearchParams(window.location.search).get('project') || root.dataset.projectId || '';
+    const [projects, content] = await Promise.all([getSheet('Projects'), getSheet('Project_Content')]);
+    const project = projects.find(row => String(row.slug) === requested || String(row.project_id) === requested);
+    if (!project) {
+      root.innerHTML = `<p class="portfolio-empty">${lang === 'ko' ? '프로젝트를 찾을 수 없습니다.' : 'Project not found.'}</p>`;
+      return;
+    }
+    const title = localized(project, 'title', lang);
+    const summary = localized(project, 'summary', lang);
+    const period = localized(project, 'period', lang);
+    const organization = localized(project, 'organization', lang);
+    const categories = String(project.categories || '').split(';').map(item => item.trim()).filter(Boolean);
+    const blocks = content.filter(row => row.project_id === project.project_id &&
+      (row.is_visible === undefined || truthy(row.is_visible)))
+      .sort((a, b) => Number(a.display_order || 0) - Number(b.display_order || 0));
+    root.innerHTML = `<a class="project-detail-back" href="/project/">← ${lang === 'ko' ? '모든 프로젝트' : 'All Projects'}</a>
+      <header class="project-detail-hero">
+        <div><p class="project-detail-eyebrow">${escapeHtml(organization)}</p><h1>${escapeHtml(title)}</h1><p>${escapeHtml(summary)}</p>
+        ${period ? `<p class="project-detail-period">${escapeHtml(period)}</p>` : ''}
+        <div class="project-category-chips">${categories.map(category => `<span>${escapeHtml(category)}</span>`).join('')}</div>
+        <div class="portfolio-actions">${actionLink(project.github_link, 'GitHub')}${actionLink(project.paper_or_demo_link, 'Paper / Demo')}</div></div>
+        <img src="${escapeHtml(project.cover_image_url)}" alt="${escapeHtml(title)}">
+      </header>
+      <div class="project-detail-content">${blocks.map(block => {
+        const heading = localized(block, 'title', lang);
+        const body = localized(block, 'content', lang);
+        const caption = localized(block, 'caption', lang);
+        return `<section class="project-detail-block"><div>${heading ? `<h2>${escapeHtml(heading)}</h2>` : ''}${detailParagraph(body)}</div>
+          ${block.media_url ? `<figure><img src="${escapeHtml(block.media_url)}" alt="${escapeHtml(caption || heading || title)}" loading="lazy">${caption ? `<figcaption>${escapeHtml(caption)}</figcaption>` : ''}</figure>` : ''}</section>`;
+      }).join('')}</div>`;
   }
 
   async function renderCredentials(root) {
@@ -721,6 +844,7 @@
     });
     document.querySelectorAll('[data-portfolio-publications]').forEach(root => renderPublications(root, Number(root.dataset.limit || 0)));
     document.querySelectorAll('[data-portfolio-projects]').forEach(renderProjects);
+    document.querySelectorAll('[data-portfolio-project-detail]').forEach(renderProjectDetail);
     document.querySelectorAll('[data-portfolio-credentials]').forEach(renderCredentials);
     document.querySelectorAll('[data-portfolio-cv]').forEach(renderCV);
     document.querySelectorAll('[data-open-portfolio-search]').forEach(button => button.addEventListener('click', openGlobalSearch));
@@ -735,6 +859,7 @@
     document.addEventListener('portfolio:languagechange', () => {
       refreshSyncStatuses();
       document.querySelectorAll('[data-portfolio-projects]').forEach(renderProjects);
+      document.querySelectorAll('[data-portfolio-project-detail]').forEach(renderProjectDetail);
       document.querySelectorAll('[data-portfolio-credentials]').forEach(renderCredentials);
       document.querySelectorAll('[data-portfolio-cv]').forEach(renderCV);
     });
@@ -747,6 +872,10 @@
       }
       if (sheet === 'Projects') {
         document.querySelectorAll('[data-portfolio-projects]').forEach(renderProjects);
+        document.querySelectorAll('[data-portfolio-project-detail]').forEach(renderProjectDetail);
+      }
+      if (sheet === 'Project_Content') {
+        document.querySelectorAll('[data-portfolio-project-detail]').forEach(renderProjectDetail);
       }
       if (sheet === 'Professional_Credentials') {
         document.querySelectorAll('[data-portfolio-credentials]').forEach(renderCredentials);

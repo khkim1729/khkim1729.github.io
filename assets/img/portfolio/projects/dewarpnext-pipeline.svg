@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">DewarpNeXt document rectification pipeline</title><desc id="desc">A photographed distorted document is detected, its corners are corrected, and a perspective transform produces a readable scan.</desc>
+  <defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#f6f9ff"/><stop offset="1" stop-color="#e6f0ff"/></linearGradient><filter id="shadow"><feDropShadow dy="10" stdDeviation="12" flood-color="#25466d" flood-opacity=".16"/></filter></defs>
+  <rect width="1200" height="675" rx="32" fill="url(#bg)"/>
+  <text x="65" y="88" font-family="Arial,sans-serif" font-size="42" font-weight="700" fill="#132c4a">DewarpNeXt</text><text x="65" y="128" font-family="Arial,sans-serif" font-size="22" fill="#55718e">Document boundary detection and geometric rectification</text>
+  <g filter="url(#shadow)">
+    <path d="M95 225 Q200 165 315 220 L300 455 Q195 500 110 445z" fill="#fff" stroke="#7c91aa" stroke-width="5"/><path d="M140 270q70-25 130 0M135 310q75-22 140 3M132 352q80-20 145 5" stroke="#adc0d3" stroke-width="10" fill="none"/>
+    <rect x="435" y="205" width="290" height="275" rx="22" fill="#112f50"/><path d="M485 270L665 245 675 420 475 435z" fill="none" stroke="#55d6be" stroke-width="7"/><g fill="#ffcf4d"><circle cx="485" cy="270" r="12"/><circle cx="665" cy="245" r="12"/><circle cx="675" cy="420" r="12"/><circle cx="475" cy="435" r="12"/></g>
+    <rect x="850" y="200" width="245" height="285" rx="12" fill="#fff" stroke="#7c91aa" stroke-width="4"/><path d="M895 270h155M895 310h155M895 350h155M895 390h120" stroke="#adc0d3" stroke-width="11" stroke-linecap="round"/>
+  </g>
+  <g font-family="Arial,sans-serif" font-size="20" font-weight="700" text-anchor="middle" fill="#173c62"><text x="205" y="540">Distorted capture</text><text x="580" y="540">RCF boundary + corner review</text><text x="972" y="540">Perspective-corrected scan</text></g>
+  <g stroke="#2f80d1" stroke-width="6"><path d="M335 345h75"/><path d="M750 345h75"/></g><g fill="#2f80d1"><path d="M410 345l-18-12v24z"/><path d="M825 345l-18-12v24z"/></g>
+  <text x="600" y="615" text-anchor="middle" font-family="Arial,sans-serif" font-size="20" fill="#55718e">RCF · OpenCV warpPerspective · Django · Flask model serving · Docker</text>
+</svg>

@@ -60,11 +60,36 @@
 .portfolio-status { background: #f1f3f5; color: #495057; }
 .portfolio-oral { background: #d32f2f; color: #fff; margin-left: .3rem; }
 .portfolio-project-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.4rem; }
-.portfolio-project-card { border: 1px solid #e3e9ef; border-radius: 14px; overflow: hidden; }
+.project-filter-bar { display: flex; flex-wrap: wrap; gap: .55rem; margin: 1.3rem 0 .75rem; }
+.project-filter { border: 1px solid #cbd7e2; border-radius: 999px; background: #fff; color: #31485d; padding: .48rem .78rem; cursor: pointer; font-weight: 700; }
+.project-filter span { display: inline-grid; place-items: center; min-width: 1.35rem; height: 1.35rem; margin-left: .25rem; border-radius: 999px; background: #edf3f8; font-size: .75rem; }
+.project-filter[aria-pressed="true"] { border-color: #008aff; background: #008aff; color: #fff; }
+.project-filter[aria-pressed="true"] span { background: rgba(255,255,255,.2); }
+.project-filter-count { color: #596773; font-weight: 700; margin: 0 0 1.2rem; }
+.portfolio-project-card { border: 1px solid #e3e9ef; border-radius: 14px; overflow: hidden; background: #fff; box-shadow: 0 4px 18px rgba(31,78,120,.08); transition: transform .18s ease, box-shadow .18s ease; }
+.portfolio-project-card:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(31,78,120,.15); }
+.portfolio-project-card[hidden] { display: none; }
 .portfolio-project-card img { width: 100%; height: 170px; object-fit: cover; background: #eef3f7; }
 .portfolio-project-card > div { padding: 1rem; }
 .portfolio-project-card h2 { margin-top: 0; font-size: 1.25rem; }
+.portfolio-project-card h2 a { color: inherit; text-decoration: none; }
+.project-card-visual { display: block; }
 .portfolio-tags { color: #607080; font-size: .85rem; }
+.project-category-chips { display: flex; flex-wrap: wrap; gap: .35rem; margin: .7rem 0; }
+.project-category-chips span { border-radius: 999px; background: #edf5fb; color: #38617d; padding: .2rem .55rem; font-size: .72rem; font-weight: 700; }
+.project-detail-back { display: inline-block; margin-bottom: 1.2rem; font-weight: 700; }
+.project-detail-hero { display: grid; grid-template-columns: minmax(0,1.1fr) minmax(280px,.9fr); gap: 2rem; align-items: center; padding: clamp(1.2rem,3vw,2.2rem); border: 1px solid #dce7ef; border-radius: 20px; background: linear-gradient(135deg,#f8fbfe,#eef7fa); }
+.project-detail-hero h1 { margin: .25rem 0 .7rem; font-size: clamp(2rem,4vw,3.2rem); }
+.project-detail-hero > img { width: 100%; max-height: 360px; object-fit: contain; border-radius: 14px; background: #fff; box-shadow: 0 8px 28px rgba(31,78,120,.14); }
+.project-detail-eyebrow { color: #008aff; font-weight: 800; margin: 0; }
+.project-detail-period { color: #596773; font-weight: 700; }
+.project-detail-content { margin-top: 2rem; }
+.project-detail-block { display: grid; grid-template-columns: minmax(0,1fr); gap: 1.2rem; padding: 1.5rem 0; border-bottom: 1px solid #e4ebf0; }
+.project-detail-block:has(figure) { grid-template-columns: minmax(0,1fr) minmax(300px,.9fr); align-items: center; }
+.project-detail-block h2 { margin-top: 0; }
+.project-detail-block figure { margin: 0; }
+.project-detail-block figure img { width: 100%; max-height: 460px; object-fit: contain; border: 1px solid #dce7ef; border-radius: 14px; background: #f7fafc; }
+.project-detail-block figcaption { color: #687782; font-size: .82rem; margin-top: .4rem; }
 .credential-grid { display: grid; gap: .7rem; margin-bottom: 2rem; }
 .credential-item { display: grid; grid-template-columns: minmax(220px, 1.5fr) 1fr 1.4fr; gap: .7rem; padding: .75rem 0; border-bottom: 1px solid #e6ebef; }
 .credential-item small { color: #687782; }
@@ -143,6 +168,7 @@ body.learning-video-modal-open { overflow: hidden; }
   .learning-video-grid { grid-template-columns: 1fr; }
   .learning-video-count { width: 100%; margin-left: 0; }
   .learning-video-modal { padding: 3.5rem .75rem 1rem; }
+  .project-detail-hero, .project-detail-block:has(figure) { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) {
   .portfolio-sync-orb, .portfolio-sync-track span { animation: none; }

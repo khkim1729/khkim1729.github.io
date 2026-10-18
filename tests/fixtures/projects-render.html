@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Projects renderer test</title></head>
+<body>
+  <section data-portfolio-projects></section>
+  <section data-portfolio-project-detail></section>
+  <script>
+    sessionStorage.clear();
+    localStorage.setItem('language', 'en');
+    window.PORTFOLIO_API_URL = '';
+    window.PORTFOLIO_PREFETCH_SHEETS = [];
+  </script>
+  <script src="/assets/js/portfolio-data.js"></script>
+</body>
+</html>

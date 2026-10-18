@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">RAG chatbot retrieval and response pipeline</title>
+  <desc id="desc">A question flows through embedding, PostgreSQL retrieval, top-five ranking, GPT answer generation, and conversation storage.</desc>
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#071b33"/><stop offset="1" stop-color="#123d59"/></linearGradient><filter id="s"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity=".2"/></filter></defs>
+  <rect width="1200" height="675" rx="32" fill="url(#bg)"/>
+  <text x="70" y="92" fill="#fff" font-family="Arial,sans-serif" font-size="42" font-weight="700">VIEW Clinic RAG Chatbot</text>
+  <text x="70" y="132" fill="#9fdcff" font-family="Arial,sans-serif" font-size="22">Retrieval-grounded response generation with conversation memory</text>
+  <g font-family="Arial,sans-serif" text-anchor="middle" filter="url(#s)">
+    <g transform="translate(55 245)"><rect width="180" height="150" rx="20" fill="#fff"/><circle cx="90" cy="48" r="22" fill="#1d89e4"/><text x="90" y="94" font-size="22" font-weight="700" fill="#102a43">User Question</text><text x="90" y="123" font-size="16" fill="#52677a">Django API</text></g>
+    <g transform="translate(275 245)"><rect width="180" height="150" rx="20" fill="#eaf6ff"/><path d="M57 65h66M57 82h66" stroke="#1d89e4" stroke-width="8" stroke-linecap="round"/><text x="90" y="112" font-size="22" font-weight="700" fill="#102a43">Embedding</text></g>
+    <g transform="translate(495 225)"><rect width="210" height="190" rx="20" fill="#fff"/><ellipse cx="105" cy="47" rx="48" ry="18" fill="#55b5a6"/><path d="M57 47v55c0 24 96 24 96 0V47" fill="#dff6f1" stroke="#55b5a6" stroke-width="4"/><text x="105" y="142" font-size="22" font-weight="700" fill="#102a43">PostgreSQL</text><text x="105" y="170" font-size="16" fill="#52677a">Cosine similarity · Top 5</text></g>
+    <g transform="translate(745 245)"><rect width="180" height="150" rx="20" fill="#f1ecff"/><text x="90" y="60" font-size="38">✦</text><text x="90" y="98" font-size="22" font-weight="700" fill="#102a43">GPT Answer</text><text x="90" y="125" font-size="16" fill="#52677a">Grounded context</text></g>
+    <g transform="translate(965 245)"><rect width="180" height="150" rx="20" fill="#fff4df"/><path d="M50 48h80v52H82l-25 21 7-21H50z" fill="#ff9f43"/><text x="90" y="132" font-size="20" font-weight="700" fill="#102a43">Save &amp; Respond</text></g>
+  </g>
+  <g stroke="#6bd5ff" stroke-width="5" fill="none" stroke-linecap="round"><path d="M235 320h30"/><path d="M455 320h30"/><path d="M705 320h30"/><path d="M925 320h30"/></g>
+  <text x="600" y="535" text-anchor="middle" fill="#d8efff" font-family="Arial,sans-serif" font-size="22">Python · Django · Docker · PostgreSQL · Vector Retrieval · GPT</text>
+</svg>

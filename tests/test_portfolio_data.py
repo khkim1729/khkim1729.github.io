@@ -163,6 +163,43 @@ class PortfolioDataTests(unittest.TestCase):
         self.assertNotIn('data-section-filter=', page)
         self.assertIn("sectionExclude", javascript)
 
+    def test_project_snapshot_has_thirteen_projects_and_public_media_for_every_project(self):
+        payload = json.loads((ROOT / "assets/data/project-showcase.json").read_text(encoding="utf-8"))
+        projects = payload["projects"]
+        content = payload["content"]
+        self.assertEqual(13, len(projects))
+        self.assertEqual(13, len({row["project_id"] for row in projects}))
+        self.assertTrue(all(row.get("categories") for row in projects))
+        media_by_project = {
+            project["project_id"]: [
+                row["media_url"] for row in content
+                if row["project_id"] == project["project_id"] and row.get("media_url")
+            ]
+            for project in projects
+        }
+        self.assertTrue(all(media_by_project.values()), media_by_project)
+        serialized = json.dumps(payload, ensure_ascii=False)
+        self.assertNotIn("문서검증AI01", serialized)
+        self.assertNotIn("문서검증AI02", serialized)
+        for paths in media_by_project.values():
+            for media_url in paths:
+                if media_url.startswith("/"):
+                    self.assertTrue((ROOT / media_url.lstrip("/")).is_file(), media_url)
+
+    def test_project_page_has_shareable_detail_route_and_requested_categories(self):
+        page = (ROOT / "project" / "index.html").read_text(encoding="utf-8")
+        detail = (ROOT / "project" / "detail" / "index.html").read_text(encoding="utf-8")
+        javascript = (ROOT / "assets" / "js" / "portfolio-data.js").read_text(encoding="utf-8")
+        self.assertIn("data-portfolio-projects", page)
+        self.assertIn("data-portfolio-project-detail", detail)
+        self.assertIn("data-project-filter-count", javascript)
+        self.assertIn("Project_Content", javascript)
+        for category in (
+            "All", "Medical AI", "Computer Vision", "GenAI", "LLM & NLP",
+            "Document AI", "ML & DL", "Software", "Research",
+        ):
+            self.assertIn(category, javascript)
+
 
 if __name__ == "__main__":
     unittest.main()

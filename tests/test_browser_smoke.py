@@ -402,6 +402,70 @@ class BrowserSmokeTests(unittest.TestCase):
         """)
         self.assertEqual(["베타러닝", "람다코스"], korean)
 
+    def test_projects_filter_counts_and_bilingual_detail_gallery(self):
+        self.request("POST", f"/session/{self.session_id}/url", {
+            "url": (
+                f"http://127.0.0.1:{self.web_port}/tests/fixtures/projects-render.html"
+                "?project=document-validation"
+            )
+        })
+        result = self.execute("""
+          const done = arguments[arguments.length - 1];
+          const deadline = Date.now() + 10000;
+          (function poll() {
+            const cards = [...document.querySelectorAll('.portfolio-project-card')];
+            const detail = document.querySelector('[data-portfolio-project-detail]');
+            if (cards.length === 13 && detail?.innerText.includes('Lightweight Document Validation')) {
+              done({
+                cards: cards.length,
+                filters: [...document.querySelectorAll('.project-filter')].map(x => x.innerText.trim()),
+                cardImages: cards.filter(x => x.querySelector('img')).length,
+                detailImages: detail.querySelectorAll('img').length,
+                detailText: detail.innerText
+              });
+            } else if (Date.now() > deadline) {
+              done({error: document.body.innerText, cards: cards.length});
+            } else setTimeout(poll, 50);
+          })();
+        """)
+        self.assertNotIn("error", result)
+        self.assertEqual(13, result["cards"])
+        self.assertEqual(13, result["cardImages"])
+        self.assertGreaterEqual(result["detailImages"], 1)
+        self.assertEqual(
+            [
+                "All 13", "Medical AI 6", "Computer Vision 9", "GenAI 4",
+                "LLM & NLP 3", "Document AI 4", "ML & DL 10",
+                "Software 5", "Research 10",
+            ],
+            result["filters"],
+        )
+        self.assertIn("File & Format Validation", result["detailText"])
+        self.assertIn("OCR & Text Validation", result["detailText"])
+
+        filtered = self.execute("""
+          const done = arguments[arguments.length - 1];
+          const button = [...document.querySelectorAll('.project-filter')]
+            .find(x => x.dataset.projectCategory === 'Document AI');
+          button.click();
+          setTimeout(() => done({
+            visible: [...document.querySelectorAll('.portfolio-project-card')]
+              .filter(x => !x.hidden).length,
+            summary: document.querySelector('[data-project-filter-count]').innerText
+          }), 100);
+        """)
+        self.assertEqual(4, filtered["visible"])
+        self.assertIn("4 projects", filtered["summary"])
+
+        korean = self.execute("""
+          const done = arguments[arguments.length - 1];
+          localStorage.setItem('language', 'kr');
+          document.dispatchEvent(new CustomEvent('portfolio:languagechange'));
+          setTimeout(() => done(document.querySelector('[data-portfolio-project-detail]').innerText), 200);
+        """)
+        self.assertIn("라이트 문서 검증", korean)
+        self.assertIn("파일·형식 검증", korean)
+
 
 if __name__ == "__main__":
     unittest.main()
