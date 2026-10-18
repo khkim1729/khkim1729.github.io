@@ -159,6 +159,7 @@ class BrowserSmokeTests(unittest.TestCase):
         self.assertGreaterEqual(result["images"], 2)
         self.assertIn("Research Highlights", result["text"])
         self.assertIn("Volunteering & Giving", result["text"])
+        self.assertIn("Aug. 27, 2026", result["text"])
         self.assertNotIn("Lectures & Teaching", result["text"])
 
         media = self.execute("""
@@ -190,6 +191,29 @@ class BrowserSmokeTests(unittest.TestCase):
         self.assertIn("연구 하이라이트", korean)
         self.assertIn("봉사 및 나눔", korean)
         self.assertNotIn("강의 및 교육", korean)
+
+    def test_cv_history_renders_canonical_lectures_award_and_patent_media(self):
+        self.request("POST", f"/session/{self.session_id}/url", {
+            "url": f"http://127.0.0.1:{self.web_port}/tests/fixtures/cv-history-render.html"
+        })
+        result = self.execute("""
+          const done = arguments[arguments.length - 1];
+          const deadline = Date.now() + 5000;
+          (function poll() {
+            const text = document.body.innerText;
+            const media = document.querySelector('[data-cv-media*="2019-ksae"]');
+            if (text.includes('Generative AI for workplace productivity and public administration') && media) {
+              done({text, lectures: document.querySelectorAll('#lectures .cv-entry').length,
+                awardImage: media.dataset.cvMedia});
+            } else if (Date.now() > deadline) done({error: text});
+            else setTimeout(poll, 50);
+          })();
+        """)
+        self.assertNotIn("error", result)
+        self.assertEqual(12, result["lectures"])
+        self.assertIn("2019 KSAE Formula Student EV Division Bronze Award", result["text"])
+        self.assertIn("Aug. 27, 2026", result["text"])
+        self.assertEqual("/assets/img/portfolio/awards/2019-ksae-team-sv-bronze.png", result["awardImage"])
 
     def test_slow_remote_sheet_shows_saved_content_without_loading_indicator_then_updates(self):
         QuietHandler.request_counts["slow"] = 0

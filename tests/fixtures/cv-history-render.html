@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CV history renderer test</title>
+  <link rel="stylesheet" href="/assets/css/portfolio-data.css">
+</head>
+<body>
+  <main data-portfolio-cv data-section-filter="lectures,awards,patents" aria-live="polite"></main>
+  <div class="portfolio-media-modal" data-portfolio-media-modal role="dialog" aria-modal="true" hidden>
+    <button type="button" data-portfolio-media-close>×</button>
+    <figure><img data-portfolio-media-image alt=""><figcaption data-portfolio-media-caption></figcaption></figure>
+  </div>
+  <script>
+    sessionStorage.clear();
+    localStorage.setItem('language', 'en');
+    window.PORTFOLIO_API_URL = '';
+    window.PORTFOLIO_PREFETCH_SHEETS = [];
+  </script>
+  <script src="/assets/js/portfolio-data.js"></script>
+</body>
+</html>

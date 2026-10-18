@@ -28,7 +28,7 @@ class PortfolioDataTests(unittest.TestCase):
         payload = json.loads((ROOT / "assets/data/portfolio-data.json").read_text(encoding="utf-8"))
         self.assertEqual(50, len(payload["sheets"]["Publications"]))
         self.assertEqual(20, len(payload["sheets"]["Learning_Videos"]))
-        self.assertEqual(43, len(json.loads(
+        self.assertEqual(49, len(json.loads(
             (ROOT / "assets/data/cv-content.json").read_text(encoding="utf-8")
         )))
 
@@ -117,13 +117,40 @@ class PortfolioDataTests(unittest.TestCase):
             "KCA / Kyobo Life",
             "Busan Metropolitan City",
             "Kookmin University AX-Startup Bootcamp",
-            "2026.08.29 and 2026.09.01",
+            "Aug. 29 and Sep. 1, 2026",
         ):
             self.assertIn(required, text)
         image_rows = [row for row in rows if row.get("image_url")]
         self.assertGreaterEqual(len(image_rows), 6)
         for row in image_rows:
             self.assertTrue((ROOT / row["image_url"].lstrip("/")).is_file(), row["image_url"])
+
+    def test_cv_content_has_canonical_teaching_award_and_patent_dates(self):
+        rows = json.loads((ROOT / "assets/data/cv-content.json").read_text(encoding="utf-8"))
+        snapshot = json.loads((ROOT / "assets/data/portfolio-data.json").read_text(encoding="utf-8"))
+        self.assertEqual(rows, snapshot["sheets"]["CV_Content"])
+        lectures = sorted(
+            [row for row in rows if row.get("section_id") == "lectures"],
+            key=lambda row: int(row["display_order"]),
+        )
+        self.assertEqual(12, len(lectures))
+        self.assertEqual([
+            "CV_LEC_008", "CV_LEC_007", "CV_LEC_003", "CV_LEC_006",
+            "CV_LEC_005", "CV_LEC_012", "CV_LEC_004", "CV_LEC_009",
+            "CV_LEC_002", "CV_LEC_011", "CV_LEC_001", "CV_LEC_010",
+        ], [row["content_id"] for row in lectures])
+        by_id = {row["content_id"]: row for row in rows}
+        self.assertEqual("Oct. 23, 2026", by_id["CV_LEC_008"]["period_en"])
+        self.assertEqual("생성형 AI 활용 업무 효율화 및 공공행정 실무 교육", by_id["CV_LEC_008"]["subtitle_ko"])
+        self.assertNotIn("forthcoming", json.dumps(by_id["CV_LEC_008"]).lower())
+        self.assertEqual("Apr. 21, 2026", by_id["CV_LEC_005"]["period_en"])
+        self.assertEqual("Aug. 16–18, 2019", by_id["CV_AWD_001"]["period_en"])
+        self.assertEqual("/assets/img/portfolio/awards/2019-ksae-team-sv-bronze.png", by_id["CV_AWD_001"]["image_url"])
+        self.assertEqual("Aug. 27, 2026", by_id["CV_PAT_001"]["period_en"])
+        for filename in ("assets/data/cv-content.json", "assets/data/portfolio-data.json"):
+            text = (ROOT / filename).read_text(encoding="utf-8")
+            for required in ("2,302,547", "5,000+", "3,000+", "102 universities", "10-3010471-0000"):
+                self.assertIn(required, text)
 
     def test_home_and_cv_use_bilingual_sheet_renderer_with_media(self):
         index = (ROOT / "index.md").read_text(encoding="utf-8")
