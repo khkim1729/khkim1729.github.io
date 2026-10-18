@@ -53,6 +53,20 @@ class PortfolioDataTests(unittest.TestCase):
         self.assertIn("medDrSeq=274", source)
         self.assertIn("medDrSeq=286", source)
 
+    def test_author_url_overrides_include_requested_profiles(self):
+        source = (ROOT / "assets/js/portfolio-data.js").read_text(encoding="utf-8")
+        payload = json.loads((ROOT / "assets/data/portfolio-data.json").read_text(encoding="utf-8"))
+        sieun = next(row for row in payload["sheets"]["DB_People"] if row.get("Name_EN") == "Sieun Hyeon")
+        self.assertIn("'Sieun Hyeon': 'https://hyeonsieun.github.io/'", source)
+        self.assertEqual("https://hyeonsieun.github.io/", sieun["Primary_URL"])
+
+    def test_projects_are_sorted_newest_first(self):
+        source = (ROOT / "assets/js/portfolio-data.js").read_text(encoding="utf-8")
+        self.assertIn("function compareProjects", source)
+        self.assertIn("String(b.sort_date || '').localeCompare(String(a.sort_date || ''))", source)
+        self.assertIn("Number(a.display_order || 0) - Number(b.display_order || 0)", source)
+        self.assertIn("localized(a, 'title', lang).localeCompare(localized(b, 'title', lang))", source)
+
     def test_private_content_model_workbook_is_not_published(self):
         self.assertFalse((ROOT / "docs/Portfolio_Website_Content_Model.xlsx").exists())
         ignored = (ROOT / ".gitignore").read_text(encoding="utf-8")

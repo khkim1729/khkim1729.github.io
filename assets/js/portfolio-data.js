@@ -64,7 +64,8 @@
     'Pa Hong': 'https://smc.skku.edu/doctor/main/main.do?mId=1&medDrSeq=274',
     'Won Jae Lee': 'https://smc.skku.edu/doctor/main/main.do?mId=1&medDrSeq=286',
     'Sumin Lee': 'https://suminxlee.com/',
-    'Hyunsu Go': 'https://gohyunsu.github.io/'
+    'Hyunsu Go': 'https://gohyunsu.github.io/',
+    'Sieun Hyeon': 'https://hyeonsieun.github.io/'
   }).map(([name, url]) => [name.toLowerCase(), url]));
 
   function currentLanguage() {
@@ -84,6 +85,12 @@
 
   function localized(row, key, lang) {
     return row[`${key}_${lang}`] || row[`${key}_en`] || row[key] || '';
+  }
+
+  function compareProjects(a, b, lang) {
+    return String(b.sort_date || '').localeCompare(String(a.sort_date || '')) ||
+      Number(a.display_order || 0) - Number(b.display_order || 0) ||
+      localized(a, 'title', lang).localeCompare(localized(b, 'title', lang));
   }
 
   function normalizeRow(name, row) {
@@ -561,8 +568,7 @@
     const lang = currentLanguage();
     const projects = (await getSheet('Projects'))
       .filter(row => row.is_visible === undefined || truthy(row.is_visible))
-      .sort((a, b) => String(b.sort_date || '').localeCompare(String(a.sort_date || '')) ||
-        Number(a.display_order || 0) - Number(b.display_order || 0));
+      .sort((a, b) => compareProjects(a, b, lang));
     const categoryCounts = new Map(PROJECT_CATEGORIES.map(category => [category,
       category === 'All' ? projects.length : projects.filter(project =>
         String(project.categories || '').split(';').map(item => item.trim()).includes(category)
@@ -578,7 +584,7 @@
       const period = localized(project, 'period', lang);
       const organization = localized(project, 'organization', lang);
       const detailUrl = `/projects/detail/?project=${encodeURIComponent(project.slug || project.project_id)}`;
-      return `<article class="portfolio-project-card" data-project-categories="${escapeHtml(categories.join('|'))}">
+      return `<article class="portfolio-project-card" data-project-categories="${escapeHtml(categories.join('|'))}" data-project-sort-date="${escapeHtml(project.sort_date || '')}">
         <a class="project-card-visual" href="${detailUrl}" aria-label="${escapeHtml(title)} — ${lang === 'ko' ? '자세히 보기' : 'View details'}"><img src="${escapeHtml(project.cover_image_url)}" alt="${escapeHtml(title)}" loading="lazy"></a>
         <div><p class="project-card-date">${escapeHtml(period || String(project.sort_date || '').slice(0, 4))}</p><h2><a href="${detailUrl}">${escapeHtml(title)}</a></h2><p>${escapeHtml(summary)}</p>
         ${organization ? `<p class="project-card-organization">${escapeHtml(organization)}</p>` : ''}

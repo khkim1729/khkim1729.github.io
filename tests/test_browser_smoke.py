@@ -420,6 +420,7 @@ class BrowserSmokeTests(unittest.TestCase):
                 cards: cards.length,
                 filters: [...document.querySelectorAll('.project-filter')].map(x => x.innerText.trim()),
                 titles: cards.map(x => x.querySelector('h2').innerText),
+                dates: cards.map(x => x.dataset.projectSortDate),
                 cardImages: cards.filter(x => x.querySelector('img')).length,
                 detailImages: detail.querySelectorAll('img').length,
                 detailImageSources: [...detail.querySelectorAll('img')].map(x => x.getAttribute('src')),
@@ -434,6 +435,7 @@ class BrowserSmokeTests(unittest.TestCase):
         """)
         self.assertNotIn("error", result)
         self.assertEqual(17, result["cards"])
+        self.assertEqual(sorted(result["dates"], reverse=True), result["dates"])
         self.assertEqual(
             [
                 "FBI: A Framework for Benchmark Integrity",
