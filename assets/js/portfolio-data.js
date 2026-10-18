@@ -14,7 +14,7 @@
   const syncStatusByRoot = new WeakMap();
   const REMOTE_TIMEOUT_MS = 30000;
   const REMOTE_ATTEMPTS = 2;
-  const SESSION_CACHE_PREFIX = 'portfolio-sheet-v4:';
+  const SESSION_CACHE_PREFIX = 'portfolio-sheet-v5:';
   const PREFETCH_SHEETS = window.PORTFOLIO_PREFETCH_SHEETS || [
     'CV_Content', 'Professional_Credentials', 'Publications',
     'Projects', 'Project_Content', 'Learning_Videos', 'DB_People'
@@ -561,7 +561,8 @@
     const lang = currentLanguage();
     const projects = (await getSheet('Projects'))
       .filter(row => row.is_visible === undefined || truthy(row.is_visible))
-      .sort((a, b) => Number(a.display_order || 0) - Number(b.display_order || 0));
+      .sort((a, b) => String(b.sort_date || '').localeCompare(String(a.sort_date || '')) ||
+        Number(a.display_order || 0) - Number(b.display_order || 0));
     const categoryCounts = new Map(PROJECT_CATEGORIES.map(category => [category,
       category === 'All' ? projects.length : projects.filter(project =>
         String(project.categories || '').split(';').map(item => item.trim()).includes(category)
@@ -574,10 +575,13 @@
       const title = localized(project, 'title', lang);
       const summary = localized(project, 'summary', lang);
       const categories = String(project.categories || '').split(';').map(item => item.trim()).filter(Boolean);
-      const detailUrl = `/project/detail/?project=${encodeURIComponent(project.slug || project.project_id)}`;
+      const period = localized(project, 'period', lang);
+      const organization = localized(project, 'organization', lang);
+      const detailUrl = `/projects/detail/?project=${encodeURIComponent(project.slug || project.project_id)}`;
       return `<article class="portfolio-project-card" data-project-categories="${escapeHtml(categories.join('|'))}">
         <a class="project-card-visual" href="${detailUrl}" aria-label="${escapeHtml(title)} — ${lang === 'ko' ? '자세히 보기' : 'View details'}"><img src="${escapeHtml(project.cover_image_url)}" alt="${escapeHtml(title)}" loading="lazy"></a>
-        <div><h2><a href="${detailUrl}">${escapeHtml(title)}</a></h2><p>${escapeHtml(summary)}</p>
+        <div><p class="project-card-date">${escapeHtml(period || String(project.sort_date || '').slice(0, 4))}</p><h2><a href="${detailUrl}">${escapeHtml(title)}</a></h2><p>${escapeHtml(summary)}</p>
+        ${organization ? `<p class="project-card-organization">${escapeHtml(organization)}</p>` : ''}
         <p class="portfolio-tags">${escapeHtml(project.tags)}</p>
         <div class="project-category-chips">${categories.map(category => `<span>${escapeHtml(category)}</span>`).join('')}</div>
         <div class="portfolio-actions"><a class="portfolio-chip" href="${detailUrl}">${lang === 'ko' ? '자세히 보기' : 'View Details'}</a>${actionLink(project.github_link, 'GitHub')}${actionLink(project.paper_or_demo_link, 'Paper / Demo')}</div></div>
@@ -628,7 +632,7 @@
     const blocks = content.filter(row => row.project_id === project.project_id &&
       (row.is_visible === undefined || truthy(row.is_visible)))
       .sort((a, b) => Number(a.display_order || 0) - Number(b.display_order || 0));
-    root.innerHTML = `<a class="project-detail-back" href="/project/">← ${lang === 'ko' ? '모든 프로젝트' : 'All Projects'}</a>
+    root.innerHTML = `<a class="project-detail-back" href="/projects/">← ${lang === 'ko' ? '모든 프로젝트' : 'All Projects'}</a>
       <header class="project-detail-hero">
         <div><p class="project-detail-eyebrow">${escapeHtml(organization)}</p><h1>${escapeHtml(title)}</h1><p>${escapeHtml(summary)}</p>
         ${period ? `<p class="project-detail-period">${escapeHtml(period)}</p>` : ''}
@@ -640,8 +644,9 @@
         const heading = localized(block, 'title', lang);
         const body = localized(block, 'content', lang);
         const caption = localized(block, 'caption', lang);
+        const mediaUrl = block.media_url === project.cover_image_url ? '' : block.media_url;
         return `<section class="project-detail-block"><div>${heading ? `<h2>${escapeHtml(heading)}</h2>` : ''}${detailParagraph(body)}</div>
-          ${block.media_url ? `<figure><img src="${escapeHtml(block.media_url)}" alt="${escapeHtml(caption || heading || title)}" loading="lazy">${caption ? `<figcaption>${escapeHtml(caption)}</figcaption>` : ''}</figure>` : ''}</section>`;
+          ${mediaUrl ? `<figure><img src="${escapeHtml(mediaUrl)}" alt="${escapeHtml(caption || heading || title)}" loading="lazy">${caption ? `<figcaption>${escapeHtml(caption)}</figcaption>` : ''}</figure>` : ''}</section>`;
       }).join('')}</div>`;
   }
 
@@ -813,8 +818,8 @@
       getSheet('Publications'), getSheet('Projects'), getSheet('Professional_Credentials')
     ]);
     const records = [
-      ...publications.map(row => ({type: 'Publication', title: row.Title, text: `${row.Authors} ${row.Venue_Name} ${row.Year}`, url: '/publication'})),
-      ...projects.map(row => ({type: 'Project', title: row.title_en, text: `${row.summary_en} ${row.tags}`, url: '/project'})),
+      ...publications.map(row => ({type: 'Publication', title: row.Title, text: `${row.Authors} ${row.Venue_Name} ${row.Year}`, url: '/publications/'})),
+      ...projects.map(row => ({type: 'Project', title: row.title_en, text: `${row.summary_en} ${row.tags}`, url: `/projects/detail/?project=${encodeURIComponent(row.slug || row.project_id)}`})),
       ...credentials.map(row => ({type: 'Credential', title: row.name_en, text: `${row.level_en} ${row.issuer_en}`, url: '/CV#credentials'}))
     ];
     const results = overlay.querySelector('[data-global-search-results]');

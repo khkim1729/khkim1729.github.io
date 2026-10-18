@@ -22,8 +22,8 @@ cover-img: /assets/img/main1.jpeg
   <div data-publication-list><p>Loading recent publications…</p></div>
 </section>
 
-<span class="lang-en"><a href="/publication"><strong>See all publications →</strong></a></span>
-<span class="lang-kr" style="display:none"><a href="/publication"><strong>전체 논문 보기 →</strong></a></span>
+<span class="lang-en"><a href="/publications/"><strong>See all publications →</strong></a></span>
+<span class="lang-kr" style="display:none"><a href="/publications/"><strong>전체 논문 보기 →</strong></a></span>
 
 <section data-portfolio-cv data-section-filter="contact" aria-live="polite">
   <p>Loading contact information…</p>

@@ -415,12 +415,14 @@ class BrowserSmokeTests(unittest.TestCase):
           (function poll() {
             const cards = [...document.querySelectorAll('.portfolio-project-card')];
             const detail = document.querySelector('[data-portfolio-project-detail]');
-            if (cards.length === 13 && detail?.innerText.includes('Lightweight Document Validation')) {
+            if (cards.length === 17 && detail?.innerText.includes('Lightweight Document Validation')) {
               done({
                 cards: cards.length,
                 filters: [...document.querySelectorAll('.project-filter')].map(x => x.innerText.trim()),
+                titles: cards.map(x => x.querySelector('h2').innerText),
                 cardImages: cards.filter(x => x.querySelector('img')).length,
                 detailImages: detail.querySelectorAll('img').length,
+                detailImageSources: [...detail.querySelectorAll('img')].map(x => x.getAttribute('src')),
                 detailText: detail.innerText
               });
             } else if (Date.now() > deadline) {
@@ -429,18 +431,28 @@ class BrowserSmokeTests(unittest.TestCase):
           })();
         """)
         self.assertNotIn("error", result)
-        self.assertEqual(13, result["cards"])
-        self.assertEqual(13, result["cardImages"])
-        self.assertGreaterEqual(result["detailImages"], 1)
+        self.assertEqual(17, result["cards"])
         self.assertEqual(
             [
-                "All 13", "Medical AI 6", "Computer Vision 9", "GenAI 4",
-                "LLM & NLP 3", "Document AI 4", "ML & DL 10",
-                "Software 5", "Research 10",
+                "FBI: A Framework for Benchmark Integrity",
+                "Auditing Correlated Failures in Medical Segmentation",
+                "Auditing Capsule Vision 2024",
+                "Hierarchy-Aware Preference Optimization for Safe Korean SLMs",
+            ],
+            result["titles"][:4],
+        )
+        self.assertEqual(17, result["cardImages"])
+        self.assertGreaterEqual(result["detailImages"], 2)
+        self.assertEqual(len(result["detailImageSources"]), len(set(result["detailImageSources"])))
+        self.assertEqual(
+            [
+                "All 17", "Medical AI 8", "Computer Vision 11", "GenAI 6",
+                "LLM & NLP 5", "Document AI 4", "ML & DL 14",
+                "Software 5", "Research 14",
             ],
             result["filters"],
         )
-        self.assertIn("File & Format Validation", result["detailText"])
+        self.assertIn("File, Format & Report Validation", result["detailText"])
         self.assertIn("OCR & Text Validation", result["detailText"])
 
         filtered = self.execute("""
@@ -464,7 +476,7 @@ class BrowserSmokeTests(unittest.TestCase):
           setTimeout(() => done(document.querySelector('[data-portfolio-project-detail]').innerText), 200);
         """)
         self.assertIn("라이트 문서 검증", korean)
-        self.assertIn("파일·형식 검증", korean)
+        self.assertIn("파일·형식·결과 검증", korean)
 
 
 if __name__ == "__main__":

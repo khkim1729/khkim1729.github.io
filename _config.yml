@@ -17,8 +17,8 @@ portfolio_api_url: "https://script.google.com/macros/s/AKfycbwF_IabUr_NYJehsE2Bz
 navbar-links:
   CV: "CV"
   Lectures: "lectures"
-  Publications: "publication"
-  Projects: "project"
+  Publications: "publications"
+  Projects: "projects"
   GitHub: "https://github.com/khkim1729"
   Google Scholar: "https://scholar.google.com/citations?user=N3LVcyEAAAAJ&hl=ko"
   BLOG(KOREAN): "https://blog.naver.com/kgh9080"

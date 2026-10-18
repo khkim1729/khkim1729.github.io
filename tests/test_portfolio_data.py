@@ -122,7 +122,7 @@ class PortfolioDataTests(unittest.TestCase):
         self.assertIn("portfolio:languagechange", javascript)
 
     def test_publication_note_links_the_content_model(self):
-        source = (ROOT / "publication.md").read_text(encoding="utf-8")
+        source = (ROOT / "publications" / "index.html").read_text(encoding="utf-8")
         self.assertIn('Portfolio_Website_Content_Model', source)
         self.assertIn(f'href="{CONTENT_MODEL_URL}"', source)
         self.assertNotIn('href="/docs/Portfolio_Website_Content_Model.xlsx"', source)
@@ -163,35 +163,50 @@ class PortfolioDataTests(unittest.TestCase):
         self.assertNotIn('data-section-filter=', page)
         self.assertIn("sectionExclude", javascript)
 
-    def test_project_snapshot_has_thirteen_projects_and_public_media_for_every_project(self):
+    def test_project_snapshot_has_seventeen_projects_and_two_local_media_for_every_project(self):
         payload = json.loads((ROOT / "assets/data/project-showcase.json").read_text(encoding="utf-8"))
         projects = payload["projects"]
         content = payload["content"]
-        self.assertEqual(13, len(projects))
-        self.assertEqual(13, len({row["project_id"] for row in projects}))
+        self.assertEqual(17, len(projects))
+        self.assertEqual(17, len({row["project_id"] for row in projects}))
         self.assertTrue(all(row.get("categories") for row in projects))
+        self.assertTrue(all(row.get("sort_date") for row in projects))
+        self.assertTrue(all(row.get("cover_image_url", "").startswith("/assets/") for row in projects))
         media_by_project = {
-            project["project_id"]: [
+            project["project_id"]: set([
+                project["cover_image_url"],
+                *[
                 row["media_url"] for row in content
                 if row["project_id"] == project["project_id"] and row.get("media_url")
-            ]
+                ]
+            ])
             for project in projects
         }
-        self.assertTrue(all(media_by_project.values()), media_by_project)
-        serialized = json.dumps(payload, ensure_ascii=False)
-        self.assertNotIn("문서검증AI01", serialized)
-        self.assertNotIn("문서검증AI02", serialized)
+        self.assertTrue(all(len(paths) >= 2 for paths in media_by_project.values()), media_by_project)
         for paths in media_by_project.values():
             for media_url in paths:
-                if media_url.startswith("/"):
-                    self.assertTrue((ROOT / media_url.lstrip("/")).is_file(), media_url)
+                self.assertTrue(media_url.startswith("/assets/"), media_url)
+                self.assertTrue((ROOT / media_url.lstrip("/")).is_file(), media_url)
+
+        slugs = {row["slug"] for row in projects}
+        self.assertEqual({
+            "3d-lldm", "time", "mathena", "maesil", "cotta", "lucas", "cipher",
+            "portfolio", "rag-chatbot", "dewarpnext", "hyperspectral-ocr",
+            "medical-document-ai", "document-validation", "neurips-correlated-failures",
+            "neurips-capsule-vision", "hierarchy-aware-preference-optimization",
+            "fbi-benchmark-integrity",
+        }, slugs)
 
     def test_project_page_has_shareable_detail_route_and_requested_categories(self):
-        page = (ROOT / "project" / "index.html").read_text(encoding="utf-8")
-        detail = (ROOT / "project" / "detail" / "index.html").read_text(encoding="utf-8")
+        page = (ROOT / "projects" / "index.html").read_text(encoding="utf-8")
+        detail = (ROOT / "projects" / "detail" / "index.html").read_text(encoding="utf-8")
         javascript = (ROOT / "assets" / "js" / "portfolio-data.js").read_text(encoding="utf-8")
         self.assertIn("data-portfolio-projects", page)
         self.assertIn("data-portfolio-project-detail", detail)
+        self.assertIn("/projects/detail/?project=", javascript)
+        self.assertIn('href="/projects/"', javascript)
+        self.assertNotIn("/project/detail/?project=", javascript)
+        self.assertIn("sort_date", javascript)
         self.assertIn("data-project-filter-count", javascript)
         self.assertIn("Project_Content", javascript)
         for category in (
@@ -199,6 +214,19 @@ class PortfolioDataTests(unittest.TestCase):
             "Document AI", "ML & DL", "Software", "Research",
         ):
             self.assertIn(category, javascript)
+
+    def test_plural_portfolio_routes_are_canonical_and_legacy_routes_redirect(self):
+        config = (ROOT / "_config.yml").read_text(encoding="utf-8")
+        self.assertIn('Publications: "publications"', config)
+        self.assertIn('Projects: "projects"', config)
+        self.assertTrue((ROOT / "publications" / "index.html").is_file())
+        self.assertTrue((ROOT / "projects" / "index.html").is_file())
+        self.assertTrue((ROOT / "projects" / "detail" / "index.html").is_file())
+        self.assertIn("/publications/", (ROOT / "publication.md").read_text(encoding="utf-8"))
+        self.assertIn("/projects/", (ROOT / "project" / "index.html").read_text(encoding="utf-8"))
+        legacy_detail = (ROOT / "project" / "detail" / "index.html").read_text(encoding="utf-8")
+        self.assertIn("/projects/detail/", legacy_detail)
+        self.assertIn("location.search", legacy_detail)
 
 
 if __name__ == "__main__":
