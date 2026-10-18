@@ -173,7 +173,7 @@ class PortfolioDataTests(unittest.TestCase):
         aise = by_id["CV_RES_004"]
         self.assertEqual("AISE Lab, Kookmin University", aise["title_en"])
         self.assertEqual("Sep. 1, 2022 – Aug. 5, 2024", aise["period_en"])
-        self.assertIn("Prof. Soo-Yeon Yoon|mailto:1104py@kookmin.ac.kr", aise["related_links"])
+        self.assertEqual("Prof. Soo-Yeon Yoon|mailto:1104py@kookmin.ac.kr", aise["related_links"])
         self.assertIn("TimeYOLO", aise["description_en"])
         self.assertIn("Prompt-Guided Image Generation", aise["description_en"])
         self.assertEqual("https://sites.google.com/view/imocap/home", imocap["link_url"])
