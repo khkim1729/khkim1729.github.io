@@ -893,7 +893,16 @@
     const credentialRoot = root.querySelector('[data-cv-credentials]');
     if (credentialRoot) await renderCredentials(credentialRoot);
     document.querySelectorAll('[data-cv-download]').forEach(link => {
-      link.textContent = lang === 'ko' ? '📄 CV 폴더 열기 (PDF)' : '📄 Download CV (PDF)';
+      const cvLanguage = link.dataset.cvDownload;
+      if (lang === 'ko') {
+        link.textContent = cvLanguage === 'ko'
+          ? '📄 한글 이력서 열기 (PDF)'
+          : '📄 영문 이력서 열기 (PDF)';
+      } else {
+        link.textContent = cvLanguage === 'ko'
+          ? '📄 Download CV (Korean PDF)'
+          : '📄 Download CV (English PDF)';
+      }
     });
   }
 

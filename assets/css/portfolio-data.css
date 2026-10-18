@@ -107,13 +107,15 @@
 .credential-grid { display: grid; gap: .7rem; margin-bottom: 2rem; }
 .credential-item { display: grid; grid-template-columns: minmax(220px, 1.5fr) 1fr 1.4fr; gap: .7rem; padding: .75rem 0; border-bottom: 1px solid #e6ebef; }
 .credential-item small { color: #687782; }
-.cv-download-wrap { text-align: center; margin: 20px 0 30px; }
+.cv-download-wrap { display: flex; flex-wrap: wrap; justify-content: center; gap: .75rem; margin: 20px 0 30px; text-align: center; }
 .cv-download-button {
-  display: inline-block; background: #007bff; color: #fff; padding: 12px 24px;
+  display: inline-flex; align-items: center; justify-content: center; min-width: min(100%, 250px); background: #007bff; color: #fff; padding: 12px 24px;
   text-decoration: none; border-radius: 5px; font-weight: 700;
   box-shadow: 0 2px 4px rgba(0, 0, 0, .1); transition: background-color .3s;
 }
+.cv-download-button-secondary { background: #315a7d; }
 .cv-download-button:hover, .cv-download-button:focus { background: #0069d9; color: #fff; }
+.cv-download-button-secondary:hover, .cv-download-button-secondary:focus { background: #244761; }
 .cv-section > h1 { border-bottom: 1px solid #e6ebef; padding-bottom: .35rem; }
 .cv-entry { margin: 1.45rem 0; }
 .cv-entry h3 { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .35rem 1rem; margin-bottom: .35rem; }

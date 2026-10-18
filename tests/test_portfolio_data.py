@@ -14,6 +14,14 @@ PUBLICATION_HEADERS = [
 
 
 class PortfolioDataTests(unittest.TestCase):
+    def test_cv_page_exposes_english_and_korean_drive_folders(self):
+        page = (ROOT / "CV.md").read_text(encoding="utf-8")
+        self.assertIn('data-cv-download="en"', page)
+        self.assertIn('data-cv-download="ko"', page)
+        self.assertIn("1U5ENrltXZDs5EobbmH_y6YenByKtdjZx", page)
+        self.assertIn("1UPX3vLzKza-hmvgMHZKkdo47UIrC-MHz", page)
+        self.assertEqual(2, page.count('target="_blank"'))
+
     def test_builder_and_fallback_use_exact_a_to_t_publication_schema(self):
         source = (ROOT / "scripts/build_content_model.py").read_text(encoding="utf-8")
         for header in PUBLICATION_HEADERS:

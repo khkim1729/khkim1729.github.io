@@ -146,6 +146,10 @@ class BrowserSmokeTests(unittest.TestCase):
                 cards: cards.length,
                 count: document.querySelector('[data-publication-count]').innerText,
                 labels: [...document.querySelectorAll('.publication-card .portfolio-chip')].map(x => x.innerText),
+                cvLabels: [...document.querySelectorAll('[data-cv-download]')].map(x => x.innerText),
+                cvLinks: [...document.querySelectorAll('[data-cv-download]')].map(x => ({
+                  language: x.dataset.cvDownload, href: x.href, target: x.target, rel: x.rel
+                })),
                 images: document.querySelectorAll('.cv-entry-media img').length,
                 text
               });
@@ -156,6 +160,12 @@ class BrowserSmokeTests(unittest.TestCase):
         self.assertNotIn("error", result)
         self.assertIn(str(result["cards"]), result["count"])
         self.assertIn("GDrive", result["labels"])
+        self.assertEqual(["📄 Download CV (English PDF)", "📄 Download CV (Korean PDF)"], result["cvLabels"])
+        self.assertEqual(["en", "ko"], [link["language"] for link in result["cvLinks"]])
+        self.assertTrue(all(link["target"] == "_blank" for link in result["cvLinks"]))
+        self.assertTrue(all("noopener" in link["rel"] for link in result["cvLinks"]))
+        self.assertIn("1U5ENrltXZDs5EobbmH_y6YenByKtdjZx", result["cvLinks"][0]["href"])
+        self.assertIn("1UPX3vLzKza-hmvgMHZKkdo47UIrC-MHz", result["cvLinks"][1]["href"])
         self.assertGreaterEqual(result["images"], 2)
         self.assertIn("Research Highlights", result["text"])
         self.assertIn("Volunteering & Giving", result["text"])
@@ -186,11 +196,15 @@ class BrowserSmokeTests(unittest.TestCase):
           const done = arguments[arguments.length - 1];
           localStorage.setItem('language', 'kr');
           document.dispatchEvent(new CustomEvent('portfolio:languagechange'));
-          setTimeout(() => done(document.body.innerText), 200);
+          setTimeout(() => done({
+            text: document.body.innerText,
+            cvLabels: [...document.querySelectorAll('[data-cv-download]')].map(x => x.innerText)
+          }), 200);
         """)
-        self.assertIn("연구 하이라이트", korean)
-        self.assertIn("봉사 및 나눔", korean)
-        self.assertNotIn("강의 및 교육", korean)
+        self.assertIn("연구 하이라이트", korean["text"])
+        self.assertIn("봉사 및 나눔", korean["text"])
+        self.assertNotIn("강의 및 교육", korean["text"])
+        self.assertEqual(["📄 영문 이력서 열기 (PDF)", "📄 한글 이력서 열기 (PDF)"], korean["cvLabels"])
 
     def test_research_entries_render_all_lab_photos_in_the_existing_modal(self):
         self.request("POST", f"/session/{self.session_id}/url", {
