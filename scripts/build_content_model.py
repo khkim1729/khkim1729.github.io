@@ -24,7 +24,7 @@ PUBLICATION_HEADERS = [
 CV_CONTENT_HEADERS = [
     "content_id", "section_id", "section_title_en", "section_title_ko",
     "entry_type", "title_en", "title_ko", "subtitle_en", "subtitle_ko",
-    "period_en", "period_ko", "description_en", "description_ko", "link_url", "related_links",
+    "period_en", "period_ko", "sort_date", "description_en", "description_ko", "link_url", "related_links",
     "icon", "image_url", "image_alt_en", "image_alt_ko", "display_order", "is_visible",
 ]
 

@@ -264,19 +264,84 @@ class BrowserSmokeTests(unittest.TestCase):
           const deadline = Date.now() + 5000;
           (function poll() {
             const text = document.body.innerText;
-            const media = document.querySelector('[data-cv-media*="2019-ksae"]');
+            const media = document.querySelector('#awards .cv-inline-media[data-cv-media*="2019-ksae"]');
             if (text.includes('Generative AI for workplace productivity and public administration') && media) {
               done({text, lectures: document.querySelectorAll('#lectures .cv-entry').length,
-                awardImage: media.dataset.cvMedia});
+                lecturePeriods: [...document.querySelectorAll('#lectures .cv-entry h3 span')].map(x => x.innerText),
+                awardImage: media.dataset.cvMedia,
+                awardCards: document.querySelectorAll('#awards .cv-entry-media').length});
             } else if (Date.now() > deadline) done({error: text});
             else setTimeout(poll, 50);
           })();
         """)
         self.assertNotIn("error", result)
         self.assertEqual(12, result["lectures"])
+        self.assertEqual([
+            "Mar. 2, 2018 – Present", "Oct. 23, 2026",
+            "Aug. 29, 2026 and Sep. 1, 2026", "Jun. 1, 2024 – Aug. 30, 2026",
+            "Jul. 1, 2026", "Apr. 21, 2026", "Oct. 5, 2023 – Dec. 30, 2025",
+            "Apr. 25, 2025", "Aug. 23, 2020 – Feb. 16, 2024",
+            "Dec. 5, 2023 – Dec. 7, 2023", "Jun. 8, 2023 – Aug. 30, 2023",
+            "Dec. 10, 2017 – Jun. 17, 2021",
+        ], result["lecturePeriods"])
         self.assertIn("2019 KSAE Formula Student EV Division Bronze Award", result["text"])
         self.assertIn("Aug. 27, 2026", result["text"])
         self.assertEqual("/assets/img/portfolio/awards/2019-ksae-team-sv-bronze.png", result["awardImage"])
+        self.assertEqual(0, result["awardCards"])
+
+        modal = self.execute("""
+          const done = arguments[arguments.length - 1];
+          document.querySelector('#awards .cv-inline-media').click();
+          setTimeout(() => done({
+            hidden: document.querySelector('[data-portfolio-media-modal]').hidden,
+            src: document.querySelector('[data-portfolio-media-image]').getAttribute('src')
+          }), 50);
+        """)
+        self.assertFalse(modal["hidden"])
+        self.assertIn("2019-ksae-team-sv-bronze", modal["src"])
+
+    def test_cached_sheet_cannot_remove_patent_registration_date(self):
+        base_url = f"http://127.0.0.1:{self.web_port}/tests/fixtures/cv-history-render.html"
+        self.request("POST", f"/session/{self.session_id}/url", {"url": base_url})
+        cached = self.execute("""
+          const done = arguments[arguments.length - 1];
+          fetch('/assets/data/cv-content.json').then(response => response.json()).then(rows => {
+            const patent = rows.find(row => row.content_id === 'CV_PAT_001');
+            patent.period_en = 'Registered';
+            patent.period_ko = '등록 완료';
+            patent.description_en = 'Registration No.: 10-3010471-0000';
+            patent.description_ko = '특허등록번호: 10-3010471-0000';
+            rows.push({
+              content_id: 'CV_LEC_013', section_id: 'lectures',
+              section_title_en: 'Lectures & Teaching', section_title_ko: '강의 및 교육',
+              entry_type: 'entry', title_en: 'New Sheet Lecture', title_ko: '신규 시트 강의',
+              subtitle_en: 'Added directly in Google Sheets', subtitle_ko: '구글시트에서 직접 추가',
+              period_en: 'Jan. 15, 2027', period_ko: '2027년 1월 15일',
+              sort_date: '2027-01-15', description_en: 'Remote row', description_ko: '원격 행',
+              display_order: '509', is_visible: 'TRUE'
+            });
+            sessionStorage.setItem('portfolio-sheet-v5:CV_Content', JSON.stringify({rows}));
+            done(true);
+          });
+        """)
+        self.assertTrue(cached)
+        self.request("POST", f"/session/{self.session_id}/url", {"url": base_url + "?keep-cache=1"})
+        result = self.execute("""
+          const done = arguments[arguments.length - 1];
+          const deadline = Date.now() + 5000;
+          (function poll() {
+            const patentText = document.querySelector('#patents')?.innerText || '';
+            const lectureText = document.querySelector('#lectures')?.innerText || '';
+            if (patentText.includes('Registration date: Aug. 27, 2026') && lectureText.includes('Jan. 15, 2027')) {
+              done({patentText, lectureText});
+            } else if (Date.now() > deadline) done({patentText, lectureText});
+            else setTimeout(poll, 50);
+          })();
+        """)
+        self.assertIn("Registration date: Aug. 27, 2026", result["patentText"])
+        self.assertNotIn("Registered\nRegistered", result["patentText"])
+        self.assertIn("New Sheet Lecture", result["lectureText"])
+        self.assertIn("Jan. 15, 2027", result["lectureText"])
 
     def test_slow_remote_sheet_shows_saved_content_without_loading_indicator_then_updates(self):
         QuietHandler.request_counts["slow"] = 0

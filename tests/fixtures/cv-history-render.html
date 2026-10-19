@@ -13,7 +13,7 @@
     <figure><img data-portfolio-media-image alt=""><figcaption data-portfolio-media-caption></figcaption></figure>
   </div>
   <script>
-    sessionStorage.clear();
+    if (!new URLSearchParams(location.search).has('keep-cache')) sessionStorage.clear();
     localStorage.setItem('language', 'en');
     window.PORTFOLIO_API_URL = '';
     window.PORTFOLIO_PREFETCH_SHEETS = [];

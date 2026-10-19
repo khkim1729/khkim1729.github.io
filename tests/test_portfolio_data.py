@@ -1,3 +1,4 @@
+import ast
 import json
 import unittest
 from pathlib import Path
@@ -147,7 +148,7 @@ class PortfolioDataTests(unittest.TestCase):
             "KCA / Kyobo Life",
             "Busan Metropolitan City",
             "Kookmin University AX-Startup Bootcamp",
-            "Aug. 29 and Sep. 1, 2026",
+            "Aug. 29, 2026 and Sep. 1, 2026",
         ):
             self.assertIn(required, text)
         image_rows = [row for row in rows if row.get("image_url")]
@@ -157,28 +158,58 @@ class PortfolioDataTests(unittest.TestCase):
                 self.assertTrue((ROOT / image_url.lstrip("/")).is_file(), image_url)
 
     def test_cv_content_has_canonical_teaching_award_and_patent_dates(self):
+        builder_tree = ast.parse((ROOT / "scripts/build_content_model.py").read_text(encoding="utf-8"))
+        header_assignment = next(
+            node for node in builder_tree.body
+            if isinstance(node, ast.Assign)
+            and any(isinstance(target, ast.Name) and target.id == "CV_CONTENT_HEADERS" for target in node.targets)
+        )
+        self.assertIn("sort_date", ast.literal_eval(header_assignment.value))
         rows = json.loads((ROOT / "assets/data/cv-content.json").read_text(encoding="utf-8"))
         snapshot = json.loads((ROOT / "assets/data/portfolio-data.json").read_text(encoding="utf-8"))
         self.assertEqual(rows, snapshot["sheets"]["CV_Content"])
         lectures = sorted(
             [row for row in rows if row.get("section_id") == "lectures"],
-            key=lambda row: int(row["display_order"]),
+            key=lambda row: row["sort_date"], reverse=True,
         )
         self.assertEqual(12, len(lectures))
         self.assertEqual([
-            "CV_LEC_008", "CV_LEC_007", "CV_LEC_003", "CV_LEC_006",
+            "CV_LEC_001", "CV_LEC_008", "CV_LEC_007", "CV_LEC_003", "CV_LEC_006",
             "CV_LEC_005", "CV_LEC_012", "CV_LEC_004", "CV_LEC_009",
-            "CV_LEC_002", "CV_LEC_011", "CV_LEC_001", "CV_LEC_010",
+            "CV_LEC_002", "CV_LEC_011", "CV_LEC_010",
         ], [row["content_id"] for row in lectures])
         by_id = {row["content_id"]: row for row in rows}
+        expected_periods = {
+            "CV_LEC_001": ("Mar. 2, 2018 – Present", "2018년 3월 2일 – 현재"),
+            "CV_LEC_002": ("Dec. 5, 2023 – Dec. 7, 2023", "2023년 12월 5일 – 2023년 12월 7일"),
+            "CV_LEC_003": ("Jun. 1, 2024 – Aug. 30, 2026", "2024년 6월 1일 – 2026년 8월 30일"),
+            "CV_LEC_004": ("Apr. 25, 2025", "2025년 4월 25일"),
+            "CV_LEC_005": ("Apr. 21, 2026", "2026년 4월 21일"),
+            "CV_LEC_006": ("Jul. 1, 2026", "2026년 7월 1일"),
+            "CV_LEC_007": ("Aug. 29, 2026 and Sep. 1, 2026", "2026년 8월 29일 및 2026년 9월 1일"),
+            "CV_LEC_008": ("Oct. 23, 2026", "2026년 10월 23일"),
+            "CV_LEC_009": ("Aug. 23, 2020 – Feb. 16, 2024", "2020년 8월 23일 – 2024년 2월 16일"),
+            "CV_LEC_010": ("Dec. 10, 2017 – Jun. 17, 2021", "2017년 12월 10일 – 2021년 6월 17일"),
+            "CV_LEC_011": ("Jun. 8, 2023 – Aug. 30, 2023", "2023년 6월 8일 – 2023년 8월 30일"),
+            "CV_LEC_012": ("Oct. 5, 2023 – Dec. 30, 2025", "2023년 10월 5일 – 2025년 12월 30일"),
+        }
+        for content_id, (period_en, period_ko) in expected_periods.items():
+            self.assertEqual(period_en, by_id[content_id]["period_en"])
+            self.assertEqual(period_ko, by_id[content_id]["period_ko"])
         self.assertEqual("Oct. 23, 2026", by_id["CV_LEC_008"]["period_en"])
         self.assertEqual("생성형 AI 활용 업무 효율화 및 공공행정 실무 교육", by_id["CV_LEC_008"]["subtitle_ko"])
         self.assertNotIn("forthcoming", json.dumps(by_id["CV_LEC_008"]).lower())
         self.assertEqual("", by_id["CV_LEC_008"]["image_url"])
-        self.assertEqual("Apr. 21, 2026", by_id["CV_LEC_005"]["period_en"])
         self.assertEqual("Aug. 16–18, 2019", by_id["CV_AWD_001"]["period_en"])
-        self.assertEqual("/assets/img/portfolio/awards/2019-ksae-team-sv-bronze.png", by_id["CV_AWD_001"]["image_url"])
+        self.assertEqual("", by_id["CV_AWD_001"]["image_url"])
+        award_path = "/assets/img/portfolio/awards/2019-ksae-team-sv-bronze.png"
+        self.assertIn(f"[bronze in the EV division]({award_path})", by_id["CV_AWD_001"]["description_en"])
+        self.assertIn(f"[EV 부문 동상]({award_path})", by_id["CV_AWD_001"]["description_ko"])
+        self.assertTrue((ROOT / award_path.lstrip("/")).is_file())
         self.assertEqual("Aug. 27, 2026", by_id["CV_PAT_001"]["period_en"])
+        self.assertEqual("2026년 8월 27일", by_id["CV_PAT_001"]["period_ko"])
+        self.assertIn("Registration date: Aug. 27, 2026", by_id["CV_PAT_001"]["description_en"])
+        self.assertIn("특허등록일: 2026년 8월 27일", by_id["CV_PAT_001"]["description_ko"])
         for filename in ("assets/data/cv-content.json", "assets/data/portfolio-data.json"):
             text = (ROOT / filename).read_text(encoding="utf-8")
             for required in ("2,302,547", "5,000+", "3,000+", "102 universities", "10-3010471-0000"):

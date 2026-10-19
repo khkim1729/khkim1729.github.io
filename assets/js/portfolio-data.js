@@ -274,8 +274,33 @@
       if (canonicalResearch.has(row.content_id)) {
         return nonEmptyMerge(row, curatedById.get(row.content_id));
       }
-      if (row.content_id === 'CV_LEC_008') {
-        return Object.assign({}, row, {image_url: '', image_alt_en: '', image_alt_ko: ''});
+      const curatedRow = curatedById.get(row.content_id) || {};
+      if (/^CV_LEC_\d+$/.test(row.content_id) && curatedRow.content_id) {
+        return Object.assign({}, row, {
+          period_en: curatedRow.period_en,
+          period_ko: curatedRow.period_ko,
+          sort_date: curatedRow.sort_date,
+          image_url: row.content_id === 'CV_LEC_008' ? '' : row.image_url,
+          image_alt_en: row.content_id === 'CV_LEC_008' ? '' : row.image_alt_en,
+          image_alt_ko: row.content_id === 'CV_LEC_008' ? '' : row.image_alt_ko
+        });
+      }
+      if (row.content_id === 'CV_PAT_001') {
+        return Object.assign({}, row, {
+          period_en: curatedRow.period_en,
+          period_ko: curatedRow.period_ko,
+          description_en: curatedRow.description_en,
+          description_ko: curatedRow.description_ko
+        });
+      }
+      if (row.content_id === 'CV_AWD_001') {
+        return Object.assign({}, row, {
+          description_en: curatedRow.description_en,
+          description_ko: curatedRow.description_ko,
+          image_url: '',
+          image_alt_en: '',
+          image_alt_ko: ''
+        });
       }
       return row;
     });
@@ -888,6 +913,13 @@
       }
       byId.get(id).rows.push(row);
     });
+    const lectureSection = byId.get('lectures');
+    if (lectureSection) {
+      lectureSection.rows.sort((a, b) =>
+        String(b.sort_date || '').localeCompare(String(a.sort_date || '')) ||
+        Number(a.display_order || 0) - Number(b.display_order || 0)
+      );
+    }
     root.innerHTML = sections.map((section, index) => {
       const credentials = section.rows.some(row => row.entry_type === 'credentials');
       const contacts = section.rows.every(row => row.entry_type === 'link');
