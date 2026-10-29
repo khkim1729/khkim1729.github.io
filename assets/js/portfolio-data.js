@@ -14,7 +14,7 @@
   const syncStatusByRoot = new WeakMap();
   const REMOTE_TIMEOUT_MS = 30000;
   const REMOTE_ATTEMPTS = 2;
-  const SESSION_CACHE_PREFIX = 'portfolio-sheet-v5:';
+  const SESSION_CACHE_PREFIX = 'portfolio-sheet-v6:';
   const PREFETCH_SHEETS = window.PORTFOLIO_PREFETCH_SHEETS || [
     'CV_Content', 'Professional_Credentials', 'Publications',
     'Projects', 'Project_Content', 'Learning_Videos', 'DB_People'
@@ -31,7 +31,7 @@
   const PUBLICATION_HEADERS = [
     'Pub_ID', 'Year', 'Title', 'Venue_Name', 'Authors', 'Spacer',
     'Project_Link', 'GDrive_Link', 'arXiv_Link', 'Paper_Link', 'Venue_Link',
-    'Code', 'Model', 'Poster_Link', 'Slides_link', 'Cite',
+    'Code', 'Model', 'Poster_Link', 'Slides_Link', 'Presentation_Video', 'Cite',
     'In Google Scholar', 'Cited at Least Once', 'Notes', 'Remarks'
   ];
 
@@ -102,7 +102,9 @@
       Paper_Link: ['paper_link'], Venue_Link: ['venue_link'],
       Notes: ['notes', 'abstract_or_notes_en'], Code: ['code', 'code_link'],
       Model: ['model', 'model_link'], Poster_Link: ['poster_link'],
-      Slides_link: ['slides_link'], Cite: ['cite', 'bibtex'], Remarks: ['remarks'],
+      Slides_Link: ['slides_link', 'Slides_link'],
+      Presentation_Video: ['presentation_video'],
+      Cite: ['cite', 'bibtex'], Remarks: ['remarks'],
       Status: ['status', 'publication_status'], Oral: ['oral'],
       Featured: ['featured', 'featured_on_home'], Display_Order: ['display_order'],
       Is_Visible: ['is_visible']
@@ -556,7 +558,8 @@
       actionLink(pub.Code, 'Code'),
       actionLink(pub.Model, 'Model'),
       actionLink(pub.Poster_Link, 'Poster'),
-      actionLink(pub.Slides_link, 'Slides'),
+      actionLink(pub.Slides_Link || pub.Slides_link, 'Slides'),
+      actionLink(pub.Presentation_Video, 'Presentation'),
       pub.Cite && pub.Cite !== '-'
         ? `<button class="portfolio-chip portfolio-cite" type="button" data-cite="${escapeHtml(pub.Cite)}">${citeLabel}</button>`
         : ''

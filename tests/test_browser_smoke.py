@@ -62,7 +62,8 @@ class QuietHandler(http.server.SimpleHTTPRequestHandler):
                     "Code": "",
                     "Model": "",
                     "Poster_Link": "",
-                    "Slides_link": "",
+                    "Slides_Link": "https://example.test/slides",
+                    "Presentation_Video": "https://example.test/presentation",
                     "Cite": "",
                     "In Google Scholar": "",
                     "Cited at Least Once": "",
@@ -146,6 +147,9 @@ class BrowserSmokeTests(unittest.TestCase):
                 cards: cards.length,
                 count: document.querySelector('[data-publication-count]').innerText,
                 labels: [...document.querySelectorAll('.publication-card .portfolio-chip')].map(x => x.innerText),
+                presentationLinks: [...document.querySelectorAll('.publication-card .portfolio-chip')]
+                  .filter(x => x.innerText === 'Presentation')
+                  .map(x => ({href: x.href, target: x.target, rel: x.rel})),
                 cvLabels: [...document.querySelectorAll('[data-cv-download]')].map(x => x.innerText),
                 cvLinks: [...document.querySelectorAll('[data-cv-download]')].map(x => ({
                   language: x.dataset.cvDownload, href: x.href, target: x.target, rel: x.rel
@@ -165,6 +169,10 @@ class BrowserSmokeTests(unittest.TestCase):
         self.assertNotIn("error", result)
         self.assertIn(str(result["cards"]), result["count"])
         self.assertIn("GDrive", result["labels"])
+        self.assertIn("Presentation", result["labels"])
+        self.assertTrue(result["presentationLinks"])
+        self.assertTrue(all(link["target"] == "_blank" for link in result["presentationLinks"]))
+        self.assertTrue(all("noopener" in link["rel"] for link in result["presentationLinks"]))
         self.assertEqual(["📄 Download CV (English PDF)", "📄 Download CV (Korean PDF)"], result["cvLabels"])
         self.assertEqual(["en", "ko"], [link["language"] for link in result["cvLinks"]])
         self.assertTrue(all(link["target"] == "_blank" for link in result["cvLinks"]))
@@ -320,7 +328,7 @@ class BrowserSmokeTests(unittest.TestCase):
               sort_date: '2027-01-15', description_en: 'Remote row', description_ko: '원격 행',
               display_order: '509', is_visible: 'TRUE'
             });
-            sessionStorage.setItem('portfolio-sheet-v5:CV_Content', JSON.stringify({rows}));
+            sessionStorage.setItem('portfolio-sheet-v6:CV_Content', JSON.stringify({rows}));
             done(true);
           });
         """)
@@ -371,7 +379,15 @@ class BrowserSmokeTests(unittest.TestCase):
           (function poll() {
             const title = document.querySelector('.publication-card h3')?.innerText || '';
             if (title === 'Remote slow publication') {
-              done({title, count: document.querySelector('[data-publication-count]').innerText});
+              const chips = [...document.querySelectorAll('.publication-card .portfolio-chip')];
+              done({
+                title,
+                count: document.querySelector('[data-publication-count]').innerText,
+                labels: chips.map(chip => chip.innerText),
+                presentation: chips
+                  .filter(chip => chip.innerText === 'Presentation')
+                  .map(chip => ({href: chip.href, target: chip.target, rel: chip.rel}))
+              });
             } else if (Date.now() > deadline) {
               done({error: document.body.innerText});
             } else setTimeout(poll, 50);
@@ -379,6 +395,10 @@ class BrowserSmokeTests(unittest.TestCase):
         """)
         self.assertNotIn("error", updated)
         self.assertEqual("1 publication", updated["count"])
+        self.assertEqual(["Slides", "Presentation"], updated["labels"])
+        self.assertEqual("https://example.test/presentation", updated["presentation"][0]["href"])
+        self.assertEqual("_blank", updated["presentation"][0]["target"])
+        self.assertIn("noopener", updated["presentation"][0]["rel"])
 
     def test_same_tab_navigation_reuses_session_snapshot_without_refetch(self):
         QuietHandler.request_counts["session"] = 0

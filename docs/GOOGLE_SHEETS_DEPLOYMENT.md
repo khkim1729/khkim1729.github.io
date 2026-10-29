@@ -1,7 +1,7 @@
 # Portfolio Google Sheets deployment
 
-The workbook uses the same A:T publication schema as IMSI Lab. Copy the entire
-`WEB_Publications!A:T` range into this workbook's `WEB_Publications!A:T`.
+The workbook uses the same A:U publication schema as IMSI Lab. Copy the entire
+`WEB_Publications!A:U` range into this workbook's `WEB_Publications!A:U`.
 
 ## Upload and deploy
 
@@ -48,8 +48,8 @@ phone-number column or any other private contact data to a public sheet.
 ## Editing rules
 
 - Publications: edit `WEB_Publications`; keep `Pub_ID` unique.
-- IMSI backup: paste the IMSI roster's `WEB_Publications!A:T` into
-  `WEB_Publications!A:T` without changing the header row.
+- IMSI backup: paste the IMSI roster's `WEB_Publications!A:U` into
+  `WEB_Publications!A:U` without changing the header row.
 - Personal-only papers: enter the exact token `PERSONAL` in `Remarks`. P1 keeps
   Kyeonghun Kim's rows; P2 hides rows carrying this token.
 - Korean text: optional. Empty Korean values fall back to English.

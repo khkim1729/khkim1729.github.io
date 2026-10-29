@@ -17,7 +17,7 @@ from openpyxl.worksheet.datavalidation import DataValidation
 PUBLICATION_HEADERS = [
     "Pub_ID", "Year", "Title", "Venue_Name", "Authors", "Spacer",
     "Project_Link", "GDrive_Link", "arXiv_Link", "Paper_Link", "Venue_Link",
-    "Code", "Model", "Poster_Link", "Slides_link", "Cite",
+    "Code", "Model", "Poster_Link", "Slides_Link", "Presentation_Video", "Cite",
     "In Google Scholar", "Cited at Least Once", "Notes", "Remarks",
 ]
 
@@ -83,6 +83,7 @@ def make_publications(imsi):
         if "Kyeonghun Kim" not in str(row.get("Authors", "")):
             continue
         record = {header: row.get(header, "") for header in PUBLICATION_HEADERS}
+        record["Slides_Link"] = row.get("Slides_Link", row.get("Slides_link", ""))
         legacy_paper = str(row.get("Paper_Link", "") or "").strip()
         if legacy_paper and not any((record["GDrive_Link"], record["arXiv_Link"])):
             if "drive.google.com" in legacy_paper:
@@ -185,7 +186,7 @@ def build(args):
     wb.remove(wb.active)
     add_sheet(wb, "README", ["Item", "Guideline"], [
         ["Editing flow", "WEB_Publications와 콘텐츠 탭을 편집합니다. 배포 API는 이 값을 그대로 읽습니다."],
-        ["IMSI copy/paste", "IMSI WEB_Publications의 A:T 열을 WEB_Publications A:T에 그대로 붙여넣습니다."],
+        ["IMSI copy/paste", "IMSI WEB_Publications의 A:U 열을 WEB_Publications A:U에 그대로 붙여넣습니다."],
         ["Personal papers", "IMSI 홈페이지에서 숨길 개인 논문은 Remarks에 PERSONAL을 입력합니다."],
         ["Languages", "한국어 열이 비어 있으면 Apps Script와 웹사이트가 영어 값을 fallback으로 사용합니다."],
         ["Projects/images", "Projects의 cover_image_url과 Project_Content의 media_url에 공개 HTTPS 이미지 URL을 입력합니다."],

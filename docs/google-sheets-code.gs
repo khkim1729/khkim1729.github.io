@@ -32,7 +32,7 @@ const REQUIRED_HEADERS = {
   "WEB_Publications": [
     "Pub_ID", "Year", "Title", "Venue_Name", "Authors", "Spacer",
     "Project_Link", "GDrive_Link", "arXiv_Link", "Paper_Link", "Venue_Link",
-    "Code", "Model", "Poster_Link", "Slides_link", "Cite",
+    "Code", "Model", "Poster_Link", "Slides_Link", "Presentation_Video", "Cite",
     "In Google Scholar", "Cited at Least Once", "Notes", "Remarks"
   ]
 };
@@ -159,7 +159,10 @@ function learningVideos_(sheet) {
 
 function validateHeaders_(sheetName, headers) {
   const required = REQUIRED_HEADERS[sheetName] || [];
-  const missing = required.filter(header => !headers.includes(header));
+  const aliases = {"Slides_Link": "Slides_link"};
+  const missing = required.filter(header =>
+    !headers.includes(header) && !(aliases[header] && headers.includes(aliases[header]))
+  );
   return missing.length ? "Missing required columns: " + missing.join(", ") : "";
 }
 

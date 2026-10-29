@@ -2,7 +2,7 @@ Portfolio_Website_Content_Model 빠른 수정 안내
 ===============================================
 
 1. 논문 백업·동기화
-   - P2 구글시트의 WEB_Publications 탭에서 A:T 전체를 복사합니다.
+   - P2 구글시트의 WEB_Publications 탭에서 A:U 전체를 복사합니다.
    - P1 구글시트의 WEB_Publications 탭 A1에 그대로 붙여넣습니다.
    - 첫 행 컬럼명과 순서를 바꾸지 마세요.
    - Spacer는 비워 두는 열이며 홈페이지에서 무시합니다.
@@ -46,6 +46,6 @@ Portfolio_Website_Content_Model 빠른 수정 안내
 
 주의
 ----
-- P1과 P2의 WEB_Publications는 서로 다른 백업입니다. 양쪽 A:T를 직접 동일하게 유지합니다.
+- P1과 P2의 WEB_Publications는 서로 다른 백업입니다. 양쪽 A:U를 직접 동일하게 유지합니다.
 - 전화번호 등 비공개 개인정보는 공개 탭에 입력하지 마세요.
 - 홈페이지에 문제가 생겨도 저장소의 portfolio-data.json fallback이 먼저 표시됩니다.

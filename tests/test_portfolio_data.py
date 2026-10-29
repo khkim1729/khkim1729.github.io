@@ -9,7 +9,7 @@ CONTENT_MODEL_URL = "https://docs.google.com/spreadsheets/d/160B7eluBKDU2f8tFonL
 PUBLICATION_HEADERS = [
     "Pub_ID", "Year", "Title", "Venue_Name", "Authors", "Spacer",
     "Project_Link", "GDrive_Link", "arXiv_Link", "Paper_Link", "Venue_Link",
-    "Code", "Model", "Poster_Link", "Slides_link", "Cite",
+    "Code", "Model", "Poster_Link", "Slides_Link", "Presentation_Video", "Cite",
     "In Google Scholar", "Cited at Least Once", "Notes", "Remarks",
 ]
 
@@ -23,7 +23,7 @@ class PortfolioDataTests(unittest.TestCase):
         self.assertIn("1UPX3vLzKza-hmvgMHZKkdo47UIrC-MHz", page)
         self.assertEqual(2, page.count('target="_blank"'))
 
-    def test_builder_and_fallback_use_exact_a_to_t_publication_schema(self):
+    def test_builder_and_fallback_use_exact_a_to_u_publication_schema(self):
         source = (ROOT / "scripts/build_content_model.py").read_text(encoding="utf-8")
         for header in PUBLICATION_HEADERS:
             self.assertIn(f'"{header}"', source)
@@ -67,8 +67,11 @@ class PortfolioDataTests(unittest.TestCase):
         source = (ROOT / "assets/js/portfolio-data.js").read_text(encoding="utf-8")
         self.assertIn("expectedApiSheets", source)
         self.assertIn("Publications: 'WEB_Publications'", source)
-        for label in ("Project", "GDrive", "arXiv", "Paper", "Venue", "Code", "Model", "Poster", "Slides", "Cite"):
+        for label in ("Project", "GDrive", "arXiv", "Paper", "Venue", "Code", "Model", "Poster", "Slides", "Presentation", "Cite"):
             self.assertIn(f"'{label}'", source)
+        self.assertIn("Presentation_Video", source)
+        self.assertIn("Slides_Link", source)
+        self.assertIn("Slides_link", source)
         self.assertIn("data-publication-count", source)
         self.assertIn("Kyeonghun Kim", source)
         self.assertNotIn("const titleLink =", source)
@@ -112,6 +115,7 @@ class PortfolioDataTests(unittest.TestCase):
         self.assertIn("Missing required columns", source)
         for header in PUBLICATION_HEADERS:
             self.assertIn(f'"{header}"', source)
+        self.assertIn('"Slides_Link": "Slides_link"', source)
 
     def test_learning_video_endpoint_is_restricted(self):
         source = (ROOT / "docs/google-sheets-code.gs").read_text(encoding="utf-8")
@@ -126,7 +130,7 @@ class PortfolioDataTests(unittest.TestCase):
 
     def test_korean_quick_guide_covers_copy_personal_and_redeployment(self):
         guide = (ROOT / "docs/GOOGLE_SHEETS_QUICK_EDIT_KO.txt").read_text(encoding="utf-8")
-        self.assertIn("A:T", guide)
+        self.assertIn("A:U", guide)
         self.assertIn("PERSONAL", guide)
         self.assertIn("새 버전", guide)
         self.assertIn("WEB_Publications", guide)
